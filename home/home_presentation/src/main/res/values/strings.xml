@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="active_program_title">Активная программа тренировок:</string>
+    <string name="default_program">не выбрана</string>
+    <string name="today_plan">Сегодня по плану:</string>
+    <string name="muscle_groups">Мышечные группы: %s</string>
+    <string name="start_training_fab">НАЧАТЬ ТРЕНИРОВКУ</string>
+    <string name="today_plan_rest_day">Сегодня отдыхаем</string>
+    <string name="today_plan_no_selected">Программа тренировок не выбрана</string>
+</resources>

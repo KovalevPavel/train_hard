@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Train hard</string>
+
+    <string name="bottom_navigation_home">Главная</string>
+    <string name="bottom_navigation_analytics">Статистика</string>
+    <string name="bottom_navigation_params">Параметры</string>
+</resources>
