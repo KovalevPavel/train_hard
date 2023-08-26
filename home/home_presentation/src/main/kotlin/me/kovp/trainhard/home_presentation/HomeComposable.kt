@@ -15,7 +15,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -81,10 +80,6 @@ fun HomeComposable(
             viewModel = vm,
             modifier = Modifier.padding(it)
         )
-    }
-
-    LaunchedEffect(key1 = vm) {
-        println("vm -> ${vm.hashCode()}")
     }
 }
 

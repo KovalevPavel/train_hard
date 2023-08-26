@@ -9,8 +9,8 @@ import me.kovp.trainhard.database.entities.MuscleGroupEntity
 @Dao
 interface MuscleGroupDao {
     @Query("select * from musclegroup")
-    fun getMuscleGroups(): List<MuscleGroupEntity>
+    suspend fun getMuscleGroups(): List<MuscleGroupEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMuscleGroup(group: MuscleGroupEntity)
+    suspend fun insertMuscleGroup(group: MuscleGroupEntity)
 }

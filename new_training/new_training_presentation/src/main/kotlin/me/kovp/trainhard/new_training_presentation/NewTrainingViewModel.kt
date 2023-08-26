@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import me.kovp.trainhard.new_trainig_domain.GetAllExercisesInteractor
+import me.kovp.trainhard.new_trainig_domain.GetMuscleGroupsInteractor
 import me.kovp.trainhard.new_trainig_domain.SaveTrainingInteractor
+import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
 
@@ -15,6 +18,8 @@ interface NewTrainingViewModel {
 
 class NewTrainingViewModelImpl(
     private val saveTraining: SaveTrainingInteractor,
+    private val getMuscleGroups: GetMuscleGroupsInteractor,
+    private val getAllExercises: GetAllExercisesInteractor,
 ) : ViewModel(), NewTrainingViewModel {
     override var screenState: MutableSharedFlow<TrainingScreenState> = MutableSharedFlow()
 
@@ -41,11 +46,10 @@ class NewTrainingViewModelImpl(
     }
 
     private fun loadProgramExercises() {
-
-    }
-
-    override fun onCleared() {
-        println("cleared")
-        super.onCleared()
+        viewModelScope.launch {
+            getAllExercises().joinToString("\n").let {
+                Timber.e("exercises from DB:\n$it")
+            }
+        }
     }
 }

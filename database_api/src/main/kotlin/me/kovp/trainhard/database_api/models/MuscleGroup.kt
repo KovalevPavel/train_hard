@@ -55,5 +55,29 @@ sealed interface MuscleGroup {
         }
     }
 
-    object Abs : MuscleGroup
+    object Abs : MuscleGroup {
+        override fun toString(): String = "ABS"
+    }
+
+    companion object {
+        const val ABS_ID = "abs_"
+
+        fun getGroupId(group: MuscleGroup) = when (group) {
+            is Legs -> group.id
+            is Chest -> group.id
+            is Back -> group.id
+            is Deltas -> group.id
+            is Arms -> group.id
+            is Abs -> ABS_ID
+        }
+
+        fun getAllGroups(): List<MuscleGroup> = mutableListOf<MuscleGroup>().apply {
+            Legs.values().let(::addAll)
+            Chest.values().let(::addAll)
+            Back.values().let(::addAll)
+            Deltas.values().let(::addAll)
+            Arms.values().let(::addAll)
+            Abs.let(::add)
+        }
+    }
 }

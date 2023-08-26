@@ -1,4 +1,4 @@
-package me.kovp.trainhard.home_domain.today_plan
+package me.kovp.trainhard.home_domain
 
 import java.util.Calendar
 

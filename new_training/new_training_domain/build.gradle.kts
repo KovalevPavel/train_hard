@@ -4,4 +4,5 @@ plugins {
 
 dependencies {
     implementation(libs.koin.core)
+    api(project(":database_api"))
 }

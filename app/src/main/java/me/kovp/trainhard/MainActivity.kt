@@ -20,6 +20,7 @@ import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.navigation_graphs.RootNavigationGraphSpec
 import me.kovp.trainhard.ui_theme.TrainHardTheme
 import me.kovp.trainhard.ui_theme.providers.themeColors
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
@@ -27,6 +28,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val viewModel: MainActivityViewModel = koinViewModel<MainActivityViewModelImpl>()
+
+            //TODO: добавить скрытие сплеш-скрина после инициализации БД
+
             val screenMapper = remember { appScreenMapper }
             val systemUiController = rememberSystemUiController()
 

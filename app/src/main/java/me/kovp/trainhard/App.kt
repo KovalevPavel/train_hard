@@ -2,7 +2,7 @@ package me.kovp.trainhard
 
 import android.app.Application
 import me.kovp.trainhard.database.di.dbModule
-import org.koin.android.BuildConfig
+import me.kovp.trainhard.di.initializationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -19,6 +19,7 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 dbModule,
+                initializationModule,
             )
         }
     }

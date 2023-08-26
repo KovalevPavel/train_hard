@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import me.kovp.trainhard.home_domain.today_plan.GetCurrentDateInteractor
-import me.kovp.trainhard.home_domain.today_plan.GetGymCardHealthInteractor
+import me.kovp.trainhard.home_domain.GetCurrentDateInteractor
+import me.kovp.trainhard.home_domain.GetGymCardHealthInteractor
 import me.kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
 import me.kovp.trainhard.home_presentation.TodayPlan.RestDay
 import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay
@@ -26,10 +26,6 @@ class HomeViewModelImpl(
     override val gymHealthFlow = MutableStateFlow(0f)
     override val todayPlanFlow = MutableStateFlow<TodayPlan>(NoProgramSelected)
 
-    override fun onCleared() {
-        println("home cleared")
-        super.onCleared()
-    }
     private val mockPlanList = TrainingDay(
         items = listOf(
             Exercise(

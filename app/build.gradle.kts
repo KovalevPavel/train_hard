@@ -26,6 +26,10 @@ android {
         toolchain.languageVersion.set(JavaLanguageVersion.of(Config.javaVersion.toString()))
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
