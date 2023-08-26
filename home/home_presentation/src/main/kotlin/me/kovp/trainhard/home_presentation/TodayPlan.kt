@@ -1,4 +1,4 @@
-package me.kovp.trainhard.home_presentation.today_plan
+package me.kovp.trainhard.home_presentation
 
 sealed interface TodayPlan {
 

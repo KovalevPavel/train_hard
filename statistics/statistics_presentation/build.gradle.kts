@@ -6,8 +6,7 @@ plugins {
 
 android {
     ksp {
-        arg("compose-destinations.mode", "navgraphs")
-        arg("compose-destinations.moduleName", "statistics")
+        arg("compose-destinations.mode", "destinations")
     }
 }
 

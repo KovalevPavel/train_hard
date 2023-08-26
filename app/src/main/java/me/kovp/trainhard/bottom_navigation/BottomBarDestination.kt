@@ -4,10 +4,9 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 import me.kovp.trainhard.R
-import me.kovp.trainhard.R.string
-import me.kovp.trainhard.home_presentation.HomeNavGraph
-import me.kovp.trainhard.parameters_presentation.ParametersNavGraph
-import me.kovp.trainhard.statistics_presentation.StatisticsNavGraph
+import me.kovp.trainhard.navigation_graphs.HomeNavGraph
+import me.kovp.trainhard.navigation_graphs.ParametersNavGraph
+import me.kovp.trainhard.navigation_graphs.StatisticsNavGraph
 
 enum class BottomBarDestination(
     val direction: NavGraphSpec,
@@ -17,16 +16,16 @@ enum class BottomBarDestination(
     Home(
         direction = HomeNavGraph,
         icon = R.drawable.icon_home,
-        label = string.bottom_navigation_home,
+        label = R.string.bottom_navigation_home,
     ),
     Statistics(
         direction = StatisticsNavGraph,
         icon = R.drawable.statistics_icon,
-        label = string.bottom_navigation_analytics,
+        label = R.string.bottom_navigation_analytics,
     ),
     Parameters(
         direction = ParametersNavGraph,
         icon = R.drawable.list_icon,
-        label = string.bottom_navigation_params,
+        label = R.string.bottom_navigation_params,
     )
 }

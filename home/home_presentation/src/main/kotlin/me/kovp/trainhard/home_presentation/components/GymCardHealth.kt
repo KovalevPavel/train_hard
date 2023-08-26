@@ -1,4 +1,4 @@
-package me.kovp.trainhard.home_presentation.today_plan.components
+package me.kovp.trainhard.home_presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

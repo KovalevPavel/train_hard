@@ -1,4 +1,4 @@
-package me.kovp.trainhard.home_presentation.today_plan
+package me.kovp.trainhard.home_presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import me.kovp.trainhard.home_domain.today_plan.GetCurrentDateInteractor
 import me.kovp.trainhard.home_domain.today_plan.GetGymCardHealthInteractor
-import me.kovp.trainhard.home_presentation.today_plan.TodayPlan.NoProgramSelected
-import me.kovp.trainhard.home_presentation.today_plan.TodayPlan.RestDay
-import me.kovp.trainhard.home_presentation.today_plan.TodayPlan.TrainingDay
-import me.kovp.trainhard.home_presentation.today_plan.TodayPlan.TrainingDay.Exercise
+import me.kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
+import me.kovp.trainhard.home_presentation.TodayPlan.RestDay
+import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay
+import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay.Exercise
 
 interface HomeViewModel {
     val dateStringFlow: Flow<Long>

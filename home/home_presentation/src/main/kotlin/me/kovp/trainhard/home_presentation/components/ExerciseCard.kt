@@ -1,4 +1,4 @@
-package me.kovp.trainhard.home_presentation.today_plan.components
+package me.kovp.trainhard.home_presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import me.kovp.home_presentation.R
-import me.kovp.trainhard.home_presentation.today_plan.TodayPlan.TrainingDay.Exercise
+import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay.Exercise
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 

@@ -60,6 +60,9 @@ dependencies {
     implementation(project(":database"))
     implementation(project(":database_api"))
     implementation(project(":navigation"))
+    implementation(project(":new_training_api"))
+    implementation(project(":new_training_presentation"))
+
     implementation(project(":home_presentation"))
     implementation(project(":statistics_presentation"))
     implementation(project(":parameters_presentation"))

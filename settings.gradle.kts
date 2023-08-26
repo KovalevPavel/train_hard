@@ -39,6 +39,12 @@ withDirectory("home") {
     includeProject("home_domain")
 }
 
+withDirectory("new_training") {
+    includeProject("new_training_api")
+    includeProject("new_training_domain")
+    includeProject("new_training_presentation")
+}
+
 withDirectory("statistics") {
     includeProject("statistics_presentation")
 }

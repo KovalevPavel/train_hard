@@ -1,4 +1,4 @@
-package me.kovp.trainhard.home_presentation.today_plan
+package me.kovp.trainhard.home_presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,10 +15,10 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,33 +27,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.kovp.home_presentation.R
 import me.kovp.trainhard.core.DATE_FORMAT_dd_newLine_MMMM
 import me.kovp.trainhard.core.formatToDateString
-import me.kovp.trainhard.home_presentation.destinations.NewTrainingComposableDestination
-import me.kovp.trainhard.home_presentation.today_plan.TodayPlan.NoProgramSelected
-import me.kovp.trainhard.home_presentation.today_plan.TodayPlan.RestDay
-import me.kovp.trainhard.home_presentation.today_plan.TodayPlan.TrainingDay
-import me.kovp.trainhard.home_presentation.today_plan.components.CurrentDateCard
-import me.kovp.trainhard.home_presentation.today_plan.components.ExerciseCard
-import me.kovp.trainhard.home_presentation.today_plan.components.GymCardHealth
 import me.kovp.trainhard.home_presentation.di.homeModule
+import me.kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
+import me.kovp.trainhard.home_presentation.TodayPlan.RestDay
+import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay
+import me.kovp.trainhard.home_presentation.components.CurrentDateCard
+import me.kovp.trainhard.home_presentation.components.ExerciseCard
+import me.kovp.trainhard.home_presentation.components.GymCardHealth
+import me.kovp.trainhard.navigation_api.localScreenMapper
+import me.kovp.trainhard.new_training_api.NewTrainingScreen
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
 
-@RootNavGraph(start = true)
 @Destination
 @Composable
 fun HomeComposable(
     navigator: DestinationsNavigator,
 ) {
     loadKoinModules(homeModule)
-    val vm:HomeViewModel = koinViewModel<HomeViewModelImpl>()
+    val screenMapper = localScreenMapper.current
+
+    val newTrainingDestination = remember { screenMapper(NewTrainingScreen) }
+    val vm: HomeViewModel = koinViewModel<HomeViewModelImpl>()
 
     Scaffold(
         floatingActionButton = {
@@ -62,7 +63,7 @@ fun HomeComposable(
                 containerColor = themeColors.lime,
                 shape = RoundedCornerShape(size = 100.dp),
                 onClick = {
-                    navigator.navigate(NewTrainingComposableDestination)
+                    navigator.navigate(newTrainingDestination)
                 },
             ) {
                 Text(

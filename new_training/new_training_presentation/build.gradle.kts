@@ -11,6 +11,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":ui_theme"))
+    implementation(project(":new_training_domain"))
+
+    implementation(libs.koin.compose)
     implementation(libs.destinations.core)
     ksp(libs.destinations.ksp)
 }

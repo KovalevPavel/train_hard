@@ -1,9 +1,8 @@
 plugins {
     id("trainhard.android.library")
-    alias(libs.plugins.google.ksp)
+    id("trainhard.android.compose")
 }
 
 dependencies {
     implementation(libs.destinations.core)
-    ksp(libs.destinations.ksp)
 }

@@ -1,4 +1,4 @@
-package me.kovp.trainhard.home_presentation.new_training
+package me.kovp.trainhard.new_training_presentation
 
 data class TrainingScreenState(
     val timeElapsed: Long,

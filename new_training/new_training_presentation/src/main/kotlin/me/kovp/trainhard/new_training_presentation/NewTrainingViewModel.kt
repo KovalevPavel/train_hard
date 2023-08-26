@@ -1,11 +1,11 @@
-package me.kovp.trainhard.home_presentation.new_training
+package me.kovp.trainhard.new_training_presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import me.kovp.trainhard.home_domain.new_training.SaveTrainingInteractor
+import me.kovp.trainhard.new_trainig_domain.SaveTrainingInteractor
 import java.util.Timer
 import java.util.TimerTask
 
