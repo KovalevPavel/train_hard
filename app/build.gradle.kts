@@ -3,7 +3,6 @@ import me.kovp.trainhard.convention.consts.Config
 plugins {
     id("trainhard.android.application")
     id("trainhard.android.compose")
-    id("kotlin-kapt")
     alias(libs.plugins.google.ksp)
 }
 
@@ -68,9 +67,6 @@ dependencies {
     implementation(project(":parameters_presentation"))
 
     implementation(libs.room.ktx)
-
-    implementation(libs.google.dagger)
-    kapt(libs.google.dagger.compiler)
 
     implementation(libs.koin.compose)
     implementation(libs.koin.core)
