@@ -1,4 +1,4 @@
-package me.kovp.trainhard.database.api_impl
+package me.kovp.trainhard.database.muscle_groups
 
 import me.kovp.trainhard.database.entities.MuscleGroupEntity
 import me.kovp.trainhard.database_api.models.MuscleGroup

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e46d50edc8a5fc2a264f175882c8e950",
+    "identityHash": "b888458c2337ac2221fcac633a6a6476",
     "entities": [
       {
         "tableName": "musclegroup",
@@ -58,12 +58,12 @@
       },
       {
         "tableName": "completedExercises",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exerciseId` TEXT NOT NULL, `reps` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `exerciseId` TEXT NOT NULL, `reps` TEXT NOT NULL, PRIMARY KEY(`date`, `exerciseId`))",
         "fields": [
           {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -80,9 +80,10 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
-            "id"
+            "date",
+            "exerciseId"
           ]
         },
         "indices": [],
@@ -92,7 +93,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e46d50edc8a5fc2a264f175882c8e950')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b888458c2337ac2221fcac633a6a6476')"
     ]
   }
 }

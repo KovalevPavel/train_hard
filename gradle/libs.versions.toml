@@ -1,5 +1,6 @@
 [versions]
 kotlin = "1.8.10"
+kotlinCoroutines = "1.7.3"
 androidGradlePlugin = "8.1.0"
 ksp = "1.8.10-1.0.9"
 core-ktx = "1.10.1"
@@ -25,6 +26,8 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [libraries]
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 androidx-core-splash = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splash" }
 androidx-lifecycle-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }

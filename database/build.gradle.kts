@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
     implementation(project(":database_api"))
+    implementation(project(":core_domain"))
 
     implementation(libs.koin.compose)
 }

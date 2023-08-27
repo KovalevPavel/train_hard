@@ -1,7 +1,8 @@
-package me.kovp.trainhard.database.api_impl
+package me.kovp.trainhard.database.exercises
 
 import me.kovp.trainhard.database.entities.ExerciseEntity
 import me.kovp.trainhard.database.entities.MuscleGroupEntity
+import me.kovp.trainhard.database.muscle_groups.MuscleGroupsMapper
 import me.kovp.trainhard.database_api.models.Exercise
 
 internal class ExerciseMapper(

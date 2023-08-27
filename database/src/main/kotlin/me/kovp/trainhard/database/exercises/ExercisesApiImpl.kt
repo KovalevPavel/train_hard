@@ -1,4 +1,4 @@
-package me.kovp.trainhard.database.api_impl
+package me.kovp.trainhard.database.exercises
 
 import me.kovp.trainhard.database.dao.ExerciseDao
 import me.kovp.trainhard.database.dao.MuscleGroupDao
