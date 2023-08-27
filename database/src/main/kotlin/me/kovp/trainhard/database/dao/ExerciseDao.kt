@@ -17,6 +17,9 @@ interface ExerciseDao {
     @Query("select * from exercises")
     suspend fun getExercises(): List<ExerciseEntity>
 
+    @Query("select * from exercises where title=:title")
+    suspend fun getExerciseByTitle(title: String): List<ExerciseEntity>
+
     @Query("select * from exercises where muscleGroups like :group")
     suspend fun getExercisesByMuscleGroup(group: Int): List<ExerciseEntity>
 }
