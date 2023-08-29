@@ -2,26 +2,23 @@ package me.kovp.trainhard.database.completed_set
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
+import me.kovp.trainhard.database.MuscleGroupsProvider
 import me.kovp.trainhard.database.dao.CompletedSetsDao
-import me.kovp.trainhard.database.dao.MuscleGroupDao
-import me.kovp.trainhard.database.entities.MuscleGroupEntity
 import me.kovp.trainhard.database_api.CompletedSetsApi
 import me.kovp.trainhard.database_api.models.CompletedSet
 import me.kovp.trainhard.database_api.models.MuscleGroup
 
 internal class CompletedSetsApiImpl(
     private val completedSetsDao: CompletedSetsDao,
-    private val muscleGroupDao: MuscleGroupDao,
     private val completedSetMapper: CompletedSetMapper,
+    private val muscleGroupsProvider: MuscleGroupsProvider,
 ) : CompletedSetsApi {
-    private var muscleGroups: List<MuscleGroupEntity>? = null
-
     override suspend fun getAllSets(): Flow<List<CompletedSet>> = completedSetsDao
         .getAllSets()
         .transform { list ->
             val result = list.mapNotNull { entity ->
                 completedSetMapper.mapToDomain(
-                    groups = getMuscleGroupsAndReturn(),
+                    groups = muscleGroupsProvider(),
                     set = entity,
                 )
             }
@@ -35,7 +32,7 @@ internal class CompletedSetsApiImpl(
     ): CompletedSet? = completedSetsDao.getSetByIdAndExerciseId(date, exerciseId)
         .firstOrNull()
         ?.let { entity ->
-            completedSetMapper.mapToDomain(groups = getMuscleGroupsAndReturn(), set = entity)
+            completedSetMapper.mapToDomain(groups = muscleGroupsProvider(), set = entity)
         }
 
     override suspend fun getCompletedSetsByMuscleGroup(
@@ -44,7 +41,7 @@ internal class CompletedSetsApiImpl(
         typeId = MuscleGroup.getGroupId(group),
     )
         .mapNotNull { entity ->
-            completedSetMapper.mapToDomain(groups = getMuscleGroupsAndReturn(), set = entity)
+            completedSetMapper.mapToDomain(groups = muscleGroupsProvider(), set = entity)
         }
 
     override suspend fun addNewCompletedSet(newSet: CompletedSet) {
@@ -62,11 +59,5 @@ internal class CompletedSetsApiImpl(
             date = completedSet.date,
             exerciseId = completedSet.exercise.title,
         )
-    }
-
-    private suspend fun getMuscleGroupsAndReturn(): List<MuscleGroupEntity> {
-        return muscleGroups ?: kotlin.run {
-            muscleGroupDao.getMuscleGroups().also { muscleGroups = it }
-        }
     }
 }

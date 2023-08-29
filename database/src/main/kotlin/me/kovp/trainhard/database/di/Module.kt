@@ -2,6 +2,7 @@ package me.kovp.trainhard.database.di
 
 import androidx.room.Room
 import me.kovp.trainhard.database.AppDatabase
+import me.kovp.trainhard.database.MuscleGroupsProvider
 import me.kovp.trainhard.database.completed_set.CompletedSetMapper
 import me.kovp.trainhard.database.completed_set.CompletedSetsApiImpl
 import me.kovp.trainhard.database.exercises.ExerciseMapper
@@ -34,10 +35,18 @@ val dbModule = module {
         )
     }
 
+    //Providers' section
+    single {
+        val db: AppDatabase = get()
+        MuscleGroupsProvider(muscleGroupDao = db.muscleGroupsDao())
+    }
+
+    // APIs' section
     single<MuscleGroupsApi> {
         val db: AppDatabase = get()
 
         MuscleGroupsApiImpl(
+            muscleGroupsProvider = get(),
             muscleGroupDao = db.muscleGroupsDao(),
             muscleGroupMapper = get(),
         )
@@ -48,7 +57,7 @@ val dbModule = module {
 
         ExercisesApiImpl(
             exerciseDao = db.exercisesDao(),
-            muscleGroupDao = db.muscleGroupsDao(),
+            muscleGroupsProvider = get(),
             exerciseMapper = get(),
         )
     }
@@ -58,7 +67,7 @@ val dbModule = module {
 
         CompletedSetsApiImpl(
             completedSetsDao = db.completedExercisesDao(),
-            muscleGroupDao = db.muscleGroupsDao(),
+            muscleGroupsProvider = get(),
             completedSetMapper = get(),
         )
     }
