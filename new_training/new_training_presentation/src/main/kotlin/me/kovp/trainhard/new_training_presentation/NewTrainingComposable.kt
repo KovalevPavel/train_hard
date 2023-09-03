@@ -30,12 +30,17 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultRecipient
+import me.kovp.trainhard.components.counter.CounterValue
 import me.kovp.trainhard.new_training_presentation.TrainingScreenState.SetItem
+import me.kovp.trainhard.new_training_presentation.destinations.NewSetDialogDestination
+import me.kovp.trainhard.new_training_presentation.destinations.SelectNewExerciseTypeComposableDestination
 import me.kovp.trainhard.new_training_presentation.di.newTrainingModule
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
+import timber.log.Timber
 
 //TODO: перенести в MainActivity
 private val myStoreOwner = object : ViewModelStoreOwner {
@@ -46,8 +51,13 @@ private val myStoreOwner = object : ViewModelStoreOwner {
 @Composable
 fun NewTrainingComposable(
     navigator: DestinationsNavigator,
+    resultRecipient: ResultRecipient<NewSetDialogDestination, CounterValue?>
 ) {
     loadKoinModules(newTrainingModule)
+
+    resultRecipient.onNavResult {
+        Timber.e("result from dialog -> $it")
+    }
 
     val vm: NewTrainingViewModel =
         koinViewModel<NewTrainingViewModelImpl>(viewModelStoreOwner = myStoreOwner)
@@ -56,7 +66,7 @@ fun NewTrainingComposable(
 
     Scaffold(
         floatingActionButton = {
-            IconButton(onClick = { vm.addNewExercise() }) {
+            IconButton(onClick = { navigator.navigate(SelectNewExerciseTypeComposableDestination) }) {
                 Surface(
                     modifier = Modifier.size(40.dp),
                     shape = AbsoluteRoundedCornerShape(20.dp),

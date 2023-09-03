@@ -33,6 +33,8 @@ include(":database")
 include(":database_api")
 include(":navigation")
 include(":ui_theme")
+include(":components")
+include(":core_design")
 
 withDirectory("home") {
     includeProject("home_presentation")

@@ -13,6 +13,7 @@ android {
 dependencies {
     implementation(project(":ui_theme"))
     implementation(project(":new_training_domain"))
+    implementation(project(":components"))
 
     implementation(libs.koin.compose)
     implementation(libs.destinations.core)

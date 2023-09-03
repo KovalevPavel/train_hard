@@ -6,12 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.plusAssign
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.google.accompanist.navigation.material.ModalBottomSheetLayout
+import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
@@ -36,7 +41,9 @@ class MainActivity : ComponentActivity() {
             val systemUiController = rememberSystemUiController()
 
             val navController = rememberAnimatedNavController()
+            val bottomSheetNavigator = rememberBottomSheetNavigator()
             val engine = rememberAnimatedNavHostEngine()
+            navController.navigatorProvider += bottomSheetNavigator
 
             CompositionLocalProvider(
                 localScreenMapper provides screenMapper
@@ -44,20 +51,26 @@ class MainActivity : ComponentActivity() {
                 TrainHardTheme {
                     systemUiController.setStatusBarColor(themeColors.black)
 
-                    Scaffold(
-                        bottomBar = {
-                            BottomBar(navController = navController)
-                        }
-                    ) { paddingValues ->
+                    ModalBottomSheetLayout(
+                        bottomSheetNavigator = bottomSheetNavigator,
+                        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+                        sheetBackgroundColor = themeColors.gray,
+                    ) {
+                        Scaffold(
+                            bottomBar = {
+                                BottomBar(navController = navController)
+                            }
+                        ) { paddingValues ->
 
-                        DestinationsNavHost(
-                            navController = navController,
-                            modifier = Modifier
-                                .padding(paddingValues)
-                                .fillMaxSize(),
-                            navGraph = RootNavigationGraphSpec,
-                            engine = engine,
-                        )
+                            DestinationsNavHost(
+                                navController = navController,
+                                modifier = Modifier
+                                    .padding(paddingValues)
+                                    .fillMaxSize(),
+                                navGraph = RootNavigationGraphSpec,
+                                engine = engine,
+                            )
+                        }
                     }
                 }
             }

@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.database_api.models.Exercise
-import me.kovp.trainhard.database_api.models.MuscleGroup
 import me.kovp.trainhard.new_trainig_domain.AddNewSetInteractor
 import me.kovp.trainhard.new_trainig_domain.GetAllExercisesInteractor
 import me.kovp.trainhard.new_trainig_domain.GetAllSetsInteractor

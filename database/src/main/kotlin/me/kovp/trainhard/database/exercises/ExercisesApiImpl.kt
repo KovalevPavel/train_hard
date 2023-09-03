@@ -1,10 +1,10 @@
 package me.kovp.trainhard.database.exercises
 
+import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.database.MuscleGroupsProvider
 import me.kovp.trainhard.database.dao.ExerciseDao
 import me.kovp.trainhard.database_api.ExercisesApi
 import me.kovp.trainhard.database_api.models.Exercise
-import me.kovp.trainhard.database_api.models.MuscleGroup
 
 internal class ExercisesApiImpl(
     private val exerciseDao: ExerciseDao,

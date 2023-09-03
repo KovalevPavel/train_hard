@@ -1,7 +1,7 @@
 package me.kovp.trainhard
 
+import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.database_api.MuscleGroupsApi
-import me.kovp.trainhard.database_api.models.MuscleGroup
 
 class InitMuscleGroupsInteractor(
     private val muscleGroupsApi: MuscleGroupsApi,

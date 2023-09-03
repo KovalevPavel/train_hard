@@ -1,8 +1,8 @@
 package me.kovp.trainhard
 
+import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.database_api.ExercisesApi
 import me.kovp.trainhard.database_api.models.Exercise
-import me.kovp.trainhard.database_api.models.MuscleGroup
 
 class InitBaseExercisesInteractor(
     private val exercisesApi: ExercisesApi,
@@ -12,7 +12,7 @@ class InitBaseExercisesInteractor(
             Exercise(
                 title = "Приседания",
                 muscleGroups = listOf(
-                    MuscleGroup.Legs.QUADRICEPS,
+                    me.kovp.trainhard.core_domain.MuscleGroup.Legs.QUADRICEPS,
                 ),
             ),
             Exercise(

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -17,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,21 +31,25 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.kovp.home_presentation.R
-import me.kovp.trainhard.core.DATE_FORMAT_dd_newLine_MMMM
-import me.kovp.trainhard.core.formatToDateString
-import me.kovp.trainhard.home_presentation.di.homeModule
+import me.kovp.trainhard.components.train_card.SetCard
+import me.kovp.trainhard.components.train_card.SetCardDto
+import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_newLine_MMMM
+import me.kovp.trainhard.core_domain.MuscleGroup
+import me.kovp.trainhard.core_domain.formatToDateString
 import me.kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
 import me.kovp.trainhard.home_presentation.TodayPlan.RestDay
 import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay
 import me.kovp.trainhard.home_presentation.components.CurrentDateCard
 import me.kovp.trainhard.home_presentation.components.ExerciseCard
 import me.kovp.trainhard.home_presentation.components.GymCardHealth
+import me.kovp.trainhard.home_presentation.di.homeModule
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.new_training_api.NewTrainingScreen
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
+import timber.log.Timber
 
 @Destination
 @Composable
@@ -94,6 +101,35 @@ private fun HomeScreen(
 
     val locale = LocalContext.current.resources.configuration.locales[0]
 
+    var sets by remember {
+        mutableStateOf(
+            listOf(
+                SetCardDto(
+                    exerciseTitle = "Приседания",
+                    sets = listOf(
+                        "set 1",
+                        "set 2",
+                        "set 3",
+                        "set 4",
+                        "set 5",
+                    ),
+                    muscleGroups = MuscleGroup.Legs.values().map { it.id },
+                ),
+                SetCardDto(
+                    exerciseTitle = "Жим лежа",
+                    sets = listOf(
+                        "set 1",
+                        "set 2",
+                        "set 3",
+                        "set 4",
+                        "set 5",
+                    ),
+                    muscleGroups = MuscleGroup.Chest.values().map { it.id },
+                )
+            )
+        )
+    }
+
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -102,6 +138,27 @@ private fun HomeScreen(
         contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp, alignment = Alignment.Top),
     ) {
+        itemsIndexed(sets) {index, set ->
+            SetCard(
+                card = set,
+                onAddSetClick = {
+                    Timber.e("add set for $set")
+                },
+                onRemoveSetClick = { setIndex ->
+                    set.copy(
+                        sets = set.sets.filterIndexed { i, _ -> i != setIndex }
+                    )
+                        .let {
+                            sets = sets.mapIndexed { i, s ->
+                                if (i == index) it else s
+                            }
+                        }
+                },
+                onEditSetClick = { i ->
+                    Timber.e("edit set $i for $set")
+                }
+            )
+        }
         item {
             GymCardHealth(cardHealth = cardHealth)
         }

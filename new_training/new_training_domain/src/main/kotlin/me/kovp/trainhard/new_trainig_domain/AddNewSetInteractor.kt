@@ -1,7 +1,7 @@
 package me.kovp.trainhard.new_trainig_domain
 
-import me.kovp.trainhard.core.DATE_FORMAT_dd_MM_yyyy
-import me.kovp.trainhard.core.formatToDateString
+import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_MM_yyyy
+import me.kovp.trainhard.core_domain.formatToDateString
 import me.kovp.trainhard.database_api.CompletedSetsApi
 import me.kovp.trainhard.database_api.models.CompletedSet
 import me.kovp.trainhard.database_api.models.Exercise

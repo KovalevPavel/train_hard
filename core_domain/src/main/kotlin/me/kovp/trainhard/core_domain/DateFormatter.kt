@@ -1,4 +1,4 @@
-package me.kovp.trainhard.core
+package me.kovp.trainhard.core_domain
 
 import java.text.SimpleDateFormat
 import java.util.Locale

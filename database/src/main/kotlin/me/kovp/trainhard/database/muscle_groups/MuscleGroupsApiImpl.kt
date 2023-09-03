@@ -1,10 +1,10 @@
 package me.kovp.trainhard.database.muscle_groups
 
+import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.database.MuscleGroupsProvider
 import me.kovp.trainhard.database.dao.MuscleGroupDao
 import me.kovp.trainhard.database.entities.MuscleGroupEntity
 import me.kovp.trainhard.database_api.MuscleGroupsApi
-import me.kovp.trainhard.database_api.models.MuscleGroup
 
 class MuscleGroupsApiImpl internal constructor(
     private val muscleGroupDao: MuscleGroupDao,

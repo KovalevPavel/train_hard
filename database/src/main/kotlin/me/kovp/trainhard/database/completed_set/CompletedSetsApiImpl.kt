@@ -2,11 +2,11 @@ package me.kovp.trainhard.database.completed_set
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
+import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.database.MuscleGroupsProvider
 import me.kovp.trainhard.database.dao.CompletedSetsDao
 import me.kovp.trainhard.database_api.CompletedSetsApi
 import me.kovp.trainhard.database_api.models.CompletedSet
-import me.kovp.trainhard.database_api.models.MuscleGroup
 
 internal class CompletedSetsApiImpl(
     private val completedSetsDao: CompletedSetsDao,

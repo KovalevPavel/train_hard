@@ -1,6 +1,6 @@
 package me.kovp.trainhard.database_api
 
-import me.kovp.trainhard.database_api.models.MuscleGroup
+import me.kovp.trainhard.core_domain.MuscleGroup
 
 interface MuscleGroupsApi {
     suspend fun getMuscleGroups(): List<MuscleGroup>

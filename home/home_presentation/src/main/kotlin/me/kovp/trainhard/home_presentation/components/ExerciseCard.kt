@@ -20,7 +20,6 @@ fun ExerciseCard(exercise: Exercise) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-//            .padding(16.dp)
             .background(
                 color = themeColors.gray,
                 shape = RoundedCornerShape(16.dp),

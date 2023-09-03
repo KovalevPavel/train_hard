@@ -1,8 +1,8 @@
 package me.kovp.trainhard.database_api
 
 import kotlinx.coroutines.flow.Flow
+import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.database_api.models.CompletedSet
-import me.kovp.trainhard.database_api.models.MuscleGroup
 
 interface CompletedSetsApi {
     suspend fun getAllSets(): Flow<List<CompletedSet>>

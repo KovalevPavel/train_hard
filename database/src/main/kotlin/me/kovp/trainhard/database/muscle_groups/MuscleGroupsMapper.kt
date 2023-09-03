@@ -1,7 +1,7 @@
 package me.kovp.trainhard.database.muscle_groups
 
+import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.database.entities.MuscleGroupEntity
-import me.kovp.trainhard.database_api.models.MuscleGroup
 
 internal class MuscleGroupsMapper {
     fun mapMuscleGroupToDomainById(

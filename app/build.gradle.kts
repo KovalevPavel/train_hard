@@ -59,6 +59,7 @@ dependencies {
 
     implementation(libs.destinations.core)
 
+    implementation(project(":core_domain"))
     implementation(project(":ui_theme"))
     implementation(project(":database"))
     implementation(project(":database_api"))

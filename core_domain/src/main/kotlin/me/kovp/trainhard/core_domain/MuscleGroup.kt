@@ -1,4 +1,4 @@
-package me.kovp.trainhard.database_api.models
+package me.kovp.trainhard.core_domain
 
 sealed interface MuscleGroup {
     enum class Legs(val id: String) : MuscleGroup {
@@ -79,5 +79,13 @@ sealed interface MuscleGroup {
             Arms.values().let(::addAll)
             Abs.let(::add)
         }
+
+        fun getGroupById(groupId: String): MuscleGroup? =
+            Legs.find(groupId)
+                ?: Chest.find(groupId)
+                ?: Back.find(groupId)
+                ?: Deltas.find(groupId)
+                ?: Arms.find(groupId)
+                ?: Abs.takeIf { groupId.equals(ABS_ID, ignoreCase = true) }
     }
 }
