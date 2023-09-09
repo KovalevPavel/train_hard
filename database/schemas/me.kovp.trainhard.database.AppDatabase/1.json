@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b888458c2337ac2221fcac633a6a6476",
+    "identityHash": "9ca9d180abe94d06211d2d758a411e6d",
     "entities": [
       {
         "tableName": "musclegroup",
@@ -58,8 +58,14 @@
       },
       {
         "tableName": "completedExercises",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `exerciseId` TEXT NOT NULL, `reps` TEXT NOT NULL, PRIMARY KEY(`date`, `exerciseId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `date` TEXT NOT NULL, `exerciseId` TEXT NOT NULL, `sets` TEXT NOT NULL, PRIMARY KEY(`id`, `date`, `exerciseId`))",
         "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
           {
             "fieldPath": "date",
             "columnName": "date",
@@ -73,8 +79,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "reps",
-            "columnName": "reps",
+            "fieldPath": "sets",
+            "columnName": "sets",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -82,6 +88,7 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
+            "id",
             "date",
             "exerciseId"
           ]
@@ -93,7 +100,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b888458c2337ac2221fcac633a6a6476')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9ca9d180abe94d06211d2d758a411e6d')"
     ]
   }
 }

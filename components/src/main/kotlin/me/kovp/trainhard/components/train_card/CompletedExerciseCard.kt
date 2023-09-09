@@ -23,9 +23,9 @@ import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 
 @Composable
-fun SetCard(
+fun CompletedExerciseCard(
     modifier: Modifier = Modifier,
-    card: SetCardDto,
+    card: CompletedExerciseCardDto,
     onAddSetClick: () -> Unit,
     onRemoveSetClick: (Int) -> Unit,
     onEditSetClick: (Int) -> Unit,
@@ -45,9 +45,9 @@ fun SetCard(
             Column(
                 modifier = Modifier.animateContentSize()
             ) {
-                card.sets.forEachIndexed { index, set ->
+                card.sets.forEachIndexed { index, (w, r) ->
                     SetElement(
-                        text = set,
+                        text = stringResource(id = R.string.weight_reps_template, w, r),
                         isEditable = true,
                         onRemoveClick = { onRemoveSetClick(index) },
                         onSetClick = { onEditSetClick(index) }

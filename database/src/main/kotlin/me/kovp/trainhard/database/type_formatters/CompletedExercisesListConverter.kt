@@ -1,18 +1,18 @@
 package me.kovp.trainhard.database.type_formatters
 
 import androidx.room.TypeConverter
-import me.kovp.trainhard.database_api.models.Reps
+import me.kovp.trainhard.database_api.models.Sets
 
 class CompletedExercisesListConverter {
     @TypeConverter
-    fun convertToJson(data: Reps): String {
+    fun convertToJson(data: Sets): String {
         return data.joinToString(SETS_DELIMITER) { (weight, reps) ->
             "$weight$WEIGHT_REPS_DELIMITER$reps"
         }
     }
 
     @TypeConverter
-    fun convertFromJson(data: String): Reps {
+    fun convertFromJson(data: String): Sets {
         if (data.isEmpty()) return emptyList()
         return data.split(SETS_DELIMITER).mapNotNull {
             val (weightString, repsString) = it.split(WEIGHT_REPS_DELIMITER)

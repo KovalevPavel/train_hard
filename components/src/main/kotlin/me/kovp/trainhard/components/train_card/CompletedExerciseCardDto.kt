@@ -4,8 +4,10 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class SetCardDto(
+data class CompletedExerciseCardDto(
+    val setId: Long,
+    val setDate: String,
     val exerciseTitle: String,
-    val sets: List<String>,
+    val sets: List<Pair<Float, Int>>,
     val muscleGroups: List<String>,
 ) : Parcelable

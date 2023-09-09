@@ -6,6 +6,10 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import me.kovp.trainhard.database.type_formatters.IntListConverter
 
+/**
+ * @param title Название упраженения. Используется как id
+ * @param muscleGroups Список мышечных групп, которые работают в упражнении
+ */
 @Entity(tableName = "exercises")
 @TypeConverters(
     IntListConverter::class,

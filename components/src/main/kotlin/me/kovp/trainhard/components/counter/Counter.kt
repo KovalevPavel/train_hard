@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +35,7 @@ import me.kovp.trainhard.ui_theme.providers.themeTypography
 @Composable
 fun Counter(
     modifier: Modifier = Modifier,
+    label: String = "",
     initialValue: CounterValue,
     increment: Float,
     onValueChanged: (CounterValue) -> Unit,
@@ -48,80 +50,90 @@ fun Counter(
     }
         .toRegex()
 
-    Row(modifier = modifier) {
-        CounterButton(
-            iconRes = drawable.ic_minus,
-            isDecreaseButton = true,
-        ) {
-            val newValue = (currentValue - increment).value
-                .let {
-                    when (initialValue) {
-                        is CounterValue.Int -> it.toInt().coerceAtLeast(0)
-                        else -> it.toFloat().coerceAtLeast(0f)
-                    }
-                }
-                .toCounterValue()
-
-            currentValue = newValue
-            currentString = currentValue.value.toString()
-
-            onValueChanged(currentValue)
-        }
-        Row(
-            modifier = Modifier
-                .height(40.dp)
-                .width(70.dp)
-                .background(color = themeColors.white)
-                .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-        ) {
-            BasicTextField(
-                textStyle = themeTypography.body1.copy(color = themeColors.black),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = Companion.Number,
-                ),
-                singleLine = true,
-                cursorBrush = SolidColor(themeColors.lime),
-                value = currentString,
-                onValueChange = { rawString ->
-                    val newString = rawString.takeIf { it.matches(regex) } ?: currentString
-                    val newValue = when (initialValue) {
-                        is CounterValue.Int -> {
-                            newString.toIntOrNull()?.coerceAtLeast(0).orZero()
-                        }
-
-                        else -> {
-                            newString.toFloatOrNull()?.coerceAtLeast(0f).orZero() as Number
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = label,
+            style = themeTypography.body1
+        )
+        Row {
+            CounterButton(
+                iconRes = drawable.ic_minus,
+                isDecreaseButton = true,
+            ) {
+                val newValue = (currentValue - increment).value
+                    .let {
+                        when (initialValue) {
+                            is CounterValue.Int -> it.toInt().coerceAtLeast(0)
+                            else -> it.toFloat().coerceAtLeast(0f)
                         }
                     }
-                        .toCounterValue()
+                    .toCounterValue()
 
-                    if (newString != currentString) {
-                        currentValue = newValue
-                        currentString = newString
-                        onValueChanged(currentValue)
+                currentValue = newValue
+                currentString = currentValue.value.toString()
+
+                onValueChanged(currentValue)
+            }
+            Row(
+                modifier = Modifier
+                    .height(40.dp)
+                    .width(70.dp)
+                    .background(color = themeColors.white)
+                    .padding(horizontal = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+            ) {
+                BasicTextField(
+                    textStyle = themeTypography.body1.copy(color = themeColors.black),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = Companion.Number,
+                    ),
+                    singleLine = true,
+                    cursorBrush = SolidColor(themeColors.lime),
+                    value = currentString,
+                    onValueChange = { rawString ->
+                        val newString = rawString.takeIf { it.matches(regex) } ?: currentString
+                        val newValue = when (initialValue) {
+                            is CounterValue.Int -> {
+                                newString.toIntOrNull()?.coerceAtLeast(0).orZero()
+                            }
+
+                            else -> {
+                                newString.toFloatOrNull()?.coerceAtLeast(0f).orZero() as Number
+                            }
+                        }
+                            .toCounterValue()
+
+                        if (newString != currentString) {
+                            currentValue = newValue
+                            currentString = newString
+                            onValueChanged(currentValue)
+                        }
+                    },
+                )
+            }
+            CounterButton(
+                iconRes = drawable.ic_plus,
+                isDecreaseButton = false,
+            ) {
+                val newValue = (currentValue + increment).value
+                    .let {
+                        when (initialValue) {
+                            is CounterValue.Int -> it.toInt()
+                            else -> it.toFloat()
+                        }
                     }
-                },
-            )
-        }
-        CounterButton(
-            iconRes = drawable.ic_plus,
-            isDecreaseButton = false,
-        ) {
-            val newValue = (currentValue + increment).value
-                .let {
-                    when (initialValue) {
-                        is CounterValue.Int -> it.toInt()
-                        else -> it.toFloat()
-                    }
-                }
-                .toCounterValue()
+                    .toCounterValue()
 
-            currentValue = newValue
-            currentString = currentValue.value.toString()
+                currentValue = newValue
+                currentString = currentValue.value.toString()
 
-            onValueChanged(currentValue)
+                onValueChanged(currentValue)
+            }
         }
     }
 }

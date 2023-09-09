@@ -1,17 +1,10 @@
 package me.kovp.trainhard.new_training_presentation
 
-import me.kovp.trainhard.database_api.models.CompletedSet
+import me.kovp.trainhard.components.train_card.CompletedExerciseCardDto
 
 data class TrainingScreenState(
-    val items: List<SetItem>
+    val items: List<CompletedExerciseCardDto>,
 ) {
-    data class SetItem(
-        val payload: CompletedSet,
-        val title: String,
-        val muscleGroups: List<String>,
-        val reps: List<String>,
-    )
-
     companion object {
         val init = TrainingScreenState(
             items = emptyList(),

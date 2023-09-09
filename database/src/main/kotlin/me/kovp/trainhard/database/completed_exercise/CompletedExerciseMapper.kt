@@ -1,25 +1,28 @@
-package me.kovp.trainhard.database.completed_set
+package me.kovp.trainhard.database.completed_exercise
 
 import me.kovp.trainhard.database.dao.ExerciseDao
-import me.kovp.trainhard.database.entities.CompletedSetEntity
+import me.kovp.trainhard.database.entities.CompletedExerciseEntity
 import me.kovp.trainhard.database.entities.MuscleGroupEntity
 import me.kovp.trainhard.database.exercises.ExerciseMapper
-import me.kovp.trainhard.database_api.models.CompletedSet
+import me.kovp.trainhard.database_api.models.CompletedExercise
 
-internal class CompletedSetMapper(
+internal class CompletedExerciseMapper(
     private val exerciseDao: ExerciseDao,
     private val exerciseMapper: ExerciseMapper,
 ) {
-    fun mapToDb(set: CompletedSet): CompletedSetEntity = CompletedSetEntity(
-        date = set.date,
-        exerciseId = set.exercise.title,
-        reps = set.reps,
+    fun mapToDb(
+        completedExercise: CompletedExercise,
+    ): CompletedExerciseEntity = CompletedExerciseEntity(
+        id = completedExercise.id,
+        date = completedExercise.date,
+        exerciseId = completedExercise.exercise.title,
+        sets = completedExercise.sets,
     )
 
     suspend fun mapToDomain(
         groups: List<MuscleGroupEntity>,
-        set: CompletedSetEntity
-    ): CompletedSet? {
+        set: CompletedExerciseEntity,
+    ): CompletedExercise? {
         val exercise = exerciseDao.getExerciseByTitle(set.exerciseId)
             .firstOrNull()
             ?.let {
@@ -30,10 +33,11 @@ internal class CompletedSetMapper(
             }
             ?: return null
 
-        return CompletedSet(
+        return CompletedExercise(
+            id = set.id,
             date = set.date,
             exercise = exercise,
-            reps = set.reps
+            sets = set.sets
         )
     }
 }

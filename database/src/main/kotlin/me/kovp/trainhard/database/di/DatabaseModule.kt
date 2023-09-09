@@ -3,13 +3,13 @@ package me.kovp.trainhard.database.di
 import androidx.room.Room
 import me.kovp.trainhard.database.AppDatabase
 import me.kovp.trainhard.database.MuscleGroupsProvider
-import me.kovp.trainhard.database.completed_set.CompletedSetMapper
-import me.kovp.trainhard.database.completed_set.CompletedSetsApiImpl
+import me.kovp.trainhard.database.completed_exercise.CompletedExerciseApiImpl
+import me.kovp.trainhard.database.completed_exercise.CompletedExerciseMapper
 import me.kovp.trainhard.database.exercises.ExerciseMapper
 import me.kovp.trainhard.database.exercises.ExercisesApiImpl
 import me.kovp.trainhard.database.muscle_groups.MuscleGroupsApiImpl
 import me.kovp.trainhard.database.muscle_groups.MuscleGroupsMapper
-import me.kovp.trainhard.database_api.CompletedSetsApi
+import me.kovp.trainhard.database_api.CompletedExerciseApi
 import me.kovp.trainhard.database_api.ExercisesApi
 import me.kovp.trainhard.database_api.MuscleGroupsApi
 import org.koin.dsl.module
@@ -29,7 +29,7 @@ val dbModule = module {
     single {
         val db: AppDatabase = get()
 
-        CompletedSetMapper(
+        CompletedExerciseMapper(
             exerciseDao = db.exercisesDao(),
             exerciseMapper = get(),
         )
@@ -62,13 +62,13 @@ val dbModule = module {
         )
     }
 
-    single<CompletedSetsApi> {
+    single<CompletedExerciseApi> {
         val db: AppDatabase = get()
 
-        CompletedSetsApiImpl(
-            completedSetsDao = db.completedExercisesDao(),
+        CompletedExerciseApiImpl(
+            completedExercisesDao = db.completedExercisesDao(),
             muscleGroupsProvider = get(),
-            completedSetMapper = get(),
+            completedExerciseMapper = get(),
         )
     }
 }

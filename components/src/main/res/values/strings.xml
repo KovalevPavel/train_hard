@@ -2,4 +2,6 @@
 <resources>
     <string name="muscle_groups">Мышечные группы: %s</string>
     <string name="add_set">Добавить подход</string>
+    <string name="save">Сохранить</string>
+    <string name="weight_reps_template">%.2f кг на %d повторений</string>
 </resources>

@@ -29,10 +29,17 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultBackNavigator
+import com.ramcosta.composedestinations.result.ResultRecipient
+import com.ramcosta.composedestinations.result.getOr
 import com.ramcosta.composedestinations.spec.DestinationStyle
 import me.kovp.trainhard.database_api.models.Exercise
+import me.kovp.trainhard.navigation_api.localScreenMapper
+import me.kovp.trainhard.new_training_api.NewSetDialogScreen
+import me.kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
 import me.kovp.trainhard.new_training_presentation.destinations.NewSetDialogDestination
 import me.kovp.trainhard.new_training_presentation.di.selectExerciseModule
+import me.kovp.trainhard.new_training_presentation.new_set_dialog.NewSetDialogResult
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
@@ -43,8 +50,16 @@ import org.koin.core.context.unloadKoinModules
 @Composable
 fun SelectNewExerciseTypeComposable(
     navigator: DestinationsNavigator,
+    resultNavigator: ResultBackNavigator<NewSetDialogResult>,
+    resultRecipient: ResultRecipient<NewSetDialogDestination, NewSetDialogResult>,
 ) {
     loadKoinModules(selectExerciseModule)
+    val screenMapper = localScreenMapper.current
+
+    resultRecipient.onNavResult {
+        val result = it.getOr { NewSetDialogResult.Error }
+        resultNavigator.navigateBack(result)
+    }
 
     val viewModel: SelectNewExerciseTypeViewModel =
         koinViewModel<SelectNewExerciseTypeViewModelImpl>()
@@ -53,7 +68,13 @@ fun SelectNewExerciseTypeComposable(
         .collectAsState(initial = SelectExerciseScreenState.init)
 
     ExerciseList(screenState = screenState) {
-        navigator.navigate(NewSetDialogDestination(exerciseTitle = it.title))
+        val newSetDialog = screenMapper(
+            NewSetDialogScreen(
+                exerciseTitle = it.title,
+                requestAction = RequestAction.ADD,
+            )
+        )
+        navigator.navigate(newSetDialog)
     }
 
     DisposableEffect(key1 = viewModel) {

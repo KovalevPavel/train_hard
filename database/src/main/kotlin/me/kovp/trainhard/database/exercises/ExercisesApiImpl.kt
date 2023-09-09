@@ -28,6 +28,14 @@ internal class ExercisesApiImpl(
             .map { exerciseMapper.mapToDomain(groups, it) }
     }
 
+    override suspend fun getExerciseById(id: String): Exercise? {
+        val groups = muscleGroupsProvider()
+
+        return exerciseDao.getExerciseByTitle(title = id)
+            .firstOrNull()
+            ?.let { exerciseMapper.mapToDomain(groups, it) }
+    }
+
     override suspend fun getExercisesByMuscleGroup(muscleGroup: MuscleGroup): List<Exercise> {
         val groups = muscleGroupsProvider()
 

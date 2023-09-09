@@ -7,5 +7,6 @@ interface ExercisesApi {
     suspend fun addInitExercises(exercises: List<Exercise>)
     suspend fun addNewExercise(exercise: Exercise)
     suspend fun getExercises(): List<Exercise>
+    suspend fun getExerciseById(id: String): Exercise?
     suspend fun getExercisesByMuscleGroup(muscleGroup: MuscleGroup): List<Exercise>
 }
