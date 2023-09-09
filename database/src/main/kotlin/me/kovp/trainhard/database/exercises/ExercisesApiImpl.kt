@@ -1,7 +1,5 @@
 package me.kovp.trainhard.database.exercises
 
-import me.kovp.trainhard.core_domain.MuscleGroup
-import me.kovp.trainhard.database.MuscleGroupsProvider
 import me.kovp.trainhard.database.dao.ExerciseDao
 import me.kovp.trainhard.database_api.ExercisesApi
 import me.kovp.trainhard.database_api.models.Exercise
@@ -9,7 +7,6 @@ import me.kovp.trainhard.database_api.models.Exercise
 internal class ExercisesApiImpl(
     private val exerciseDao: ExerciseDao,
     private val exerciseMapper: ExerciseMapper,
-    private val muscleGroupsProvider: MuscleGroupsProvider,
 ) : ExercisesApi {
     override suspend fun addInitExercises(exercises: List<Exercise>) {
         exercises.map(exerciseMapper::mapToDb)
@@ -22,31 +19,15 @@ internal class ExercisesApiImpl(
     }
 
     override suspend fun getExercises(): List<Exercise> {
-        val groups = muscleGroupsProvider()
 
         return exerciseDao.getExercises()
-            .map { exerciseMapper.mapToDomain(groups, it) }
+            .map(exerciseMapper::mapToDomain)
     }
 
     override suspend fun getExerciseById(id: String): Exercise? {
-        val groups = muscleGroupsProvider()
 
         return exerciseDao.getExerciseByTitle(title = id)
             .firstOrNull()
-            ?.let { exerciseMapper.mapToDomain(groups, it) }
-    }
-
-    override suspend fun getExercisesByMuscleGroup(muscleGroup: MuscleGroup): List<Exercise> {
-        val groups = muscleGroupsProvider()
-
-        val groupId = groups.firstOrNull { e ->
-            e.groupId.equals(MuscleGroup.getGroupId(muscleGroup), ignoreCase = true)
-        }
-            ?.id
-            ?: return emptyList()
-
-        return exerciseDao.getExercisesByMuscleGroup(groupId).map {
-            exerciseMapper.mapToDomain(groups, it)
-        }
+            ?.let(exerciseMapper::mapToDomain)
     }
 }

@@ -2,37 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9ca9d180abe94d06211d2d758a411e6d",
+    "identityHash": "09e5874fc97789dee770811722dba6c7",
     "entities": [
       {
-        "tableName": "musclegroup",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `groupId` TEXT NOT NULL, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "groupId",
-            "columnName": "groupId",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": [
-            "id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
         "tableName": "exercises",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `muscleGroups` TEXT NOT NULL, PRIMARY KEY(`title`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `muscles` TEXT NOT NULL, PRIMARY KEY(`title`))",
         "fields": [
           {
             "fieldPath": "title",
@@ -41,8 +15,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "muscleGroups",
-            "columnName": "muscleGroups",
+            "fieldPath": "muscles",
+            "columnName": "muscles",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -100,7 +74,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9ca9d180abe94d06211d2d758a411e6d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '09e5874fc97789dee770811722dba6c7')"
     ]
   }
 }

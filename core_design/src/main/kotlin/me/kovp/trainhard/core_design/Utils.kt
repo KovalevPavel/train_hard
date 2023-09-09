@@ -3,26 +3,26 @@ package me.kovp.trainhard.core_design
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import me.kovp.core_design.R
-import me.kovp.trainhard.core_domain.MuscleGroup
+import me.kovp.trainhard.core_domain.Muscles
 
 @Composable
-fun mapMuscleGroupTitle(title: String): String {
-    val stringRes = when (MuscleGroup.getGroupById(title)) {
-        MuscleGroup.Legs.QUADRICEPS -> R.string.legs_quad
-        MuscleGroup.Legs.BICEPS -> R.string.legs_bic
-        MuscleGroup.Legs.CALVES -> R.string.legs_calves
-        MuscleGroup.Chest.UPPER_CHEST -> R.string.chest_upper
-        MuscleGroup.Chest.LOWER_CHEST -> R.string.chest_lower
-        MuscleGroup.Deltas.ANTERIOR -> R.string.deltas_ant
-        MuscleGroup.Deltas.MIDDLE -> R.string.deltas_mid
-        MuscleGroup.Deltas.POSTERIOR -> R.string.deltas_post
-        MuscleGroup.Back.LATS -> R.string.back_lats
-        MuscleGroup.Back.LOIN -> R.string.back_loin
-        MuscleGroup.Back.TRAPEZIUS -> R.string.back_trapezius
-        MuscleGroup.Arms.BICEPS -> R.string.arms_bic
-        MuscleGroup.Arms.TRICEPS -> R.string.arms_tric
-        MuscleGroup.Arms.FOREARMS -> R.string.arms_fore
-        MuscleGroup.Abs -> R.string.abs_
+fun mapMuscleTitle(muscleId: String): String {
+    val stringRes = when (muscleId) {
+        Muscles.quadriceps.id -> R.string.legs_quad
+        Muscles.hamstrings.id -> R.string.legs_bic
+        Muscles.calves.id -> R.string.legs_calves
+        Muscles.upperChest.id -> R.string.chest_upper
+        Muscles.lowerChest.id -> R.string.chest_lower
+        Muscles.deltoidsAnt.id -> R.string.deltas_ant
+        Muscles.deltoidsMid.id -> R.string.deltas_mid
+        Muscles.deltoidsPost.id -> R.string.deltas_post
+        Muscles.lats.id -> R.string.back_lats
+        Muscles.loin.id -> R.string.back_loin
+        Muscles.trapezius.id -> R.string.back_trapezius
+        Muscles.armsBiceps.id -> R.string.arms_bic
+        Muscles.armsTriceps.id -> R.string.arms_tric
+        Muscles.armsForearms.id -> R.string.arms_fore
+        Muscles.abs.id -> R.string.abs_
         else -> null
     }
 

@@ -9,5 +9,5 @@ data class CompletedExerciseCardDto(
     val setDate: String,
     val exerciseTitle: String,
     val sets: List<Pair<Float, Int>>,
-    val muscleGroups: List<String>,
+    val muscles: List<String>,
 ) : Parcelable

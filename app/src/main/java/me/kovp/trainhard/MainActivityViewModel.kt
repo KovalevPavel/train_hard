@@ -12,14 +12,12 @@ interface MainActivityViewModel {
 }
 
 class MainActivityViewModelImpl(
-    private val initMuscleGroups: InitMuscleGroupsInteractor,
     private val initBaseExercises: InitBaseExercisesInteractor,
 ) : ViewModel(), MainActivityViewModel {
     override val dbInitializationState = MutableStateFlow(false)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            initMuscleGroups()
             initBaseExercises()
         }
     }

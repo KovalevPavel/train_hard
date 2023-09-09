@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core_design"))
     implementation(project(":ui_theme"))
     implementation(project(":new_training_domain"))
     implementation(project(":new_training_api"))

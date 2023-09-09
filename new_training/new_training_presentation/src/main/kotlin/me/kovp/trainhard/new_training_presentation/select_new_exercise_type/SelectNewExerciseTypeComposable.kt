@@ -33,6 +33,8 @@ import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
 import com.ramcosta.composedestinations.spec.DestinationStyle
+import me.kovp.trainhard.core_design.joinToStringComposable
+import me.kovp.trainhard.core_design.mapMuscleTitle
 import me.kovp.trainhard.database_api.models.Exercise
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.new_training_api.NewSetDialogScreen
@@ -163,7 +165,8 @@ private fun ExerciseItem(
             style = themeTypography.header2,
         )
         Text(
-            text = item.muscleGroups.joinToString(),
+            text = item.muscles
+                .joinToStringComposable { mapMuscleTitle(muscleId = it.id) },
             style = themeTypography.body1,
         )
     }

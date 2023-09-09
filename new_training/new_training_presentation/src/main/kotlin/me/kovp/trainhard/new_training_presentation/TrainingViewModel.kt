@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import me.kovp.trainhard.components.train_card.CompletedExerciseCardDto
-import me.kovp.trainhard.core_domain.MuscleGroup
+import me.kovp.trainhard.core_domain.Muscle
 import me.kovp.trainhard.database_api.models.CompletedExercise
 import me.kovp.trainhard.database_api.models.minus
 import me.kovp.trainhard.database_api.models.plus
 import me.kovp.trainhard.new_trainig_domain.AddNewCompletedExerciseInteractor
-import me.kovp.trainhard.new_trainig_domain.GetAllSetsInteractor
+import me.kovp.trainhard.new_trainig_domain.GetAllCompletedExercisesInteractor
 import me.kovp.trainhard.new_trainig_domain.GetExerciseByIdInteractor
 import me.kovp.trainhard.new_trainig_domain.RemoveCompletedExerciseInteractor
 import me.kovp.trainhard.new_trainig_domain.UpdateCompletedExerciseInteractor
@@ -29,7 +29,7 @@ interface TrainingViewModel {
 class TrainingViewModelImpl(
     private val currentDate: String,
     private val addNewCompletedSet: AddNewCompletedExerciseInteractor,
-    private val getAllSets: GetAllSetsInteractor,
+    private val getAllExercises: GetAllCompletedExercisesInteractor,
     private val updateCompletedExercise: UpdateCompletedExerciseInteractor,
     private val getExerciseById: GetExerciseByIdInteractor,
     private val removeCompletedExercise: RemoveCompletedExerciseInteractor,
@@ -110,7 +110,7 @@ class TrainingViewModelImpl(
 
     private fun subscribeOnSetsList() {
         viewModelScope.launch {
-            getAllSets(date = currentDate).collect { list ->
+            getAllExercises(date = currentDate).collect { list ->
                 completedExercises.clear()
                 list.let(completedExercises::addAll)
                 screenState.value
@@ -125,6 +125,6 @@ class TrainingViewModelImpl(
         setDate = item.date,
         exerciseTitle = item.exercise.title,
         sets = item.sets,
-        muscleGroups = item.exercise.muscleGroups.map(MuscleGroup::getGroupId),
+        muscles = item.exercise.muscles.map(Muscle::id),
     )
 }

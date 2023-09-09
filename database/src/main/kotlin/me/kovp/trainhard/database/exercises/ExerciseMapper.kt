@@ -1,33 +1,32 @@
 package me.kovp.trainhard.database.exercises
 
+import me.kovp.trainhard.core_domain.Muscle
+import me.kovp.trainhard.core_domain.Muscles
 import me.kovp.trainhard.database.entities.ExerciseEntity
-import me.kovp.trainhard.database.entities.MuscleGroupEntity
-import me.kovp.trainhard.database.muscle_groups.MuscleGroupsMapper
 import me.kovp.trainhard.database_api.models.Exercise
 
-internal class ExerciseMapper(
-    private val muscleGroupMapper: MuscleGroupsMapper,
-) {
+internal class ExerciseMapper {
     fun mapToDb(data: Exercise): ExerciseEntity = ExerciseEntity(
         title = data.title,
-        muscleGroups = data.muscleGroups
-            .mapIndexed(muscleGroupMapper::mapMuscleGroupToDb)
-            .map(MuscleGroupEntity::id),
+        muscles = data.muscles
+            .map(Muscle::id)
     )
 
-    fun mapToDomain(groups: List<MuscleGroupEntity>, data: ExerciseEntity): Exercise {
-        val groupsIds = groups.map(MuscleGroupEntity::id)
-        val exerciseGroups = mutableListOf<String>()
+    fun mapToDomain(data: ExerciseEntity): Exercise {
+        val groupsIds = Muscles.allMuscles.map(Muscle::id)
+        val exerciseGroups = mutableListOf<Muscle>()
 
-        data.muscleGroups.forEach { id ->
+        data.muscles.forEach { id ->
             if (id in groupsIds) {
-                groups.firstOrNull { g -> g.id == id }?.groupId?.let(exerciseGroups::add)
+                Muscles.allMuscles
+                    .firstOrNull { g -> g.id == id }
+                    ?.let(exerciseGroups::add)
             }
         }
 
         return Exercise(
             title = data.title,
-            muscleGroups = exerciseGroups.mapNotNull(muscleGroupMapper::mapMuscleGroupToDomainById)
+            muscles = exerciseGroups
         )
     }
 }

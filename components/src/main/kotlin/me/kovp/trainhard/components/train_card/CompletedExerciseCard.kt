@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import me.kovp.components.R
 import me.kovp.trainhard.components.button.TrainButton
 import me.kovp.trainhard.core_design.joinToStringComposable
-import me.kovp.trainhard.core_design.mapMuscleGroupTitle
+import me.kovp.trainhard.core_design.mapMuscleTitle
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 
@@ -61,8 +61,8 @@ fun CompletedExerciseCard(
             }
 
             Spacer(modifier = Modifier.height(8.dp))
-            val groups = card.muscleGroups
-                .joinToStringComposable { mapMuscleGroupTitle(title = it) }
+            val groups = card.muscles
+                .joinToStringComposable { mapMuscleTitle(muscleId = it) }
 
             Text(
                 modifier = Modifier.padding(vertical = 8.dp),

@@ -2,7 +2,6 @@ package me.kovp.trainhard.database.completed_exercise
 
 import me.kovp.trainhard.database.dao.ExerciseDao
 import me.kovp.trainhard.database.entities.CompletedExerciseEntity
-import me.kovp.trainhard.database.entities.MuscleGroupEntity
 import me.kovp.trainhard.database.exercises.ExerciseMapper
 import me.kovp.trainhard.database_api.models.CompletedExercise
 
@@ -20,24 +19,18 @@ internal class CompletedExerciseMapper(
     )
 
     suspend fun mapToDomain(
-        groups: List<MuscleGroupEntity>,
-        set: CompletedExerciseEntity,
+        completedExercise: CompletedExerciseEntity,
     ): CompletedExercise? {
-        val exercise = exerciseDao.getExerciseByTitle(set.exerciseId)
+        val exercise = exerciseDao.getExerciseByTitle(completedExercise.exerciseId)
             .firstOrNull()
-            ?.let {
-                exerciseMapper.mapToDomain(
-                    groups = groups,
-                    data = it,
-                )
-            }
+            ?.let(exerciseMapper::mapToDomain)
             ?: return null
 
         return CompletedExercise(
-            id = set.id,
-            date = set.date,
+            id = completedExercise.id,
+            date = completedExercise.date,
             exercise = exercise,
-            sets = set.sets
+            sets = completedExercise.sets,
         )
     }
 }
