@@ -52,5 +52,7 @@ withDirectory("statistics") {
 }
 
 withDirectory("parameters") {
+    includeProject("parameters_api")
+    includeProject("parameters_domain")
     includeProject("parameters_presentation")
 }
