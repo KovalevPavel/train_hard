@@ -4,4 +4,11 @@
     <string name="add_set">Добавить подход</string>
     <string name="save">Сохранить</string>
     <string name="weight_reps_template">%.2f кг на %d повторений</string>
+
+    <string name="group_chest">Грудные</string>
+    <string name="group_legs">Ноги</string>
+    <string name="group_back">Спина</string>
+    <string name="group_deltoids">Плечи</string>
+    <string name="group_arms">Руки</string>
+    <string name="group_abs">Пресс</string>
 </resources>

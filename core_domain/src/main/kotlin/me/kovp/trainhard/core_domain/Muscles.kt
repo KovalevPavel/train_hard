@@ -92,6 +92,6 @@ object Muscles {
         abs,
     )
 
-    inline fun <reified T : MuscleGroup> getMusclesByGroup(): List<Muscle> = allMuscles
-        .filter { it.muscleGroup is T }
+    fun getMusclesByGroup(group: MuscleGroup): List<Muscle> = allMuscles
+        .filter { it.muscleGroup == group }
 }
