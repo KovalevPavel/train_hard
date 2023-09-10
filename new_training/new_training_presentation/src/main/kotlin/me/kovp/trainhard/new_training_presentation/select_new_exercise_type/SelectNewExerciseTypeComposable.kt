@@ -28,7 +28,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
-import com.ramcosta.composedestinations.spec.DestinationStyle
+import com.ramcosta.composedestinations.spec.DestinationStyleBottomSheet
 import me.kovp.new_training_presentation.R
 import me.kovp.trainhard.components.text_field.TrainTextField
 import me.kovp.trainhard.core_design.joinToStringComposable
@@ -46,7 +46,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 
-@Destination(style = DestinationStyle.BottomSheet::class)
+@Destination(style = DestinationStyleBottomSheet::class)
 @Composable
 fun SelectNewExerciseTypeComposable(
     navigator: DestinationsNavigator,

@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
-import com.ramcosta.composedestinations.spec.DestinationStyle.BottomSheet
+import com.ramcosta.composedestinations.spec.DestinationStyleBottomSheet
 import me.kovp.components.R.string
 import me.kovp.parameters_presentation.R
 import me.kovp.trainhard.components.button.TrainButton
@@ -28,7 +28,7 @@ import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen.RequestAction
 import me.kovp.trainhard.parameters_presentation.new_exercise_dialog.NewExerciseDialogResult.Success.DialogAction
 import me.kovp.trainhard.ui_theme.providers.themeColors
 
-@Destination(style = BottomSheet::class)
+@Destination(style = DestinationStyleBottomSheet::class)
 @Composable
 fun NewExerciseDialog(
     requestAction: RequestAction,

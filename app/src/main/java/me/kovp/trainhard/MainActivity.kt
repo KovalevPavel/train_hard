@@ -9,14 +9,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.plusAssign
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
             val screenMapper = remember { appScreenMapper }
             val systemUiController = rememberSystemUiController()
 
-            val navController = rememberAnimatedNavController()
+            val navController = rememberNavController()
             val bottomSheetNavigator = rememberBottomSheetNavigator()
             val engine = rememberAnimatedNavHostEngine()
             navController.navigatorProvider += bottomSheetNavigator
@@ -58,7 +59,7 @@ class MainActivity : ComponentActivity() {
                 LocalViewModelStoreOwner provides myStoreOwner,
             ) {
                 TrainHardTheme {
-                    systemUiController.setStatusBarColor(themeColors.black)
+                    val backgroundColor = themeColors.black
 
                     ModalBottomSheetLayout(
                         bottomSheetNavigator = bottomSheetNavigator,
@@ -80,6 +81,12 @@ class MainActivity : ComponentActivity() {
                                 engine = engine,
                             )
                         }
+                    }
+
+                    DisposableEffect(key1 = systemUiController) {
+                        systemUiController.setStatusBarColor(backgroundColor)
+
+                        onDispose { }
                     }
                 }
             }
