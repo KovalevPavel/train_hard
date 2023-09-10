@@ -22,9 +22,10 @@ import me.kovp.trainhard.ui_theme.providers.themeTypography
 @Composable
 internal fun TrainChip(
     muscle: Muscle,
+    selected: Boolean,
     onChipClick: (muscle: Muscle, isChecked: Boolean) -> Unit,
 ) {
-    var isSelected by remember { mutableStateOf(false) }
+    var isSelected by remember { mutableStateOf(selected) }
 
     FilterChip(
         shape = RoundedCornerShape(24.dp),

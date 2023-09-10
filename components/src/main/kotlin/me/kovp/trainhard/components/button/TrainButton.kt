@@ -37,6 +37,7 @@ fun TrainButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = themeColors.lime,
             contentColor = themeColors.black,
+            disabledContainerColor = themeColors.gray,
         ),
     ) {
         content()

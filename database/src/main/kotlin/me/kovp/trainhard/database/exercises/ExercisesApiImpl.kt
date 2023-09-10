@@ -20,6 +20,15 @@ internal class ExercisesApiImpl(
             .let { exerciseDao.insertExercise(it) }
     }
 
+    override suspend fun updateExistingExercise(exercise: Exercise): Int {
+        return exerciseMapper.mapToDb(data = exercise)
+            .let { exerciseDao.updateExercise(it) }
+    }
+
+    override suspend fun removeExercise(exercise: Exercise) {
+        exerciseDao.removeExercise(exerciseTitle = exercise.title)
+    }
+
     override suspend fun getExercises(): Flow<List<Exercise>> {
         return exerciseDao.getExercises()
             .transform {

@@ -1,6 +1,5 @@
 package me.kovp.trainhard.components.exercise_type
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import me.kovp.trainhard.core_design.joinToStringComposable
 import me.kovp.trainhard.core_design.mapMuscleTitle
@@ -38,11 +36,6 @@ fun ExerciseCard(
 ) {
     var visible by remember { mutableStateOf(true) }
 
-    val animatedScale by animateFloatAsState(
-        targetValue = if (visible) 1f else 0.1f,
-        label = "scale",
-    )
-
     val list = card.muscles
         .joinToStringComposable(", ") {
             mapMuscleTitle(muscleId = it.id)
@@ -50,12 +43,7 @@ fun ExerciseCard(
         .replaceFirstChar { it.uppercaseChar() }
 
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .graphicsLayer {
-                scaleX = animatedScale
-                scaleY = animatedScale
-            },
+        modifier = modifier.fillMaxWidth(),
         color = themeColors.gray,
         shape = RoundedCornerShape(16.dp),
         onClick = { onCardClick(card) },

@@ -8,7 +8,8 @@ import me.kovp.trainhard.new_training_presentation.destinations.NewSetDialogDest
 import me.kovp.trainhard.new_training_presentation.destinations.SelectNewExerciseTypeComposableDestination
 import me.kovp.trainhard.new_training_presentation.destinations.TrainingComposableDestination
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
-import me.kovp.trainhard.parameters_presentation.destinations.NewExerciseDialogDestination
+import me.kovp.trainhard.parameters_presentation.data.ExerciseScreenArgument
+import me.kovp.trainhard.parameters_presentation.destinations.NewExerciseScreenDestination
 
 val appScreenMapper = AppScreenMapper {
     when (it) {
@@ -32,7 +33,13 @@ val appScreenMapper = AppScreenMapper {
         }
 
         is NewExerciseDialogScreen -> {
-            NewExerciseDialogDestination(requestAction = it.requestAction)
+            NewExerciseScreenDestination(
+                argument = ExerciseScreenArgument(
+                    title = it.cardTitle,
+                    muscleIds = it.muscleIds,
+                ),
+                requestAction = it.requestAction,
+            )
         }
 
         else -> error("Can't find destination for screen $it")

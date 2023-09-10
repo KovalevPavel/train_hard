@@ -23,6 +23,7 @@ import me.kovp.trainhard.ui_theme.providers.themeTypography
 fun MuscleGroupsCloud(
     modifier: Modifier = Modifier,
     group: MuscleGroup,
+    initialList: List<Muscle>,
     onChipClick: (muscle: Muscle, isChecked: Boolean) -> Unit,
 ) {
     val muscles = Muscles.getMusclesByGroup(group)
@@ -40,7 +41,7 @@ fun MuscleGroupsCloud(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             muscles.forEach {
-                TrainChip(muscle = it, onChipClick = onChipClick)
+                TrainChip(muscle = it, selected = it in initialList, onChipClick = onChipClick)
             }
         }
     }

@@ -23,12 +23,13 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
 import me.kovp.trainhard.components.exercise_type.ExerciseCard
 import me.kovp.trainhard.components.fab.TrainFab
+import me.kovp.trainhard.core_domain.Muscle
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen.RequestAction
-import me.kovp.trainhard.parameters_presentation.destinations.NewExerciseDialogDestination
+import me.kovp.trainhard.parameters_presentation.destinations.NewExerciseScreenDestination
 import me.kovp.trainhard.parameters_presentation.di.parametersModule
-import me.kovp.trainhard.parameters_presentation.new_exercise_dialog.NewExerciseDialogResult
+import me.kovp.trainhard.parameters_presentation.new_exercise_dialog.NewExerciseScreenResult
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
@@ -38,7 +39,7 @@ import org.koin.core.context.loadKoinModules
 @Composable
 fun ParametersComposable(
     navigator: DestinationsNavigator,
-    resultRecipient: ResultRecipient<NewExerciseDialogDestination, NewExerciseDialogResult>,
+    resultRecipient: ResultRecipient<NewExerciseScreenDestination, NewExerciseScreenResult>,
 ) {
     loadKoinModules(
         parametersModule,
@@ -51,7 +52,7 @@ fun ParametersComposable(
     val state by vm.state.collectAsState()
 
     resultRecipient.onNavResult {
-        val result = it.getOr { NewExerciseDialogResult.Fail } as? NewExerciseDialogResult.Success
+        val result = it.getOr { NewExerciseScreenResult.Fail } as? NewExerciseScreenResult.Success
             ?: return@onNavResult
         vm.addOrEditExercise(exercise = result)
     }
@@ -90,11 +91,18 @@ fun ParametersComposable(
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(state.items + state.items + state.items + state.items) { dto ->
+            items(state.items) { dto ->
                 ExerciseCard(
                     card = dto,
                     onCardClick = { exerciseCard ->
-
+                        screenMapper(
+                            NewExerciseDialogScreen(
+                                cardTitle = exerciseCard.title,
+                                muscleIds = exerciseCard.muscles.map(Muscle::id),
+                                requestAction = RequestAction.EDIT,
+                            ),
+                        )
+                            .let(navigator::navigate)
                     },
                     onRemoveClick = { exerciseCard -> vm.removeExercise(exerciseCard) },
                 )
