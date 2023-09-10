@@ -18,12 +18,13 @@ class SelectNewExerciseTypeViewModelImpl(
 
     init {
         viewModelScope.launch {
-            val list = exercisesApi.getExercises()
-            SelectExerciseScreenState(
-                items = list,
-                isLoading = false,
-            )
-                .let { screenState.emit(it) }
+            exercisesApi.getExercises().collect { list ->
+                SelectExerciseScreenState(
+                    items = list,
+                    isLoading = false,
+                )
+                    .let { screenState.emit(it) }
+            }
         }
     }
 }

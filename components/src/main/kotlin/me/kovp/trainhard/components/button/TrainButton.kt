@@ -12,9 +12,10 @@ import me.kovp.trainhard.ui_theme.providers.themeTypography
 fun TrainButton(
     modifier: Modifier = Modifier,
     label: String,
+    isEnabled: Boolean = true,
     onClick: () -> Unit,
 ) {
-    TrainButton(modifier = modifier, onClick = onClick) {
+    TrainButton(modifier = modifier, onClick = onClick, isEnabled = isEnabled) {
         Text(
             text = label,
             style = themeTypography.body2.copy(color = themeColors.black),
@@ -26,11 +27,13 @@ fun TrainButton(
 fun TrainButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    isEnabled: Boolean,
     content: @Composable () -> Unit,
 ) {
     Button(
         modifier = modifier,
         onClick = onClick,
+        enabled = isEnabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = themeColors.lime,
             contentColor = themeColors.black,

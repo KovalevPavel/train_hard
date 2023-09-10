@@ -2,4 +2,5 @@
 <resources>
     <string name="weight_label">Вес снаряда, кг</string>
     <string name="reps_label">Повторения</string>
+    <string name="seacrch_exercise_hint">Поиск…</string>
 </resources>

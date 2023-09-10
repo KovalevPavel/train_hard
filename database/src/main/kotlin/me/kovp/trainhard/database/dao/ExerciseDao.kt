@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import me.kovp.trainhard.database.entities.ExerciseEntity
 
 @Dao
@@ -15,7 +16,7 @@ interface ExerciseDao {
     suspend fun insertExercise(exercise: ExerciseEntity)
 
     @Query("select * from exercises")
-    suspend fun getExercises(): List<ExerciseEntity>
+    fun getExercises(): Flow<List<ExerciseEntity>>
 
     @Query("select * from exercises where title=:title")
     suspend fun getExerciseByTitle(title: String): List<ExerciseEntity>

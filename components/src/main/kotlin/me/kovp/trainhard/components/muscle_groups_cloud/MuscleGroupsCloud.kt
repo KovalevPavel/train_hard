@@ -1,6 +1,5 @@
 package me.kovp.trainhard.components.muscle_groups_cloud
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -17,7 +16,6 @@ import me.kovp.components.R
 import me.kovp.trainhard.core_domain.Muscle
 import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.core_domain.Muscles
-import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -31,8 +29,7 @@ fun MuscleGroupsCloud(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .background(color = themeColors.black),
+            .fillMaxWidth(),
     ) {
         Text(
             text = group.getMuscleGroupTitle(),

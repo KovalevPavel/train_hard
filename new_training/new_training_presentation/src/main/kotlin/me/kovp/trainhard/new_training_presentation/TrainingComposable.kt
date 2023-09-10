@@ -1,20 +1,15 @@
 package me.kovp.trainhard.new_training_presentation
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,6 +20,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
+import me.kovp.trainhard.components.fab.TrainFab
 import me.kovp.trainhard.components.train_card.CompletedExerciseCard
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.new_training_api.NewSetDialogScreen
@@ -72,14 +68,8 @@ fun TrainingComposable(
 
     Scaffold(
         floatingActionButton = {
-            IconButton(onClick = { navigator.navigate(addNewSetScreen) }) {
-                Surface(
-                    modifier = Modifier.size(40.dp),
-                    shape = AbsoluteRoundedCornerShape(20.dp),
-                    color = themeColors.lime
-                ) {
-                    Image(imageVector = Icons.Default.Add, contentDescription = null)
-                }
+            TrainFab(icon = Icons.Default.Add) {
+                navigator.navigate(addNewSetScreen)
             }
         }
     ) { paddings ->

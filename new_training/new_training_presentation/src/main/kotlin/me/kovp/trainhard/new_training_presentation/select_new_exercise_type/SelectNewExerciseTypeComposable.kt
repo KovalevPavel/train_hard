@@ -1,18 +1,14 @@
 package me.kovp.trainhard.new_training_presentation.select_new_exercise_type
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -25,7 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -33,6 +29,8 @@ import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
 import com.ramcosta.composedestinations.spec.DestinationStyle
+import me.kovp.new_training_presentation.R
+import me.kovp.trainhard.components.text_field.TrainTextField
 import me.kovp.trainhard.core_design.joinToStringComposable
 import me.kovp.trainhard.core_design.mapMuscleTitle
 import me.kovp.trainhard.database_api.models.Exercise
@@ -103,31 +101,16 @@ private fun ExerciseList(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(vertical = 16.dp),
+            contentPadding = PaddingValues(all = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (screenState.isLoading.not()) {
                 item {
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth()
-                            .height(40.dp)
-                            .background(themeColors.white, shape = RoundedCornerShape(4.dp)),
-                    ) {
-                        BasicTextField(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .fillMaxWidth(),
-                            value = currentQuery,
-                            onValueChange = {
-                                currentQuery = it
-                            },
-                            textStyle = themeTypography.body1.copy(themeColors.black),
-                            singleLine = true,
-                            cursorBrush = SolidColor(themeColors.lime),
-                        )
-                    }
-
+                    TrainTextField(
+                        value = currentQuery,
+                        hint = stringResource(id = R.string.seacrch_exercise_hint),
+                        onValueChanged = { currentQuery = it },
+                    )
                 }
             }
 
@@ -141,7 +124,7 @@ private fun ExerciseList(
                     Divider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                     )
                 }
             }
@@ -151,14 +134,14 @@ private fun ExerciseList(
 
 @Composable
 private fun ExerciseItem(
+    modifier: Modifier = Modifier,
     item: Exercise,
     onItemClick: (Exercise) -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onItemClick(item) }
-            .padding(16.dp)
     ) {
         Text(
             text = item.title,

@@ -69,6 +69,7 @@ dependencies {
 
     implementation(project(":home_presentation"))
     implementation(project(":statistics_presentation"))
+    implementation(project(":parameters_api"))
     implementation(project(":parameters_presentation"))
 
     implementation(libs.room.ktx)
