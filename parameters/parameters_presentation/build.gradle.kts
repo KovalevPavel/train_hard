@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core_presentation"))
     implementation(project(":components"))
     implementation(project(":navigation"))
     implementation(project(":ui_theme"))

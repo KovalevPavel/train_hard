@@ -1,10 +1,6 @@
 package me.kovp.trainhard.home_presentation
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import me.kovp.trainhard.core_presentation.BaseViewModel
 import me.kovp.trainhard.home_domain.GetCurrentDateInteractor
 import me.kovp.trainhard.home_domain.GetGymCardHealthInteractor
 import me.kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
@@ -12,19 +8,10 @@ import me.kovp.trainhard.home_presentation.TodayPlan.RestDay
 import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay
 import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay.Exercise
 
-interface HomeViewModel {
-    val dateStringFlow: Flow<Long>
-    val gymHealthFlow: Flow<Float>
-    val todayPlanFlow: Flow<TodayPlan>
-}
-
-class HomeViewModelImpl(
+class HomeViewModel(
     private val currentDate: GetCurrentDateInteractor,
     private val getGymCardHealth: GetGymCardHealthInteractor,
-) : ViewModel(), HomeViewModel {
-    override val dateStringFlow = MutableStateFlow(0L)
-    override val gymHealthFlow = MutableStateFlow(0f)
-    override val todayPlanFlow = MutableStateFlow<TodayPlan>(NoProgramSelected)
+) : BaseViewModel<HomeScreenState>(initialState = HomeScreenState.init) {
 
     private val mockPlanList = TrainingDay(
         items = listOf(
@@ -69,23 +56,19 @@ class HomeViewModelImpl(
 
     init {
         updateUi()
-        loadTodayPlan()
     }
 
     private fun updateUi() {
-        viewModelScope.launch {
-            dateStringFlow.emit(
-                value = currentDate(),
-            )
-            gymHealthFlow.emit(
-                value = getGymCardHealth(),
-            )
-        }
-    }
-
-    private fun loadTodayPlan() {
-        viewModelScope.launch {
-            todayPlanFlow.emit(mockPlans.random())
-        }
+        launch(
+            action = {
+                HomeScreenState(
+                    dateString = currentDate(),
+                    gymHealth = getGymCardHealth(),
+                    todayPlan = mockPlans.random(),
+                    isLoading = false,
+                )
+                    .let { mutableStateFlow.emit(it) }
+            }
+        )
     }
 }

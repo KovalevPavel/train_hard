@@ -58,7 +58,8 @@ fun HomeComposable(
         screenMapper(TrainingScreen(dateString = currentDateString))
     }
     
-    val vm: HomeViewModel = koinViewModel<HomeViewModelImpl>()
+    val vm = koinViewModel<HomeViewModel>()
+    val screenState by vm.stateFlow.collectAsState()
 
     Scaffold(
         floatingActionButton = {
@@ -82,7 +83,7 @@ fun HomeComposable(
         floatingActionButtonPosition = FabPosition.Center,
     ) {
         HomeScreen(
-            viewModel = vm,
+            screenState = screenState,
             modifier = Modifier.padding(it)
         )
     }
@@ -90,12 +91,12 @@ fun HomeComposable(
 
 @Composable
 private fun HomeScreen(
-    viewModel: HomeViewModel,
+    screenState: HomeScreenState,
     modifier: Modifier,
 ) {
-    val dateString by viewModel.dateStringFlow.collectAsState(initial = null)
-    val cardHealth by viewModel.gymHealthFlow.collectAsState(initial = null)
-    val plan by viewModel.todayPlanFlow.collectAsState(initial = NoProgramSelected)
+    val dateString = screenState.dateString
+    val cardHealth = screenState.gymHealth
+    val plan = screenState.todayPlan
 
     val locale = LocalContext.current.resources.configuration.locales[0]
 
@@ -112,7 +113,7 @@ private fun HomeScreen(
         }
         item {
             CurrentDateCard(
-                currentDate = dateString?.formatToDateString(DATE_FORMAT_dd_newLine_MMMM, locale),
+                currentDate = dateString.formatToDateString(DATE_FORMAT_dd_newLine_MMMM, locale),
                 currentProgramName = ""
             )
         }

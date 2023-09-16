@@ -4,7 +4,7 @@ import me.kovp.trainhard.parameters_domain.GetAllExercisesInteractor
 import me.kovp.trainhard.parameters_domain.InsertNewExerciseInteractor
 import me.kovp.trainhard.parameters_domain.RemoveExerciseInteractor
 import me.kovp.trainhard.parameters_domain.UpdateExistingExerciseInteractor
-import me.kovp.trainhard.parameters_presentation.ParametersViewModelImpl
+import me.kovp.trainhard.parameters_presentation.ParametersViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -15,7 +15,7 @@ val parametersModule = module {
     single { RemoveExerciseInteractor(exercisesApi = get()) }
 
     viewModel {
-        ParametersViewModelImpl(
+        ParametersViewModel(
             getExercises = get(),
             insertExercise = get(),
             updateExercise = get(),

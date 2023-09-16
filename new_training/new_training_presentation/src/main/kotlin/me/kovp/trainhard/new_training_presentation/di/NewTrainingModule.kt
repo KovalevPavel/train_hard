@@ -5,7 +5,7 @@ import me.kovp.trainhard.new_trainig_domain.GetAllCompletedExercisesInteractor
 import me.kovp.trainhard.new_trainig_domain.GetExerciseByIdInteractor
 import me.kovp.trainhard.new_trainig_domain.RemoveCompletedExerciseInteractor
 import me.kovp.trainhard.new_trainig_domain.UpdateCompletedExerciseInteractor
-import me.kovp.trainhard.new_training_presentation.TrainingViewModelImpl
+import me.kovp.trainhard.new_training_presentation.TrainingViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -17,7 +17,7 @@ fun newTrainingModule(currentDate: String) = module {
     single { RemoveCompletedExerciseInteractor(completedExerciseApi = get()) }
 
     viewModel {
-        TrainingViewModelImpl(
+        TrainingViewModel(
             currentDate = currentDate,
             addNewCompletedSet = get(),
             getAllExercises = get(),

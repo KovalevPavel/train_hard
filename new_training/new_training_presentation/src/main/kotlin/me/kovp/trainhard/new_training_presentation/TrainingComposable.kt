@@ -50,9 +50,9 @@ fun TrainingComposable(
 
     val addNewSetScreen = remember { mapper(SelectExerciseTypeScreen) }
 
-    val vm: TrainingViewModel = koinViewModel<TrainingViewModelImpl>()
+    val vm = koinViewModel<TrainingViewModel>()
 
-    val state by vm.screenState.collectAsState(initial = TrainingScreenState.init)
+    val state by vm.stateFlow.collectAsState()
 
     editSetResRecipient.onNavResult {
         val result = it.getOr { NewSetDialogResult.Error } as? NewSetDialogResult.Success

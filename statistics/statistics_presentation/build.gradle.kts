@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core_presentation"))
     implementation(project(":ui_theme"))
     implementation(libs.destinations.core)
     ksp(libs.destinations.ksp)

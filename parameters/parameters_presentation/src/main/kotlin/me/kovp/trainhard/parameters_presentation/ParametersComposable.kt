@@ -2,6 +2,7 @@ package me.kovp.trainhard.parameters_presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,14 +16,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
 import me.kovp.trainhard.components.exercise_type.ExerciseCard
 import me.kovp.trainhard.components.fab.TrainFab
+import me.kovp.trainhard.components.progress.TrainProgressIndicator
 import me.kovp.trainhard.core_domain.Muscle
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
@@ -47,14 +51,23 @@ fun ParametersComposable(
 
     val screenMapper = localScreenMapper.current
 
-    val vm: ParametersViewModel = koinViewModel<ParametersViewModelImpl>()
+    val vm = koinViewModel<ParametersViewModel>()
 
-    val state by vm.state.collectAsState()
+    val state by vm.stateFlow.collectAsState()
 
     resultRecipient.onNavResult {
         val result = it.getOr { NewExerciseScreenResult.Fail } as? NewExerciseScreenResult.Success
             ?: return@onNavResult
         vm.addOrEditExercise(exercise = result)
+    }
+
+    if (state.isLoading) {
+        Box(
+            modifier = Modifier.zIndex(2f),
+            contentAlignment = Alignment.Center,
+        ) {
+            TrainProgressIndicator()
+        }
     }
 
     Scaffold(
