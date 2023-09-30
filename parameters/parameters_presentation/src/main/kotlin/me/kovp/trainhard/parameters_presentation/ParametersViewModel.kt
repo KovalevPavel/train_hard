@@ -1,10 +1,13 @@
 package me.kovp.trainhard.parameters_presentation
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import me.kovp.trainhard.components.exercise_type.ExerciseCardDto
 import me.kovp.trainhard.core_domain.Muscles
 import me.kovp.trainhard.core_presentation.BaseViewModel
+import me.kovp.trainhard.database_api.errors.EntityExistsException
 import me.kovp.trainhard.database_api.models.Exercise
 import me.kovp.trainhard.parameters_domain.GetAllExercisesInteractor
 import me.kovp.trainhard.parameters_domain.InsertNewExerciseInteractor
@@ -20,6 +23,9 @@ class ParametersViewModel(
     private val updateExercise: UpdateExistingExerciseInteractor,
     private val removeExistingExercise: RemoveExerciseInteractor,
 ) : BaseViewModel<ParametersScreenState>(initialState = ParametersScreenState.init) {
+    val actionFlow: Flow<ParametersAction> by lazy { _actionFlow }
+
+    private val _actionFlow = MutableSharedFlow<ParametersAction>()
 
     init {
         subscribeOnExercisesList()
@@ -68,10 +74,20 @@ class ParametersViewModel(
             action = {
                 insertExercise(exercise)
             },
-            error = {
-                Timber.e("form onError $it")
-            }
+            error = ::handleError,
         )
+    }
+
+    private fun handleError(e: Throwable) {
+        Timber.e(e)
+        viewModelScope.launch {
+            when (e) {
+                is EntityExistsException -> {
+                    ParametersAction.ShowItemIsAlreadyExistedDialog(title = e.title)
+                        .let { _actionFlow.emit(it) }
+                }
+            }
+        }
     }
 
     private fun editExercise(exercise: Exercise) {
@@ -84,5 +100,9 @@ class ParametersViewModel(
         launch(
             action = { removeExistingExercise(exercise) },
         )
+    }
+
+    companion object {
+        const val EXERCISE_ALREADY_EXISTS_DIALOG_LABEL = "EXERCISE_ALREADY_EXISTS_DIALOG_LABEL"
     }
 }

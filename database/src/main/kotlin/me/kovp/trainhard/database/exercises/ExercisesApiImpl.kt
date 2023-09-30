@@ -1,9 +1,11 @@
 package me.kovp.trainhard.database.exercises
 
+import android.database.sqlite.SQLiteConstraintException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import me.kovp.trainhard.database.dao.ExerciseDao
 import me.kovp.trainhard.database_api.ExercisesApi
+import me.kovp.trainhard.database_api.errors.EntityExistsException
 import me.kovp.trainhard.database_api.models.Exercise
 
 internal class ExercisesApiImpl(
@@ -17,7 +19,17 @@ internal class ExercisesApiImpl(
 
     override suspend fun addNewExercise(exercise: Exercise) {
         exercise.let(exerciseMapper::mapToDb)
-            .let { exerciseDao.insertExercise(it) }
+            .let {
+                kotlin.runCatching {
+                    exerciseDao.insertExercise(it)
+                }
+                    .onFailure {
+                        throw when (it) {
+                            is SQLiteConstraintException -> EntityExistsException(title = exercise.title)
+                            else -> it
+                        }
+                    }
+            }
     }
 
     override suspend fun updateExistingExercise(exercise: Exercise): Int {

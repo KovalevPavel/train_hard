@@ -11,4 +11,6 @@
     <string name="group_deltoids">Плечи</string>
     <string name="group_arms">Руки</string>
     <string name="group_abs">Пресс</string>
+
+    <string name="action_ok">OK</string>
 </resources>

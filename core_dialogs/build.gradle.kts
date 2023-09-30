@@ -12,13 +12,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core_dialogs"))
-    implementation(project(":core_presentation"))
-    implementation(project(":components"))
     implementation(project(":navigation"))
     implementation(project(":ui_theme"))
-    implementation(project(":parameters_domain"))
-    implementation(project(":parameters_api"))
+    implementation(project(":components"))
 
     implementation(libs.koin.compose)
     implementation(libs.destinations.core)

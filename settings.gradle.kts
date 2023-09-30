@@ -35,6 +35,7 @@ include(":navigation")
 include(":ui_theme")
 include(":components")
 include(":core_design")
+include(":core_dialogs")
 include(":core_presentation")
 
 withDirectory("home") {

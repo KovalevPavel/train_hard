@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="exercises_list">Список упражнений</string>
     <string name="new_exercise_screen_title">Новое упражнение</string>
     <string name="enter_exercise_hint">Название упражнения</string>
+    <string name="exercise_already_exists">Упражнение %s уже существует.</string>
 </resources>

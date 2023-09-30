@@ -10,6 +10,8 @@ import me.kovp.trainhard.new_training_presentation.destinations.TrainingComposab
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
 import me.kovp.trainhard.parameters_presentation.data.ExerciseScreenArgument
 import me.kovp.trainhard.parameters_presentation.destinations.NewExerciseScreenDestination
+import trainhard.core_dialogs.AlertConfirmationDialogScreen
+import trainhard.core_dialogs.destinations.AlertConfirmationDialogDestination
 
 val appScreenMapper = AppScreenMapper {
     when (it) {
@@ -39,6 +41,12 @@ val appScreenMapper = AppScreenMapper {
                     muscleIds = it.muscleIds,
                 ),
                 requestAction = it.requestAction,
+            )
+        }
+
+        is AlertConfirmationDialogScreen -> {
+            AlertConfirmationDialogDestination(
+                arguments = it,
             )
         }
 
