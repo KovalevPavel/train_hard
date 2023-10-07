@@ -21,6 +21,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
 import me.kovp.trainhard.components.fab.TrainFab
+import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.components.train_card.CompletedExerciseCard
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.new_training_api.NewSetDialogScreen
@@ -46,32 +47,77 @@ fun TrainingComposable(
         newTrainingModule(currentDate = currentDateString),
     )
 
-    val mapper = localScreenMapper.current
-
-    val addNewSetScreen = remember { mapper(SelectExerciseTypeScreen) }
-
     val vm = koinViewModel<TrainingViewModel>()
 
     val state by vm.stateFlow.collectAsState()
+    val action by vm.actionFlow.collectAsState(initial = TrainingAction.Empty)
 
     editSetResRecipient.onNavResult {
         val result = it.getOr { NewSetDialogResult.Error } as? NewSetDialogResult.Success
-            ?: return@onNavResult
-        vm.addOrEditSet(result)
+            ?: run {
+                vm.obtainEvent(null)
+                return@onNavResult
+            }
+        TrainingEvent.AddOrEditSet(result).let(vm::obtainEvent)
     }
 
     newSetResRecipient.onNavResult {
         val result = it.getOr { NewSetDialogResult.Error } as? NewSetDialogResult.Success
-            ?: return@onNavResult
-        vm.addNewCompletedExercise(dialogResult = result)
+            ?: run {
+                vm.obtainEvent(null)
+                return@onNavResult
+            }
+        TrainingEvent.AddNewCompletedExercise(result).let(vm::obtainEvent)
     }
 
+    when (val st = state) {
+        is TrainingScreenState.Loading -> {
+            FullscreenLoader()
+        }
+
+        is TrainingScreenState.Data -> {
+            DataContent(state = st, vm = vm)
+        }
+    }
+
+    SubscribeToActions(action = action, navigator = navigator)
+}
+
+@Composable
+private fun SubscribeToActions(
+    action: TrainingAction,
+    navigator: DestinationsNavigator,
+) {
+    val mapper = localScreenMapper.current
+    val addNewSetScreen = remember { mapper(SelectExerciseTypeScreen) }
+
+    when (action) {
+        is TrainingAction.Empty -> {
+            // do nothing
+        }
+
+        is TrainingAction.NavigateToSelectExerciseType -> {
+            navigator.navigate(addNewSetScreen)
+        }
+
+        is TrainingAction.NavigateToEditSetDialog -> {
+            mapper(action.data)
+                .let(navigator::navigate)
+        }
+    }
+}
+
+@Composable
+private fun DataContent(
+    state: TrainingScreenState.Data,
+    vm: TrainingViewModel,
+) {
     Scaffold(
         floatingActionButton = {
             TrainFab(icon = Icons.Default.Add) {
-                navigator.navigate(addNewSetScreen)
+                TrainingEvent.OnAddExerciseClick.let(vm::obtainEvent)
             }
-        }
+        },
     ) { paddings ->
         LazyColumn(
             modifier = Modifier
@@ -87,25 +133,26 @@ fun TrainingComposable(
                     .lastOrNull()
                     ?: (0f to 0)
 
-                val newRepsDialog = NewSetDialogScreen(
+                val newSetDialog = NewSetDialogScreen(
                     id = it.setId,
                     exerciseTitle = it.exerciseTitle,
                     initWeight = initWeight,
                     initReps = initReps,
                     requestAction = RequestAction.ADD,
                 )
-                    .let(mapper::invoke)
+                    .let(TrainingEvent::NavigateToSetDialog)
 
                 CompletedExerciseCard(
                     card = it,
                     onAddSetClick = {
-                        navigator.navigate(newRepsDialog)
+                        vm.obtainEvent(newSetDialog)
                     },
                     onRemoveSetClick = { id ->
-                        vm.removeSet(setDto = it, setIndex = id)
+                        TrainingEvent.OnRemoveSetClick(setDto = it, setIndex = id)
+                            .let(vm::obtainEvent)
                     },
                     onEditSetClick = { id ->
-                        val editDialog = NewSetDialogScreen(
+                        NewSetDialogScreen(
                             id = it.setId,
                             setId = id.toLong(),
                             exerciseTitle = it.exerciseTitle,
@@ -113,9 +160,8 @@ fun TrainingComposable(
                             initReps = initReps,
                             requestAction = RequestAction.EDIT,
                         )
-                            .let(mapper::invoke)
-
-                        navigator.navigate(editDialog)
+                            .let(TrainingEvent::NavigateToSetDialog)
+                            .let(vm::obtainEvent)
                     }
                 )
             }

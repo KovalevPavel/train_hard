@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.kovp.home_presentation.R
+import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_MM_yyyy
 import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_newLine_MMMM
 import me.kovp.trainhard.core_domain.formatToDateString
@@ -51,16 +52,52 @@ fun HomeComposable(
     navigator: DestinationsNavigator,
 ) {
     loadKoinModules(homeModule)
+
+    val vm = koinViewModel<HomeViewModel>()
+    val screenState by vm.stateFlow.collectAsState()
+    val action by vm.actionFlow.collectAsState(initial = HomeAction.Empty)
+
+    when (val st = screenState) {
+        is HomeScreenState.Loading -> {
+            FullscreenLoader()
+        }
+
+        is HomeScreenState.Data -> {
+            DataContent(screenState = st, viewModel = vm)
+        }
+    }
+
+    SubscribeToAction(action = action, navigator = navigator)
+}
+
+@Composable
+private fun SubscribeToAction(
+    action: HomeAction,
+    navigator: DestinationsNavigator,
+) {
     val screenMapper = localScreenMapper.current
     val currentDateString = System.currentTimeMillis().formatToDateString(DATE_FORMAT_dd_MM_yyyy)
 
     val newTrainingDestination = remember {
         screenMapper(TrainingScreen(dateString = currentDateString))
     }
-    
-    val vm = koinViewModel<HomeViewModel>()
-    val screenState by vm.stateFlow.collectAsState()
 
+    when (action) {
+        is HomeAction.Empty -> {
+            // do nothing
+        }
+
+        is HomeAction.OpenNewTrainingScreen -> {
+            navigator.navigate(newTrainingDestination)
+        }
+    }
+}
+
+@Composable
+private fun DataContent(
+    screenState: HomeScreenState.Data,
+    viewModel: HomeViewModel,
+) {
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -68,7 +105,7 @@ fun HomeComposable(
                 containerColor = themeColors.lime,
                 shape = RoundedCornerShape(size = 100.dp),
                 onClick = {
-                    navigator.navigate(newTrainingDestination)
+                    viewModel.obtainEvent(HomeEvent.OnStartTrainingClick)
                 },
             ) {
                 Text(
@@ -91,7 +128,7 @@ fun HomeComposable(
 
 @Composable
 private fun HomeScreen(
-    screenState: HomeScreenState,
+    screenState: HomeScreenState.Data,
     modifier: Modifier,
 ) {
     val dateString = screenState.dateString

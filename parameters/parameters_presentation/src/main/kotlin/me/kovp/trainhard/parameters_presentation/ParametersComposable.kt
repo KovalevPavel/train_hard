@@ -2,7 +2,6 @@ package me.kovp.trainhard.parameters_presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,11 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
@@ -30,7 +27,7 @@ import me.kovp.trainhard.components.exercise_type.ExerciseCard
 import me.kovp.trainhard.components.exercise_type.ExerciseCardDto
 import me.kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
 import me.kovp.trainhard.components.fab.TrainFab
-import me.kovp.trainhard.components.progress.TrainProgressIndicator
+import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen.RequestAction
@@ -57,8 +54,6 @@ fun ParametersComposable(
         parametersModule,
     )
 
-    val screenMapper = localScreenMapper.current
-
     val vm = koinViewModel<ParametersViewModel>()
 
     val state by vm.stateFlow.collectAsState()
@@ -67,7 +62,7 @@ fun ParametersComposable(
     resultRecipient.onNavResult {
         val result = it.getOr { NewExerciseScreenResult.Fail } as? NewExerciseScreenResult.Success
             ?: return@onNavResult
-        vm.addOrEditExercise(exercise = result)
+        ParametersEvent.AddOrEditExercise(result).let(vm::obtainEvent)
     }
 
     SubscribeOnAction(
@@ -77,15 +72,22 @@ fun ParametersComposable(
         confirmationResultRecipient = confirmationResultRecipient,
     )
 
-    if (state.isLoading) {
-        Box(
-            modifier = Modifier.zIndex(2f),
-            contentAlignment = Alignment.Center,
-        ) {
-            TrainProgressIndicator()
+    when (val st = state) {
+        is ParametersScreenState.Loading -> {
+            FullscreenLoader()
+        }
+
+        is ParametersScreenState.Data -> {
+            DataContent(state = st, vm = vm)
         }
     }
+}
 
+@Composable
+private fun DataContent(
+    state: ParametersScreenState.Data,
+    vm: ParametersViewModel,
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -100,10 +102,9 @@ fun ParametersComposable(
         },
         floatingActionButton = {
             TrainFab(icon = Icons.Filled.Add) {
-                screenMapper(
-                    NewExerciseDialogScreen(requestAction = RequestAction.ADD)
-                )
-                    .let(navigator::navigate)
+                NewExerciseDialogScreen(requestAction = RequestAction.ADD)
+                    .let(ParametersEvent::NavigateToNewExerciseScreen)
+                    .let(vm::obtainEvent)
             }
         }
     ) {
@@ -124,14 +125,13 @@ fun ParametersComposable(
                 ExerciseCard(
                     card = dto,
                     onCardClick = { exerciseCard ->
-                        screenMapper(
-                            NewExerciseDialogScreen(
-                                cardTitle = exerciseCard.title,
-                                muscleIds = exerciseCard.muscles.map(MuscleDto::id),
-                                requestAction = RequestAction.EDIT,
-                            ),
+                        NewExerciseDialogScreen(
+                            cardTitle = exerciseCard.title,
+                            muscleIds = exerciseCard.muscles.map(MuscleDto::id),
+                            requestAction = RequestAction.EDIT,
                         )
-                            .let(navigator::navigate)
+                            .let(ParametersEvent::NavigateToNewExerciseScreen)
+                            .let(vm::obtainEvent)
                     },
                     onRemoveClick = { exerciseCard ->
                         ParametersEvent.ShowConfirmDeleteDialog(exerciseCard)
@@ -170,8 +170,11 @@ private fun SubscribeOnAction(
                 exerciseTitle = action.title,
             )
         }
-    }
 
+        is ParametersAction.OpenNewExerciseScreen -> {
+            ShowNewExerciseScreen(screen = action.data, navigator = navigator)
+        }
+    }
 }
 
 @Composable
@@ -182,9 +185,13 @@ private fun ShowDeleteConfDialog(
     resultRecipient: ResultRecipient<AlertConfirmationDialogDestination, Boolean>,
 ) {
     val screenMapper = localScreenMapper.current
+
     resultRecipient.onNavResult {
         val result = it.getOr { false }
-        if (result) viewModel.removeExercise(exercise)
+        if (result) {
+            ParametersEvent.RemoveExercise(exercise).let(viewModel::obtainEvent)
+            return@onNavResult
+        }
         viewModel.obtainEvent(null)
     }
 
@@ -201,7 +208,7 @@ private fun ShowDeleteConfDialog(
 }
 
 @Composable
-fun ShowExerciseExistsDialog(
+private fun ShowExerciseExistsDialog(
     navigator: DestinationsNavigator,
     exerciseTitle: String,
 ) {
@@ -216,4 +223,14 @@ fun ShowExerciseExistsDialog(
         )
     )
         .let(navigator::navigate)
+}
+
+@Composable
+private fun ShowNewExerciseScreen(
+    screen: NewExerciseDialogScreen,
+    navigator: DestinationsNavigator,
+) {
+    val screenMapper = localScreenMapper.current
+
+    screenMapper(screen).let(navigator::navigate)
 }

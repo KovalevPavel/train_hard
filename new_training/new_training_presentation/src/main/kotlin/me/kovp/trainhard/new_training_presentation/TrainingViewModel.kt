@@ -2,6 +2,7 @@ package me.kovp.trainhard.new_training_presentation
 
 import me.kovp.trainhard.components.train_card.CompletedExerciseCardDto
 import me.kovp.trainhard.core_domain.Muscle
+import me.kovp.trainhard.core_domain.update
 import me.kovp.trainhard.core_presentation.BaseViewModel
 import me.kovp.trainhard.database_api.models.CompletedExercise
 import me.kovp.trainhard.database_api.models.minus
@@ -21,81 +22,49 @@ class TrainingViewModel(
     private val updateCompletedExercise: UpdateCompletedExerciseInteractor,
     private val getExerciseById: GetExerciseByIdInteractor,
     private val removeCompletedExercise: RemoveCompletedExerciseInteractor,
-) : BaseViewModel<TrainingScreenState>(initialState = TrainingScreenState.init) {
+) : BaseViewModel<TrainingScreenState, TrainingEvent, TrainingAction>(
+    initialState = TrainingScreenState.Loading,
+) {
     private val completedExercises: MutableList<CompletedExercise> = mutableListOf()
 
     init {
         subscribeOnSetsList()
     }
 
-    fun addNewCompletedExercise(dialogResult: NewSetDialogResult.Success) {
+    override fun obtainEvent(event: TrainingEvent?) {
         launch(
             action = {
-                getExerciseById(id = dialogResult.exerciseTitle)?.let {
-                    addNewCompletedSet(
-                        dateString = currentDate,
-                        exercise = it,
-                        sets = listOf(
-                            dialogResult.weight to dialogResult.reps,
+                when (event) {
+                    is TrainingEvent.OnAddExerciseClick -> {
+                        TrainingAction.NavigateToSelectExerciseType
+                            .let { mutableActionFlow.emit(it) }
+                    }
+
+                    is TrainingEvent.NavigateToSetDialog -> {
+                        TrainingAction.NavigateToEditSetDialog(data = event.dialog)
+                            .let { mutableActionFlow.emit(it) }
+                    }
+
+                    is TrainingEvent.AddOrEditSet -> {
+                        addOrEditSet(dialogResult = event.data)
+                    }
+
+                    is TrainingEvent.AddNewCompletedExercise -> {
+                        addNewCompletedExercise(dialogResult = event.data)
+                    }
+
+                    is TrainingEvent.OnRemoveSetClick -> {
+                        removeSet(
+                            setDto = event.setDto,
+                            setIndex = event.setIndex,
                         )
-                    )
-                }
-            }
-        )
-    }
-
-    fun addOrEditSet(dialogResult: NewSetDialogResult.Success) {
-        launch(
-            action = {
-                val completedExercise = completedExercises.firstOrNull {
-                    it.id == dialogResult.id && it.exercise.title == dialogResult.exerciseTitle
-                }
-                    ?: return@launch
-
-                val updatedExercise = when (dialogResult.resultAction) {
-                    DialogAction.ADD_NEW -> {
-                        completedExercise + listOf(dialogResult.weight to dialogResult.reps)
                     }
 
-                    DialogAction.EDIT_CURRENT -> {
-                        val modifiedReps = completedExercise.sets
-                            .mapIndexed { i, p ->
-                                if (i.toLong() == dialogResult.setId) {
-                                    dialogResult.weight to dialogResult.reps
-                                } else {
-                                    p
-                                }
-                            }
-                        completedExercise.copy(sets = modifiedReps)
+                    null -> {
+                        mutableActionFlow.emit(TrainingAction.Empty)
                     }
                 }
-
-                updateCompletedExercise(editedCompletedExercise = updatedExercise)
-            }
-        )
-    }
-
-    fun removeSet(setDto: CompletedExerciseCardDto, setIndex: Int) {
-        launch(
-            action = {
-                val completedExercise = completedExercises.firstOrNull {
-                    it.id == setDto.setId && it.date == setDto.setDate && it.exercise.title == setDto.exerciseTitle
-                }
-                    ?: return@launch
-
-                val index = completedExercises.indexOf(completedExercise)
-
-                if (completedExercise.sets.size == 1) {
-                    removeCompletedExercise(completedExercise)
-                    completedExercises.remove(completedExercise)
-                    return@launch
-                }
-
-                val updateSet = completedExercise - listOf(completedExercise.sets[setIndex])
-
-                completedExercises[index] = updateSet
-                updateCompletedExercise(editedCompletedExercise = updateSet)
-            }
+            },
         )
     }
 
@@ -103,16 +72,78 @@ class TrainingViewModel(
         launch(
             action = {
                 getAllExercises(date = currentDate).collect { list ->
-                    mutableStateFlow.value.copy(isLoading = true).let { mutableStateFlow.emit(it) }
+                    TrainingScreenState.Loading.let(mutableStateFlow::update)
 
                     completedExercises.clear()
                     list.let(completedExercises::addAll)
-                    mutableStateFlow.value
-                        .copy(items = list.map(::mapToCardDto), isLoading = false)
-                        .let { mutableStateFlow.emit(it) }
+                    list.map(::mapToCardDto)
+                        .let(TrainingScreenState::Data)
+                        .let(mutableStateFlow::update)
                 }
             }
         )
+    }
+
+    private suspend fun addNewCompletedExercise(dialogResult: NewSetDialogResult.Success) {
+        getExerciseById(id = dialogResult.exerciseTitle)?.let {
+            addNewCompletedSet(
+                dateString = currentDate,
+                exercise = it,
+                sets = listOf(
+                    dialogResult.weight to dialogResult.reps,
+                )
+            )
+        }
+        obtainEvent(null)
+    }
+
+    private suspend fun addOrEditSet(dialogResult: NewSetDialogResult.Success) {
+        val completedExercise = completedExercises.firstOrNull {
+            it.id == dialogResult.id && it.exercise.title == dialogResult.exerciseTitle
+        }
+            ?: return
+
+        val updatedExercise = when (dialogResult.resultAction) {
+            DialogAction.ADD_NEW -> {
+                completedExercise + listOf(dialogResult.weight to dialogResult.reps)
+            }
+
+            DialogAction.EDIT_CURRENT -> {
+                val modifiedReps = completedExercise.sets
+                    .mapIndexed { i, p ->
+                        if (i.toLong() == dialogResult.setId) {
+                            dialogResult.weight to dialogResult.reps
+                        } else {
+                            p
+                        }
+                    }
+                completedExercise.copy(sets = modifiedReps)
+            }
+        }
+
+        updateCompletedExercise(editedCompletedExercise = updatedExercise)
+        obtainEvent(null)
+    }
+
+    private suspend fun removeSet(setDto: CompletedExerciseCardDto, setIndex: Int) {
+        val completedExercise = completedExercises.firstOrNull {
+            it.id == setDto.setId && it.date == setDto.setDate && it.exercise.title == setDto.exerciseTitle
+        }
+            ?: return
+
+        val index = completedExercises.indexOf(completedExercise)
+
+        if (completedExercise.sets.size == 1) {
+            removeCompletedExercise(completedExercise)
+            completedExercises.remove(completedExercise)
+            return
+        }
+
+        val updateSet = completedExercise - listOf(completedExercise.sets[setIndex])
+
+        completedExercises[index] = updateSet
+        updateCompletedExercise(editedCompletedExercise = updateSet)
+        obtainEvent(null)
     }
 
     private fun mapToCardDto(item: CompletedExercise) = CompletedExerciseCardDto(

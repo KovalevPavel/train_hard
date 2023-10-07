@@ -1,12 +1,11 @@
 package me.kovp.trainhard.parameters_presentation
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import me.kovp.trainhard.components.exercise_type.ExerciseCardDto
 import me.kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
 import me.kovp.trainhard.core_domain.Muscles
+import me.kovp.trainhard.core_domain.update
 import me.kovp.trainhard.core_presentation.BaseViewModel
 import me.kovp.trainhard.database_api.errors.EntityExistsException
 import me.kovp.trainhard.database_api.models.Exercise
@@ -23,57 +22,71 @@ class ParametersViewModel(
     private val insertExercise: InsertNewExerciseInteractor,
     private val updateExercise: UpdateExistingExerciseInteractor,
     private val removeExistingExercise: RemoveExerciseInteractor,
-) : BaseViewModel<ParametersScreenState>(initialState = ParametersScreenState.init) {
-    val actionFlow: Flow<ParametersAction> by lazy { _actionFlow }
-
-    private val _actionFlow = MutableSharedFlow<ParametersAction>()
-
+) : BaseViewModel<ParametersScreenState, ParametersEvent, ParametersAction>(
+    initialState = ParametersScreenState.Loading,
+) {
     init {
         subscribeOnExercisesList()
     }
 
-    fun obtainEvent(event: ParametersEvent?) {
-        viewModelScope.launch {
-            when (event) {
-                is ParametersEvent.ShowConfirmDeleteDialog -> {
-                    ParametersAction.ShowDeleteConfirmationDialog(exercise = event.exercise)
-                        .let { _actionFlow.emit(it) }
-                }
-
-                null -> _actionFlow.emit(ParametersAction.Empty)
-            }
-        }
-    }
-
-    fun removeExercise(exercise: ExerciseCardDto) {
+    override fun obtainEvent(event: ParametersEvent?) {
         launch(
             action = {
-                Exercise(
-                    title = exercise.title,
-                    muscles = exercise.muscles.mapNotNull {
-                        Muscles.getMuscleById(it.id)
-                    },
-                )
-                    .let { removeExistingExercise(it) }
+                when (event) {
+                    is ParametersEvent.ShowConfirmDeleteDialog -> {
+                        ParametersAction.ShowDeleteConfirmationDialog(exercise = event.exercise)
+                            .let { mutableActionFlow.emit(it) }
+                    }
+
+                    is ParametersEvent.NavigateToNewExerciseScreen -> {
+                        ParametersAction.OpenNewExerciseScreen(data = event.data)
+                            .let { mutableActionFlow.emit(it) }
+                    }
+
+                    is ParametersEvent.RemoveExercise -> {
+                        removeExercise(exercise = event.data)
+                    }
+
+                    is ParametersEvent.AddOrEditExercise -> {
+                        addOrEditExercise(exercise = event.result)
+                    }
+
+                    null -> {
+                        mutableActionFlow.emit(ParametersAction.Empty)
+                    }
+                }
             },
+            error = ::handleError,
         )
     }
 
-    fun addOrEditExercise(exercise: NewExerciseScreenResult.Success) {
+    private suspend fun removeExercise(exercise: ExerciseCardDto) {
+        Exercise(
+            title = exercise.title,
+            muscles = exercise.muscles.mapNotNull {
+                Muscles.getMuscleById(it.id)
+            },
+        )
+            .let { removeExistingExercise(it) }
+        obtainEvent(null)
+    }
+
+    private suspend fun addOrEditExercise(exercise: NewExerciseScreenResult.Success) {
         val muscles = Muscles.allMuscles.filter { it.id in exercise.muscleIds }
         val mappedExercise = Exercise(title = exercise.title, muscles = muscles)
         when (exercise.screenAction) {
             ScreenAction.ADD -> addNewExercise(exercise = mappedExercise)
             ScreenAction.EDIT -> editExercise(exercise = mappedExercise)
         }
+        obtainEvent(null)
     }
 
     private fun subscribeOnExercisesList() {
         viewModelScope.launch {
             getExercises().collect { list ->
-                mutableStateFlow.value.copy(isLoading = true).let { mutableStateFlow.emit(it) }
+                ParametersScreenState.Loading.let(mutableStateFlow::update)
 
-                val dtoList = list.map {
+                list.map {
                     ExerciseCardDto(
                         title = it.title,
                         muscles = it.muscles.map { m ->
@@ -84,23 +97,14 @@ class ParametersViewModel(
                         },
                     )
                 }
-
-                ParametersScreenState(
-                    items = dtoList,
-                    isLoading = false,
-                )
-                    .let { mutableStateFlow.emit(it) }
+                    .let(ParametersScreenState::Data)
+                    .let(mutableStateFlow::update)
             }
         }
     }
 
-    private fun addNewExercise(exercise: Exercise) {
-        launch(
-            action = {
-                insertExercise(exercise)
-            },
-            error = ::handleError,
-        )
+    private suspend fun addNewExercise(exercise: Exercise) {
+        insertExercise(exercise)
     }
 
     private fun handleError(e: Throwable) {
@@ -109,7 +113,7 @@ class ParametersViewModel(
             when (e) {
                 is EntityExistsException -> {
                     ParametersAction.ShowItemIsAlreadyExistedDialog(title = e.title)
-                        .let { _actionFlow.emit(it) }
+                        .let { mutableActionFlow.emit(it) }
                 }
             }
         }

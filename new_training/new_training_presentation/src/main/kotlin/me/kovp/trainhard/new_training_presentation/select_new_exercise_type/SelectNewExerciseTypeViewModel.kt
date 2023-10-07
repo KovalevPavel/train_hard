@@ -1,30 +1,41 @@
 package me.kovp.trainhard.new_training_presentation.select_new_exercise_type
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import me.kovp.trainhard.core_domain.update
+import me.kovp.trainhard.core_presentation.BaseViewModel
 import me.kovp.trainhard.database_api.ExercisesApi
+import me.kovp.trainhard.new_training_api.NewSetDialogScreen
+import me.kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
 
-interface SelectNewExerciseTypeViewModel {
-    val screenState: Flow<SelectExerciseScreenState>
-}
-
-class SelectNewExerciseTypeViewModelImpl(
+class SelectNewExerciseTypeViewModel(
     private val exercisesApi: ExercisesApi,
-) : ViewModel(), SelectNewExerciseTypeViewModel {
-    override val screenState = MutableStateFlow(SelectExerciseScreenState.init)
-
+) : BaseViewModel<SelectExerciseScreenState, SelectExerciseEvent, SelectExerciseAction>(
+    initialState = SelectExerciseScreenState.Loading,
+) {
     init {
         viewModelScope.launch {
             exercisesApi.getExercises().collect { list ->
-                SelectExerciseScreenState(
-                    items = list,
-                    isLoading = false,
-                )
-                    .let { screenState.emit(it) }
+                list.let(SelectExerciseScreenState::Data)
+                    .let(mutableStateFlow::update)
             }
+        }
+    }
+
+    override fun obtainEvent(event: SelectExerciseEvent?) {
+        viewModelScope.launch {
+            when (event) {
+                is SelectExerciseEvent.OnExerciseClick -> {
+                    NewSetDialogScreen(
+                        exerciseTitle = event.data.title,
+                        requestAction = RequestAction.ADD,
+                    )
+                        .let(SelectExerciseAction::NavigateToNewSetDialog)
+                }
+
+                null -> SelectExerciseAction.Empty
+            }
+                .let { mutableActionFlow.emit(it) }
         }
     }
 }

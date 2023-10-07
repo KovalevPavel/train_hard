@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,17 +28,15 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
 import com.ramcosta.composedestinations.spec.DestinationStyleBottomSheet
 import me.kovp.new_training_presentation.R
+import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.components.text_field.TrainTextField
 import me.kovp.trainhard.core_design.joinToStringComposable
 import me.kovp.trainhard.core_design.mapMuscleTitle
 import me.kovp.trainhard.database_api.models.Exercise
 import me.kovp.trainhard.navigation_api.localScreenMapper
-import me.kovp.trainhard.new_training_api.NewSetDialogScreen
-import me.kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
 import me.kovp.trainhard.new_training_presentation.destinations.NewSetDialogDestination
 import me.kovp.trainhard.new_training_presentation.di.selectExerciseModule
 import me.kovp.trainhard.new_training_presentation.new_set_dialog.NewSetDialogResult
-import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
@@ -54,28 +50,30 @@ fun SelectNewExerciseTypeComposable(
     resultRecipient: ResultRecipient<NewSetDialogDestination, NewSetDialogResult>,
 ) {
     loadKoinModules(selectExerciseModule)
-    val screenMapper = localScreenMapper.current
 
     resultRecipient.onNavResult {
         val result = it.getOr { NewSetDialogResult.Error }
         resultNavigator.navigateBack(result)
     }
 
-    val viewModel: SelectNewExerciseTypeViewModel =
-        koinViewModel<SelectNewExerciseTypeViewModelImpl>()
+    val viewModel = koinViewModel<SelectNewExerciseTypeViewModel>()
 
-    val screenState by viewModel.screenState
-        .collectAsState(initial = SelectExerciseScreenState.init)
+    val screenState by viewModel.stateFlow.collectAsState()
+    val action by viewModel.actionFlow.collectAsState(initial = SelectExerciseAction.Empty)
 
-    ExerciseList(screenState = screenState) {
-        val newSetDialog = screenMapper(
-            NewSetDialogScreen(
-                exerciseTitle = it.title,
-                requestAction = RequestAction.ADD,
-            )
-        )
-        navigator.navigate(newSetDialog)
+    when (val st = screenState) {
+        is SelectExerciseScreenState.Loading -> {
+            FullscreenLoader()
+        }
+
+        is SelectExerciseScreenState.Data -> {
+            DataContent(screenState = st) {
+                SelectExerciseEvent.OnExerciseClick(it).let(viewModel::obtainEvent)
+            }
+        }
     }
+
+    SubscribeOnAction(action = action, navigator = navigator)
 
     DisposableEffect(key1 = viewModel) {
         onDispose {
@@ -85,48 +83,60 @@ fun SelectNewExerciseTypeComposable(
 }
 
 @Composable
-private fun ExerciseList(
-    screenState: SelectExerciseScreenState,
+fun SubscribeOnAction(
+    action: SelectExerciseAction,
+    navigator: DestinationsNavigator,
+) {
+    val screenMapper = localScreenMapper.current
+
+    when (action) {
+        is SelectExerciseAction.Empty -> {
+            // do nothing
+        }
+
+        is SelectExerciseAction.NavigateToNewSetDialog -> {
+            screenMapper(screen = action.data)
+                .let(navigator::navigate)
+        }
+    }
+}
+
+@Composable
+private fun DataContent(
+    screenState: SelectExerciseScreenState.Data,
     onItemClick: (Exercise) -> Unit,
 ) {
     var currentQuery by remember { mutableStateOf("") }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        if (screenState.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.padding(top = 64.dp),
-                color = themeColors.lime,
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(all = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        item {
+            TrainTextField(
+                value = currentQuery,
+                hint = stringResource(id = R.string.seacrch_exercise_hint),
+                onValueChanged = { currentQuery = it },
             )
         }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(all = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            if (screenState.isLoading.not()) {
-                item {
-                    TrainTextField(
-                        value = currentQuery,
-                        hint = stringResource(id = R.string.seacrch_exercise_hint),
-                        onValueChanged = { currentQuery = it },
-                    )
-                }
-            }
+        itemsIndexed(
+            items = screenState.items
+                .filter { it.title.contains(currentQuery, ignoreCase = true) },
+            key = { _, item -> item.title },
+        ) { index, item ->
+            ExerciseItem(
+                item = item,
+                onItemClick = onItemClick,
+            )
 
-            itemsIndexed(
-                items = screenState.items
-                    .filter { it.title.contains(currentQuery, ignoreCase = true) },
-                key = { _, item -> item.title },
-            ) { index, item ->
-                ExerciseItem(item = item, onItemClick = onItemClick)
-                if (index < screenState.items.lastIndex) {
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                    )
-                }
+            if (index < screenState.items.lastIndex) {
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                )
             }
         }
     }
