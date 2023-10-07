@@ -94,4 +94,8 @@ object Muscles {
 
     fun getMusclesByGroup(group: MuscleGroup): List<Muscle> = allMuscles
         .filter { it.muscleGroup == group }
+
+    fun getMuscleById(id: String) = allMuscles.firstOrNull {
+        it.muscleId.equals(id, ignoreCase = true)
+    }
 }

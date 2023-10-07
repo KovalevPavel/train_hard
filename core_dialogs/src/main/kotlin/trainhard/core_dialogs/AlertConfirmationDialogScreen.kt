@@ -11,6 +11,4 @@ data class AlertConfirmationDialogScreen(
     val message: String = "",
     val positiveAction: String,
     val negativeAction: String = "",
-    val onPositiveClick: () -> Unit,
-    val onNegativeClick: () -> Unit = {},
 ) : Screen, Parcelable

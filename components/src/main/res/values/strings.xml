@@ -13,4 +13,5 @@
     <string name="group_abs">Пресс</string>
 
     <string name="action_ok">OK</string>
+    <string name="action_cancel">Отмена</string>
 </resources>

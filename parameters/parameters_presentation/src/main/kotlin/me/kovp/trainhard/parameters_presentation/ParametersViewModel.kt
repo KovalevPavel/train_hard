@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import me.kovp.trainhard.components.exercise_type.ExerciseCardDto
+import me.kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
 import me.kovp.trainhard.core_domain.Muscles
 import me.kovp.trainhard.core_presentation.BaseViewModel
 import me.kovp.trainhard.database_api.errors.EntityExistsException
@@ -31,12 +32,31 @@ class ParametersViewModel(
         subscribeOnExercisesList()
     }
 
+    fun obtainEvent(event: ParametersEvent?) {
+        viewModelScope.launch {
+            when (event) {
+                is ParametersEvent.ShowConfirmDeleteDialog -> {
+                    ParametersAction.ShowDeleteConfirmationDialog(exercise = event.exercise)
+                        .let { _actionFlow.emit(it) }
+                }
+
+                null -> _actionFlow.emit(ParametersAction.Empty)
+            }
+        }
+    }
+
     fun removeExercise(exercise: ExerciseCardDto) {
-        Exercise(
-            title = exercise.title,
-            muscles = exercise.muscles,
+        launch(
+            action = {
+                Exercise(
+                    title = exercise.title,
+                    muscles = exercise.muscles.mapNotNull {
+                        Muscles.getMuscleById(it.id)
+                    },
+                )
+                    .let { removeExistingExercise(it) }
+            },
         )
-            .let { deleteExercise(it) }
     }
 
     fun addOrEditExercise(exercise: NewExerciseScreenResult.Success) {
@@ -56,7 +76,12 @@ class ParametersViewModel(
                 val dtoList = list.map {
                     ExerciseCardDto(
                         title = it.title,
-                        muscles = it.muscles,
+                        muscles = it.muscles.map { m ->
+                            MuscleDto(
+                                muscleId = m.muscleId,
+                                muscleGroup = m.muscleGroup,
+                            )
+                        },
                     )
                 }
 
@@ -96,13 +121,8 @@ class ParametersViewModel(
         )
     }
 
-    private fun deleteExercise(exercise: Exercise) {
-        launch(
-            action = { removeExistingExercise(exercise) },
-        )
-    }
-
     companion object {
         const val EXERCISE_ALREADY_EXISTS_DIALOG_LABEL = "EXERCISE_ALREADY_EXISTS_DIALOG_LABEL"
+        const val CONFIRM_DELETE_EXERCISE_DIALOG_LABEL = "CONFIRM_DELETE_EXERCISE_DIALOG_LABEL"
     }
 }

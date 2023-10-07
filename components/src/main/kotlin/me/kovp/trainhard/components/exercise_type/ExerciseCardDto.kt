@@ -1,8 +1,19 @@
 package me.kovp.trainhard.components.exercise_type
 
-import me.kovp.trainhard.core_domain.Muscle
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import me.kovp.trainhard.core_domain.MuscleGroup
 
+@Parcelize
 data class ExerciseCardDto(
     val title: String,
-    val muscles: List<Muscle>,
-)
+    val muscles: List<MuscleDto>,
+) : Parcelable {
+    @Parcelize
+    data class MuscleDto(
+        val muscleId: String,
+        val muscleGroup: MuscleGroup,
+    ) : Parcelable {
+        val id get() = "${muscleGroup.groupId}_$muscleId"
+    }
+}

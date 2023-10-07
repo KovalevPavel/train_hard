@@ -28,13 +28,15 @@ import com.ramcosta.composedestinations.result.getOr
 import me.kovp.parameters_presentation.R
 import me.kovp.trainhard.components.exercise_type.ExerciseCard
 import me.kovp.trainhard.components.exercise_type.ExerciseCardDto
+import me.kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
 import me.kovp.trainhard.components.fab.TrainFab
 import me.kovp.trainhard.components.progress.TrainProgressIndicator
-import me.kovp.trainhard.core_domain.Muscle
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen.RequestAction
+import me.kovp.trainhard.parameters_presentation.ParametersViewModel.Companion.CONFIRM_DELETE_EXERCISE_DIALOG_LABEL
 import me.kovp.trainhard.parameters_presentation.ParametersViewModel.Companion.EXERCISE_ALREADY_EXISTS_DIALOG_LABEL
+import me.kovp.trainhard.parameters_presentation.destinations.AlertConfirmationDialogDestination
 import me.kovp.trainhard.parameters_presentation.destinations.NewExerciseScreenDestination
 import me.kovp.trainhard.parameters_presentation.di.parametersModule
 import me.kovp.trainhard.parameters_presentation.new_exercise_dialog.NewExerciseScreenResult
@@ -49,6 +51,7 @@ import trainhard.core_dialogs.AlertConfirmationDialogScreen
 fun ParametersComposable(
     navigator: DestinationsNavigator,
     resultRecipient: ResultRecipient<NewExerciseScreenDestination, NewExerciseScreenResult>,
+    confirmationResultRecipient: ResultRecipient<AlertConfirmationDialogDestination, Boolean>,
 ) {
     loadKoinModules(
         parametersModule,
@@ -70,7 +73,8 @@ fun ParametersComposable(
     SubscribeOnAction(
         action = action,
         navigator = navigator,
-        onConfirmDeleteClick = { },
+        viewModel = vm,
+        confirmationResultRecipient = confirmationResultRecipient,
     )
 
     if (state.isLoading) {
@@ -123,13 +127,16 @@ fun ParametersComposable(
                         screenMapper(
                             NewExerciseDialogScreen(
                                 cardTitle = exerciseCard.title,
-                                muscleIds = exerciseCard.muscles.map(Muscle::id),
+                                muscleIds = exerciseCard.muscles.map(MuscleDto::id),
                                 requestAction = RequestAction.EDIT,
                             ),
                         )
                             .let(navigator::navigate)
                     },
-                    onRemoveClick = { exerciseCard -> vm.removeExercise(exerciseCard) },
+                    onRemoveClick = { exerciseCard ->
+                        ParametersEvent.ShowConfirmDeleteDialog(exerciseCard)
+                            .let(vm::obtainEvent)
+                    },
                 )
             }
         }
@@ -140,15 +147,23 @@ fun ParametersComposable(
 private fun SubscribeOnAction(
     action: ParametersAction,
     navigator: DestinationsNavigator,
-    onConfirmDeleteClick: () -> Unit,
+    viewModel: ParametersViewModel,
+    confirmationResultRecipient: ResultRecipient<AlertConfirmationDialogDestination, Boolean>,
 ) {
     when (action) {
         is ParametersAction.Empty -> {
             // do nothing
         }
+
         is ParametersAction.ShowDeleteConfirmationDialog -> {
-            // do nothing
+            ShowDeleteConfDialog(
+                navigator = navigator,
+                exercise = action.exercise,
+                viewModel = viewModel,
+                resultRecipient = confirmationResultRecipient,
+            )
         }
+
         is ParametersAction.ShowItemIsAlreadyExistedDialog -> {
             ShowExerciseExistsDialog(
                 navigator = navigator,
@@ -163,22 +178,26 @@ private fun SubscribeOnAction(
 private fun ShowDeleteConfDialog(
     navigator: DestinationsNavigator,
     exercise: ExerciseCardDto,
-    onConfirmDeleteClick: () -> Unit,
+    viewModel: ParametersViewModel,
+    resultRecipient: ResultRecipient<AlertConfirmationDialogDestination, Boolean>,
 ) {
-    //    val screenMapper = localScreenMapper.current
+    val screenMapper = localScreenMapper.current
+    resultRecipient.onNavResult {
+        val result = it.getOr { false }
+        if (result) viewModel.removeExercise(exercise)
+        viewModel.obtainEvent(null)
+    }
 
-    //    screenMapper(
-    //        AlertConfirmationDialogScreen(
-    //            dialogLabel = EXERCISE_ALREADY_EXISTS_DIALOG_LABEL,
-    //            title = stringResource(id = R.string.new_exercise),
-    //            message = "message",
-    //            positiveAction = "Ok",
-    //            negativeAction = "Cancel",
-    //            onPositiveClick = {},
-    //            onNegativeClick = {},
-    //        )
-    //    )
-    //        .let(navigator::navigate)
+    screenMapper(
+        AlertConfirmationDialogScreen(
+            dialogLabel = CONFIRM_DELETE_EXERCISE_DIALOG_LABEL,
+            title = exercise.title,
+            message = stringResource(id = R.string.exercise_delete_message),
+            positiveAction = stringResource(id = me.kovp.components.R.string.action_ok),
+            negativeAction = stringResource(id = me.kovp.components.R.string.action_cancel),
+        )
+    )
+        .let(navigator::navigate)
 }
 
 @Composable
@@ -194,7 +213,6 @@ fun ShowExerciseExistsDialog(
             title = stringResource(id = R.string.new_exercise_screen_title),
             message = stringResource(id = R.string.exercise_already_exists, exerciseTitle),
             positiveAction = stringResource(id = me.kovp.components.R.string.action_ok),
-            onPositiveClick = {},
         )
     )
         .let(navigator::navigate)

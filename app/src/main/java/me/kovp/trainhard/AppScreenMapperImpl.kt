@@ -9,9 +9,9 @@ import me.kovp.trainhard.new_training_presentation.destinations.SelectNewExercis
 import me.kovp.trainhard.new_training_presentation.destinations.TrainingComposableDestination
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
 import me.kovp.trainhard.parameters_presentation.data.ExerciseScreenArgument
+import me.kovp.trainhard.parameters_presentation.destinations.AlertConfirmationDialogDestination
 import me.kovp.trainhard.parameters_presentation.destinations.NewExerciseScreenDestination
 import trainhard.core_dialogs.AlertConfirmationDialogScreen
-import trainhard.core_dialogs.destinations.AlertConfirmationDialogDestination
 
 val appScreenMapper = AppScreenMapper {
     when (it) {
@@ -44,6 +44,8 @@ val appScreenMapper = AppScreenMapper {
             )
         }
 
+        //TODO: сделать что-то с диалогами. В текущей версии либы их нельзя вынести в отдельный
+        // модуль
         is AlertConfirmationDialogScreen -> {
             AlertConfirmationDialogDestination(
                 arguments = it,
