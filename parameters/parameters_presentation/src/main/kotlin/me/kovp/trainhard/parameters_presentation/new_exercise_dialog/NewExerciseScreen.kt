@@ -3,6 +3,7 @@ package me.kovp.trainhard.parameters_presentation.new_exercise_dialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -68,7 +69,11 @@ fun NewExerciseScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn(
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .weight(1f),
             verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(vertical = 8.dp)
         ) {
             items(MuscleGroup.values()) {
                 MuscleGroupsCloud(
@@ -82,26 +87,24 @@ fun NewExerciseScreen(
                     }
                 }
             }
-            item {
-                TrainButton(
-                    modifier = Modifier
-                        .height(56.dp)
-                        .fillMaxWidth(),
-                    isEnabled = currentQuery.isNotEmpty() && selectedMuscleGroups.isNotEmpty(),
-                    label = stringResource(id = string.save),
-                ) {
-                    resultNavigator.navigateBack(
-                        result = NewExerciseScreenResult.Success(
-                            title = currentQuery,
-                            muscleIds = selectedMuscleGroups.map(Muscle::id),
-                            screenAction = when (requestAction) {
-                                RequestAction.ADD -> ScreenAction.ADD
-                                RequestAction.EDIT -> ScreenAction.EDIT
-                            }
-                        )
-                    )
-                }
-            }
+        }
+        TrainButton(
+            modifier = Modifier
+                .height(56.dp)
+                .fillMaxWidth(),
+            isEnabled = currentQuery.isNotEmpty() && selectedMuscleGroups.isNotEmpty(),
+            label = stringResource(id = string.save),
+        ) {
+            resultNavigator.navigateBack(
+                result = NewExerciseScreenResult.Success(
+                    title = currentQuery,
+                    muscleIds = selectedMuscleGroups.map(Muscle::id),
+                    screenAction = when (requestAction) {
+                        RequestAction.ADD -> ScreenAction.ADD
+                        RequestAction.EDIT -> ScreenAction.EDIT
+                    }
+                )
+            )
         }
     }
 }
