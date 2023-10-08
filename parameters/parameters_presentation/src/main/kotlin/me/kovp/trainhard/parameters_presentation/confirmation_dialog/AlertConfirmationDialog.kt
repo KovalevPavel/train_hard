@@ -2,7 +2,9 @@ package me.kovp.trainhard.parameters_presentation.confirmation_dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,23 +46,31 @@ fun AlertConfirmationDialog(
                 Text(text = it, style = themeTypography.body1)
             }
 
-            positiveAction.takeIf(String::isNotEmpty)?.let {
-                TrainButton(
-                    modifier = Modifier.align(Alignment.End),
-                    label = it,
-                    isPrimary = true,
-                ) {
-                    resultNavigator.navigateBack(result = true)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                negativeAction.takeIf(String::isNotEmpty)?.let {
+                    TrainButton(
+                        label = it,
+                        isPrimary = false,
+                    ) {
+                        resultNavigator.navigateBack(result = false)
+                    }
                 }
-            }
+                    // Чтобы positiveAction оставался у правого края
+                    ?: Box(modifier = Modifier)
 
-            negativeAction.takeIf(String::isNotEmpty)?.let {
-                TrainButton(
-                    modifier = Modifier.align(Alignment.End),
-                    label = it,
-                    isPrimary = false,
-                ) {
-                    resultNavigator.navigateBack(result = false)
+                positiveAction.takeIf(String::isNotEmpty)?.let {
+                    TrainButton(
+                        label = it,
+                        isPrimary = true,
+                    ) {
+                        resultNavigator.navigateBack(result = true)
+                    }
                 }
             }
         }
