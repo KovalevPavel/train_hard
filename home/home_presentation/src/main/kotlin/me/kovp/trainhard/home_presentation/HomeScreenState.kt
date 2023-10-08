@@ -3,10 +3,11 @@ package me.kovp.trainhard.home_presentation
 sealed interface HomeScreenState {
     data class Data(
         val dateString: Long,
-        val gymHealth: Float,
+        val gymHealth: GymCardDates?,
         val todayPlan: TodayPlan,
-        val isLoading: Boolean,
     ) : HomeScreenState
+
+    data class GymCardDates(val start: Long?, val end: Long?)
 
     data object Loading : HomeScreenState
 }

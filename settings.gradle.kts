@@ -58,3 +58,8 @@ withDirectory("parameters") {
     includeProject("parameters_domain")
     includeProject("parameters_presentation")
 }
+
+withDirectory("storage") {
+    includeProject("domain_storage")
+    includeProject("core_storage")
+}

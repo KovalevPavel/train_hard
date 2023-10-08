@@ -29,6 +29,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.kovp.home_presentation.R
 import me.kovp.trainhard.components.progress.FullscreenLoader
+import me.kovp.trainhard.components.selectors.ShowDatePickerDialog
 import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_MM_yyyy
 import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_newLine_MMMM
 import me.kovp.trainhard.core_domain.formatToDateString
@@ -67,12 +68,13 @@ fun HomeComposable(
         }
     }
 
-    SubscribeToAction(action = action, navigator = navigator)
+    SubscribeToAction(action = action, viewModel = vm, navigator = navigator)
 }
 
 @Composable
 private fun SubscribeToAction(
     action: HomeAction,
+    viewModel: HomeViewModel,
     navigator: DestinationsNavigator,
 ) {
     val screenMapper = localScreenMapper.current
@@ -85,6 +87,21 @@ private fun SubscribeToAction(
     when (action) {
         is HomeAction.Empty -> {
             // do nothing
+        }
+
+        is HomeAction.OpenDatePickerDialog -> {
+            ShowDatePickerDialog(
+                startDateTimeStamp = action.startDate,
+                endDateTimeStamp = action.endDate,
+                onApplyDateRange = { start, end ->
+                    HomeEvent.EditGymCardDates(
+                        startTimestamp = start,
+                        endTimestamp = end,
+                    )
+                        .let(viewModel::obtainEvent)
+                },
+                onDismiss = { viewModel.obtainEvent(null) }
+            )
         }
 
         is HomeAction.OpenNewTrainingScreen -> {
@@ -122,7 +139,9 @@ private fun DataContent(
         HomeScreen(
             screenState = screenState,
             modifier = Modifier.padding(it)
-        )
+        ) {
+            viewModel.obtainEvent(HomeEvent.OnGymCardPlateClick)
+        }
     }
 }
 
@@ -130,6 +149,7 @@ private fun DataContent(
 private fun HomeScreen(
     screenState: HomeScreenState.Data,
     modifier: Modifier,
+    onGymCardPlateClick: () -> Unit
 ) {
     val dateString = screenState.dateString
     val cardHealth = screenState.gymHealth
@@ -146,7 +166,11 @@ private fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(24.dp, alignment = Alignment.Top),
     ) {
         item {
-            GymCardHealth(cardHealth = cardHealth)
+            GymCardHealth(
+                startDate = cardHealth?.start,
+                endDate = cardHealth?.end,
+                onClick = onGymCardPlateClick,
+            )
         }
         item {
             CurrentDateCard(

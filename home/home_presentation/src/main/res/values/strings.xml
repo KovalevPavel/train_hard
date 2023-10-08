@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="gym_card">Абонемент</string>
+    <string name="gym_card_stub">Тапните для установки срока действия абонемента</string>
+
     <string name="active_program_title">Активная программа тренировок:</string>
     <string name="default_program">не выбрана</string>
     <string name="today_plan">Сегодня по плану:</string>

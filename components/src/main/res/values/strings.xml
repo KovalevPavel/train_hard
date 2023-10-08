@@ -4,6 +4,7 @@
     <string name="add_set">Добавить подход</string>
     <string name="save">Сохранить</string>
     <string name="weight_reps_template">%.2f кг на %d повторений</string>
+    <string name="gym_card_date_range_title">Выберите интервал действия абонемента</string>
 
     <string name="group_chest">Грудные</string>
     <string name="group_legs">Ноги</string>
