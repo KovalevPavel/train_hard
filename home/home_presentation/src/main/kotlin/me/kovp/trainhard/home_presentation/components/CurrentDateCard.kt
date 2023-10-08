@@ -1,10 +1,10 @@
 package me.kovp.trainhard.home_presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,8 +26,9 @@ import me.kovp.trainhard.ui_theme.providers.themeTypography
 fun CurrentDateCard(
     currentDate: String?,
     currentProgramName: String,
+    onDateClick: () -> Unit,
 ) {
-    currentDate?:return
+    currentDate ?: return
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = themeColors.gray,
@@ -36,35 +37,39 @@ fun CurrentDateCard(
         Row(
             modifier = Modifier.padding(16.dp),
         ) {
-            Column(
+            Surface(
                 modifier = Modifier
-                    .size(110.dp)
-                    .background(
-                        color = themeColors.lime,
-                        shape = RoundedCornerShape(16.dp),
-                    )
-                    .padding(all = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(
-                    space = 6.dp,
-                    alignment = Alignment.Top,
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .size(110.dp),
+                onClick = onDateClick,
+                shape = RoundedCornerShape(16.dp),
+                color = themeColors.lime,
             ) {
-                val (number, month) = currentDate.split("\n")
-                Text(
-                    text = number,
-                    style = themeTypography.header1.copy(
-                        color = themeColors.black,
-                        fontSize = 36.sp,
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(all = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 6.dp,
+                        alignment = Alignment.Top,
+                    ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    val (number, month) = currentDate.split("\n")
+                    Text(
+                        text = number,
+                        style = themeTypography.header1.copy(
+                            color = themeColors.black,
+                            fontSize = 36.sp,
+                        )
                     )
-                )
-                Text(
-                    text = month,
-                    style = themeTypography.header1.copy(
-                        color = themeColors.black,
-                        fontSize = 20.sp,
+                    Text(
+                        text = month,
+                        style = themeTypography.header1.copy(
+                            color = themeColors.black,
+                            fontSize = 20.sp,
+                        )
                     )
-                )
+                }
             }
 
             Column(

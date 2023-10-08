@@ -7,6 +7,7 @@ import me.kovp.trainhard.home_presentation.destinations.HomeComposableDestinatio
 import me.kovp.trainhard.new_training_presentation.destinations.NewSetDialogDestination
 import me.kovp.trainhard.new_training_presentation.destinations.SelectNewExerciseTypeComposableDestination
 import me.kovp.trainhard.new_training_presentation.destinations.TrainingComposableDestination
+import me.kovp.trainhard.training_calendar_presentation.destinations.TrainingCalendarDestination
 
 object HomeNavGraph : NavGraphSpec {
     override val route: String = "home"
@@ -17,6 +18,7 @@ object HomeNavGraph : NavGraphSpec {
         TrainingComposableDestination,
         SelectNewExerciseTypeComposableDestination,
         NewSetDialogDestination,
+        TrainingCalendarDestination,
     )
         .associateBy { it.route }
 }

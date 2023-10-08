@@ -63,3 +63,9 @@ withDirectory("storage") {
     includeProject("domain_storage")
     includeProject("core_storage")
 }
+
+withDirectory("training_calendar") {
+    includeProject("training_calendar_api")
+    includeProject("training_calendar_domain")
+    includeProject("training_calendar_presentation")
+}

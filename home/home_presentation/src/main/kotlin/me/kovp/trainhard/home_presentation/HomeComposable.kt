@@ -42,6 +42,7 @@ import me.kovp.trainhard.home_presentation.components.GymCardHealth
 import me.kovp.trainhard.home_presentation.di.homeModule
 import me.kovp.trainhard.navigation_api.localScreenMapper
 import me.kovp.trainhard.new_training_api.TrainingScreen
+import me.kovp.trainhard.training_calendar_api.TrainingCalendarScreen
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
@@ -84,6 +85,10 @@ private fun SubscribeToAction(
         screenMapper(TrainingScreen(dateString = currentDateString))
     }
 
+    val trainingCalendarDestination = remember {
+        screenMapper(TrainingCalendarScreen(0))
+    }
+
     when (action) {
         is HomeAction.Empty -> {
             // do nothing
@@ -106,6 +111,10 @@ private fun SubscribeToAction(
 
         is HomeAction.OpenNewTrainingScreen -> {
             navigator.navigate(newTrainingDestination)
+        }
+
+        is HomeAction.OpenTrainingCalendar -> {
+            navigator.navigate(trainingCalendarDestination)
         }
     }
 }
@@ -138,10 +147,14 @@ private fun DataContent(
     ) {
         HomeScreen(
             screenState = screenState,
-            modifier = Modifier.padding(it)
-        ) {
-            viewModel.obtainEvent(HomeEvent.OnGymCardPlateClick)
-        }
+            modifier = Modifier.padding(it),
+            onGymCardPlateClick = {
+                viewModel.obtainEvent(HomeEvent.OnGymCardPlateClick)
+            },
+            onDateClick = {
+                viewModel.obtainEvent(HomeEvent.OnCalendarClick)
+            },
+        )
     }
 }
 
@@ -149,7 +162,8 @@ private fun DataContent(
 private fun HomeScreen(
     screenState: HomeScreenState.Data,
     modifier: Modifier,
-    onGymCardPlateClick: () -> Unit
+    onGymCardPlateClick: () -> Unit,
+    onDateClick: () -> Unit,
 ) {
     val dateString = screenState.dateString
     val cardHealth = screenState.gymHealth
@@ -175,7 +189,8 @@ private fun HomeScreen(
         item {
             CurrentDateCard(
                 currentDate = dateString.formatToDateString(DATE_FORMAT_dd_newLine_MMMM, locale),
-                currentProgramName = ""
+                currentProgramName = "",
+                onDateClick = onDateClick,
             )
         }
         item {
