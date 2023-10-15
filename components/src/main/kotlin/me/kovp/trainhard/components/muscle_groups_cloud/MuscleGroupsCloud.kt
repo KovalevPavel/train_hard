@@ -48,7 +48,7 @@ fun MuscleGroupsCloud(
 }
 
 @Composable
-private fun MuscleGroup.getMuscleGroupTitle(): String {
+fun MuscleGroup.getMuscleGroupTitle(): String {
     val stringResId = when (this) {
         MuscleGroup.CHEST -> R.string.group_chest
         MuscleGroup.BACK -> R.string.group_back
