@@ -1,46 +1,41 @@
 package me.kovp.trainhard.training_calendar_presentation
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.ramcosta.composedestinations.annotation.Destination
-import me.kovp.trainhard.components.muscle_groups_cloud.getMuscleGroupTitle
 import me.kovp.trainhard.core_domain.DATE_FORMAT_LLLL_yyyy
 import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.core_domain.formatToDateString
+import me.kovp.trainhard.training_calendar_presentation.day.Day
+import me.kovp.trainhard.training_calendar_presentation.di.trainingCalendarModule
+import me.kovp.trainhard.training_calendar_presentation.legend.Legend
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import me.kovp.training_calendar_presentation.R
-import timber.log.Timber
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.context.loadKoinModules
+import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
@@ -48,6 +43,28 @@ import java.util.Locale
 @Destination
 @Composable
 fun TrainingCalendar() {
+    loadKoinModules(trainingCalendarModule)
+    val viewModel = koinViewModel<TrainingCalendarViewModel>()
+    val state by viewModel.stateFlow.collectAsState()
+
+    when (val st = state) {
+        is TrainingCalendarState.Loading -> {
+
+        }
+
+        is TrainingCalendarState.Data -> {
+            Data(muscleGroups = st.trainings) { day ->
+                TrainingCalendarEvent.OnTrainingDayClick(day = day).let(viewModel::obtainEvent)
+            }
+        }
+    }
+}
+
+@Composable
+fun Data(
+    muscleGroups: Map<LocalDate, List<MuscleGroup>>,
+    onDayClick: (LocalDate) -> Unit,
+) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(24) }
     val endMonth = remember { currentMonth }
@@ -79,7 +96,11 @@ fun TrainingCalendar() {
         VerticalCalendar(
             modifier = Modifier.fillMaxSize(),
             state = state,
-            dayContent = { Day(it) },
+            dayContent = { day ->
+                if (day.position != DayPosition.MonthDate) return@VerticalCalendar
+                val trainings = muscleGroups[day.date].orEmpty()
+                Day(groups = trainings, day = day, onClick = onDayClick)
+            },
             monthContainer = { calendarMonth, container ->
                 Text(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -109,77 +130,6 @@ fun TrainingCalendar() {
                 container()
                 Spacer(modifier = Modifier.height(32.dp))
             },
-        )
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun Legend(
-    modifier: Modifier = Modifier,
-) {
-    FlowRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(32.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-
-    ) {
-        MuscleGroup.values().forEach { MuscleGroupLegendElement(it) }
-    }
-}
-
-@Composable
-private fun Day(day: CalendarDay) {
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .clickable {
-                Timber.e(day.date.toString())
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = day.date.dayOfMonth.toString(),
-            style = themeTypography.body2,
-        )
-    }
-}
-
-@Composable
-private fun MuscleGroupLegendElement(muscleGroup: MuscleGroup) {
-    val argbColor = when (muscleGroup) {
-        MuscleGroup.ARMS -> themeColors.yellow
-        MuscleGroup.CHEST -> themeColors.red
-        MuscleGroup.BACK -> themeColors.blue
-        MuscleGroup.LEGS -> themeColors.lime
-        MuscleGroup.DELTOIDS -> themeColors.orange
-        MuscleGroup.ABS -> themeColors.white
-    }
-        .toArgb()
-
-    val title = muscleGroup.getMuscleGroupTitle()
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        Box(
-            modifier = Modifier.size(16.dp)
-        ) {
-            Canvas(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                drawRoundRect(
-                    color = Color(argbColor),
-                    size = size,
-                    cornerRadius = CornerRadius(size.height / 2, size.width / 2),
-                )
-            }
-        }
-
-        Text(
-            text = title,
-            style = themeTypography.body3,
         )
     }
 }
