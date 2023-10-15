@@ -24,6 +24,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.ramcosta.composedestinations.annotation.Destination
+import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.core_domain.DATE_FORMAT_LLLL_yyyy
 import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.core_domain.formatToDateString
@@ -49,7 +50,7 @@ fun TrainingCalendar() {
 
     when (val st = state) {
         is TrainingCalendarState.Loading -> {
-
+            FullscreenLoader()
         }
 
         is TrainingCalendarState.Data -> {

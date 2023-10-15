@@ -16,6 +16,7 @@ internal class CompletedExerciseMapper(
         date = completedExercise.date,
         exerciseId = completedExercise.exercise.title,
         sets = completedExercise.sets,
+        dayTimestamp = completedExercise.dayTimestamp,
     )
 
     suspend fun mapToDomain(
@@ -31,6 +32,7 @@ internal class CompletedExerciseMapper(
             date = completedExercise.date,
             exercise = exercise,
             sets = completedExercise.sets,
+            dayTimestamp = completedExercise.dayTimestamp,
         )
     }
 }

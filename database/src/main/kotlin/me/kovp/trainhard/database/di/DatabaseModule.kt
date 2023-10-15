@@ -2,10 +2,12 @@ package me.kovp.trainhard.database.di
 
 import androidx.room.Room
 import me.kovp.trainhard.database.AppDatabase
+import me.kovp.trainhard.database.calendar.CalendarApiImpl
 import me.kovp.trainhard.database.completed_exercise.CompletedExerciseApiImpl
 import me.kovp.trainhard.database.completed_exercise.CompletedExerciseMapper
 import me.kovp.trainhard.database.exercises.ExerciseMapper
 import me.kovp.trainhard.database.exercises.ExercisesApiImpl
+import me.kovp.trainhard.database_api.CalendarApi
 import me.kovp.trainhard.database_api.CompletedExerciseApi
 import me.kovp.trainhard.database_api.ExercisesApi
 import org.koin.dsl.module
@@ -46,6 +48,13 @@ val dbModule = module {
         CompletedExerciseApiImpl(
             completedExercisesDao = db.completedExercisesDao(),
             completedExerciseMapper = get(),
+        )
+    }
+
+    single<CalendarApi> {
+        CalendarApiImpl(
+            database = get(),
+            exerciseMapper = get(),
         )
     }
 }

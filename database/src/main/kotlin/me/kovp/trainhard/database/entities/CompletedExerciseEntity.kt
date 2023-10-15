@@ -22,4 +22,5 @@ data class CompletedExerciseEntity(
     @ColumnInfo(name = "date") val date: String,
     @ColumnInfo(name = "exerciseId") val exerciseId: String,
     @ColumnInfo(name = "sets") val sets: Sets,
+    @ColumnInfo(name = "dayTimestamp") val dayTimestamp: Long,
 )

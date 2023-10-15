@@ -7,4 +7,5 @@ data class CompletedExercise(
     val date: String,
     val exercise: Exercise,
     val sets: Sets,
+    val dayTimestamp: Long,
 )
