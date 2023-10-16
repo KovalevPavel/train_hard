@@ -1,40 +1,39 @@
 package me.kovp.trainhard.database.calendar
 
-import androidx.room.withTransaction
-import me.kovp.trainhard.core_domain.Muscle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import me.kovp.trainhard.core_domain.MuscleGroup
-import me.kovp.trainhard.database.AppDatabase
-import me.kovp.trainhard.database.exercises.ExerciseMapper
+import me.kovp.trainhard.core_domain.Muscles
+import me.kovp.trainhard.database.dao.CalendarDao
 import me.kovp.trainhard.database_api.CalendarApi
-import me.kovp.trainhard.database_api.models.Exercise
 
 internal class CalendarApiImpl(
-    private val database: AppDatabase,
-    private val exerciseMapper: ExerciseMapper,
+    private val calendarDao: CalendarDao,
 ) : CalendarApi {
-    override suspend fun getMuscleGroupsByDates(
+    override fun getMuscleGroupsByDates(
         startDate: Long,
         endDate: Long
-    ): Map<Long, List<MuscleGroup>> = database.withTransaction {
-        val exercisesIdsInDates = database.calendarDao().getMuscleGroupsByDates(startDate, endDate)
+    ): Flow<Map<Long, List<MuscleGroup>>> {
+        val exercisesIdsInDatesFlow = calendarDao.getMuscleGroupsByDates(
+            startDate = startDate,
+            endDate = endDate,
+        )
 
-        val uniqueExercises = exercisesIdsInDates.values
-            .map { it.split(EXERCISES_IDS_DELIMITER) }
-            .flatten()
-            .mapNotNull { exerciseId ->
-                database.exercisesDao().getExerciseByTitle(exerciseId).firstOrNull()
-                    ?: return@mapNotNull null
+        return exercisesIdsInDatesFlow.map { tupleList ->
+            tupleList.mapNotNull {
+                val timestamp = it.timestamp ?: return@mapNotNull null
+                timestamp to it.muscles?.split(EXERCISES_IDS_DELIMITER).orEmpty()
             }
-
-        val uniqueMuscleGroups = uniqueExercises.asSequence()
-            .map(exerciseMapper::mapToDomain)
-            .map(Exercise::muscles)
-            .flatten()
-            .map(Muscle::muscleGroup)
-            .distinct()
-            .toList()
-
-        exercisesIdsInDates.mapValues { uniqueMuscleGroups }
+                .groupBy { it.first }
+                .mapValues { (_, list) ->
+                    list.asSequence()
+                        .map { it.second }
+                        .flatten()
+                        .mapNotNull { Muscles.getMuscleGroup(it) ?: return@mapNotNull null }
+                        .toList()
+                        .distinct()
+                }
+        }
     }
 
     companion object {

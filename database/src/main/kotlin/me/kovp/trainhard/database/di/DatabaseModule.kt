@@ -52,9 +52,10 @@ val dbModule = module {
     }
 
     single<CalendarApi> {
+        val db: AppDatabase = get()
+
         CalendarApiImpl(
-            database = get(),
-            exerciseMapper = get(),
+            calendarDao = db.calendarDao(),
         )
     }
 }

@@ -5,7 +5,7 @@ import me.kovp.trainhard.database_api.CalendarApi
 class GetTrainingDataInteractor(
     private val calendarApi: CalendarApi,
 ) {
-    suspend operator fun invoke(
+    operator fun invoke(
         startDate: Long,
         endDate: Long,
     ) = calendarApi.getMuscleGroupsByDates(startDate, endDate)

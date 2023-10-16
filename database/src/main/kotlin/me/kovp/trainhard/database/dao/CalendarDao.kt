@@ -1,19 +1,20 @@
 package me.kovp.trainhard.database.dao
 
 import androidx.room.Dao
-import androidx.room.MapInfo
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+import me.kovp.trainhard.database.entities.MusclesInDayTuple
 
 @Dao
 interface CalendarDao {
-    @MapInfo(keyColumn = "long", valueColumn = "exerciseId")
     @Query(
-        "select dayTimestamp as long, group_concat(distinct exerciseId) as exerciseId " +
-                "from completedExercises " +
-                "where dayTimestamp between :startDate and :endDate"
+        "select completedExercises.dayTimestamp as timestamp, exercises.muscles as muscles " +
+                "from completedExercises, exercises " +
+                "where (dayTimestamp between :startDate and :endDate) and " +
+                "(completedExercises.exerciseId = exercises.title)"
     )
-    suspend fun getMuscleGroupsByDates(
+    fun getMuscleGroupsByDates(
         startDate: Long,
         endDate: Long,
-    ): Map<Long, String>
+    ): Flow<List<MusclesInDayTuple>>
 }
