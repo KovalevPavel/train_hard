@@ -9,7 +9,7 @@ import me.kovp.trainhard.new_training_presentation.TrainingViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-fun newTrainingModule(currentDate: String) = module {
+fun newTrainingModule(currentTimestamp: Long) = module {
     single { AddNewCompletedExerciseInteractor(completedExerciseApi = get()) }
     single { GetAllCompletedExercisesInteractor(exercisesApi = get()) }
     single { UpdateCompletedExerciseInteractor(completedExerciseApi = get()) }
@@ -18,7 +18,7 @@ fun newTrainingModule(currentDate: String) = module {
 
     viewModel {
         TrainingViewModel(
-            currentDate = currentDate,
+            currentTimestamp = currentTimestamp,
             addNewCompletedSet = get(),
             getAllExercises = get(),
             updateCompletedExercise = get(),

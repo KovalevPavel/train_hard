@@ -18,7 +18,7 @@ import trainhard.core_dialogs.AlertConfirmationDialogScreen
 val appScreenMapper = AppScreenMapper {
     when (it) {
         is TrainingScreen -> {
-            TrainingComposableDestination(currentDateString = it.dateString)
+            TrainingComposableDestination(currentTimestamp = it.timestamp)
         }
 
         is SelectExerciseTypeScreen -> {

@@ -4,8 +4,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_MM_yyyy
-import me.kovp.trainhard.core_domain.formatToDateString
 import me.kovp.trainhard.core_domain.update
 import me.kovp.trainhard.core_presentation.BaseViewModel
 import me.kovp.trainhard.training_calendar_domain.GetTrainingDataInteractor
@@ -31,7 +29,6 @@ class TrainingCalendarViewModel(
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant()
                         .toEpochMilli()
-                        .formatToDateString(DATE_FORMAT_dd_MM_yyyy)
                         .let(TrainingCalendarAction::OpenNewTrainingScreen)
                 }
 

@@ -38,13 +38,13 @@ import org.koin.core.context.loadKoinModules
 @Destination
 @Composable
 fun TrainingComposable(
-    currentDateString: String,
+    currentTimestamp: Long,
     navigator: DestinationsNavigator,
     editSetResRecipient: ResultRecipient<NewSetDialogDestination, NewSetDialogResult>,
     newSetResRecipient: ResultRecipient<SelectNewExerciseTypeComposableDestination, NewSetDialogResult>,
 ) {
     loadKoinModules(
-        newTrainingModule(currentDate = currentDateString),
+        newTrainingModule(currentTimestamp = currentTimestamp),
     )
 
     val vm = koinViewModel<TrainingViewModel>()

@@ -30,7 +30,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.kovp.home_presentation.R
 import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.components.selectors.ShowDatePickerDialog
-import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_MM_yyyy
 import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_newLine_MMMM
 import me.kovp.trainhard.core_domain.formatToDateString
 import me.kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
@@ -47,6 +46,8 @@ import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
+import java.time.LocalDate
+import java.time.ZoneId
 
 @Destination
 @Composable
@@ -79,10 +80,14 @@ private fun SubscribeToAction(
     navigator: DestinationsNavigator,
 ) {
     val screenMapper = localScreenMapper.current
-    val currentDateString = System.currentTimeMillis().formatToDateString(DATE_FORMAT_dd_MM_yyyy)
+    val currentDateString = LocalDate.now()
+        .atStartOfDay()
+        .atZone(ZoneId.systemDefault())
+        .toInstant()
+        .toEpochMilli()
 
     val newTrainingDestination = remember {
-        screenMapper(TrainingScreen(dateString = currentDateString))
+        screenMapper(TrainingScreen(timestamp = currentDateString))
     }
 
     val trainingCalendarDestination = remember {

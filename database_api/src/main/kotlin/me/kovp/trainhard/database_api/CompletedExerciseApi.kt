@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import me.kovp.trainhard.database_api.models.CompletedExercise
 
 interface CompletedExerciseApi {
-    suspend fun getAllCompletedExercises(date: String): Flow<List<CompletedExercise>>
+    fun getAllCompletedExercises(timestamp: Long): Flow<List<CompletedExercise>>
     suspend fun getCompletedExercisesByDateAndExercise(
-        date: String,
+        timestamp: Long,
         exerciseId: String,
     ): List<CompletedExercise>
     suspend fun addNewCompletedExercise(newCompletedExercise: CompletedExercise)

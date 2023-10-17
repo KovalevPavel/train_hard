@@ -5,5 +5,5 @@ import me.kovp.trainhard.database_api.CompletedExerciseApi
 class GetAllCompletedExercisesInteractor(
     private val exercisesApi: CompletedExerciseApi,
 ) {
-    suspend operator fun invoke(date: String) = exercisesApi.getAllCompletedExercises(date)
+    operator fun invoke(timestamp: Long) = exercisesApi.getAllCompletedExercises(timestamp)
 }
