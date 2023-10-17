@@ -91,7 +91,7 @@ private fun SubscribeToCalendarAction(
         }
 
         is TrainingCalendarAction.OpenNewTrainingScreen -> {
-            TrainingScreen(dateString = ac.trainingDate)
+            TrainingScreen(timestamp = ac.timestamp)
                 .let(screenMapper::invoke)
                 .let(navigator::navigate)
         }

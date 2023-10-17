@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "60747461d909433d61e7fea597cb7cfb",
+    "identityHash": "9caffd7d3e75b22c5f826c48345034a8",
     "entities": [
       {
         "tableName": "exercises",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "completedExercises",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `date` TEXT NOT NULL, `exerciseId` TEXT NOT NULL, `sets` TEXT NOT NULL, `dayTimestamp` INTEGER NOT NULL, PRIMARY KEY(`id`, `date`, `exerciseId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `dayTimestamp` INTEGER NOT NULL, `exerciseId` TEXT NOT NULL, `sets` TEXT NOT NULL, PRIMARY KEY(`id`, `dayTimestamp`, `exerciseId`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -41,9 +41,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "date",
-            "columnName": "date",
-            "affinity": "TEXT",
+            "fieldPath": "dayTimestamp",
+            "columnName": "dayTimestamp",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -57,19 +57,13 @@
             "columnName": "sets",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "dayTimestamp",
-            "columnName": "dayTimestamp",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
             "id",
-            "date",
+            "dayTimestamp",
             "exerciseId"
           ]
         },
@@ -80,7 +74,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '60747461d909433d61e7fea597cb7cfb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9caffd7d3e75b22c5f826c48345034a8')"
     ]
   }
 }

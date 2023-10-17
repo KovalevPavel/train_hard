@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class CompletedExerciseCardDto(
     val setId: Long,
-    val setDate: String,
+    val timestamp: Long,
     val exerciseTitle: String,
     val sets: List<Pair<Float, Int>>,
     val muscles: List<String>,

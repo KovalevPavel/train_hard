@@ -10,9 +10,9 @@ internal class CompletedExerciseApiImpl(
     private val completedExercisesDao: CompletedExercisesDao,
     private val completedExerciseMapper: CompletedExerciseMapper,
 ) : CompletedExerciseApi {
-    override suspend fun getAllCompletedExercises(date: String): Flow<List<CompletedExercise>> =
+    override fun getAllCompletedExercises(timestamp: Long): Flow<List<CompletedExercise>> =
         completedExercisesDao
-            .getCompletedExercisesByDate(date = date)
+            .getCompletedExercisesByDate(timestamp = timestamp)
             .transform { list ->
                 val result = list.mapNotNull { entity ->
                     completedExerciseMapper.mapToDomain(completedExercise = entity)
@@ -22,10 +22,10 @@ internal class CompletedExerciseApiImpl(
             }
 
     override suspend fun getCompletedExercisesByDateAndExercise(
-        date: String,
+        timestamp: Long,
         exerciseId: String,
     ): List<CompletedExercise> =
-        completedExercisesDao.getCompletedExercisesByIdAndExerciseId(date, exerciseId)
+        completedExercisesDao.getCompletedExercisesByIdAndExerciseId(timestamp, exerciseId)
             .mapNotNull { entity ->
                 completedExerciseMapper.mapToDomain(completedExercise = entity)
             }
@@ -43,7 +43,7 @@ internal class CompletedExerciseApiImpl(
     override suspend fun removeCompletedExercise(completedExercise: CompletedExercise): Int {
         return completedExercisesDao.removeCompletedExercise(
             id = completedExercise.id,
-            date = completedExercise.date,
+            timestamp = completedExercise.dayTimestamp,
             exerciseId = completedExercise.exercise.title,
         )
     }

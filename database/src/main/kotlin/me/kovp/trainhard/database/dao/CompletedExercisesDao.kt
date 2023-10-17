@@ -13,24 +13,23 @@ interface CompletedExercisesDao {
     @Query("select * from completedExercises")
     fun getAllCompletedExercises(): Flow<List<CompletedExerciseEntity>>
 
-    @Query("select * from completedExercises where date=:date")
-    fun getCompletedExercisesByDate(date: String): Flow<List<CompletedExerciseEntity>>
+    @Query("select * from completedExercises where dayTimestamp=:timestamp")
+    fun getCompletedExercisesByDate(timestamp: Long): Flow<List<CompletedExerciseEntity>>
 
-    @Query("select * from completedExercises where date=:date and exerciseId=:exerciseId")
-    fun getCompletedExercisesByIdAndExerciseId(
-        date: String,
+    @Query("select * from completedExercises where dayTimestamp=:timestamp and exerciseId=:exerciseId")
+    suspend fun getCompletedExercisesByIdAndExerciseId(
+        timestamp: Long,
         exerciseId: String,
     ): List<CompletedExerciseEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCompletedExercise(exercise: CompletedExerciseEntity)
-
-    @Query("select * from completedExercises where exerciseId = :typeId")
-    fun getCompletedExercisesByExerciseType(typeId: String): List<CompletedExerciseEntity>
+    suspend fun insertCompletedExercise(exercise: CompletedExerciseEntity)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateCompletedExercise(newExercise: CompletedExerciseEntity): Int
 
-    @Query("delete from completedExercises where id=:id and date=:date and exerciseId=:exerciseId")
-    fun removeCompletedExercise(id: Long, date: String, exerciseId: String): Int
+    @Query(
+        "delete from completedExercises where id=:id and dayTimestamp=:timestamp and exerciseId=:exerciseId"
+    )
+    suspend fun removeCompletedExercise(id: Long, timestamp: Long, exerciseId: String): Int
 }

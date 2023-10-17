@@ -13,10 +13,9 @@ internal class CompletedExerciseMapper(
         completedExercise: CompletedExercise,
     ): CompletedExerciseEntity = CompletedExerciseEntity(
         id = completedExercise.id,
-        date = completedExercise.date,
+        dayTimestamp = completedExercise.dayTimestamp,
         exerciseId = completedExercise.exercise.title,
         sets = completedExercise.sets,
-        dayTimestamp = completedExercise.dayTimestamp,
     )
 
     suspend fun mapToDomain(
@@ -29,10 +28,9 @@ internal class CompletedExerciseMapper(
 
         return CompletedExercise(
             id = completedExercise.id,
-            date = completedExercise.date,
+            dayTimestamp = completedExercise.dayTimestamp,
             exercise = exercise,
             sets = completedExercise.sets,
-            dayTimestamp = completedExercise.dayTimestamp,
         )
     }
 }

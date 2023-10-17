@@ -1,5 +1,8 @@
 package me.kovp.trainhard.new_training_presentation
 
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import me.kovp.trainhard.components.train_card.CompletedExerciseCardDto
 import me.kovp.trainhard.core_domain.Muscle
 import me.kovp.trainhard.core_domain.update
@@ -16,7 +19,7 @@ import me.kovp.trainhard.new_training_presentation.new_set_dialog.NewSetDialogRe
 import me.kovp.trainhard.new_training_presentation.new_set_dialog.NewSetDialogResult.DialogAction
 
 class TrainingViewModel(
-    private val currentDate: String,
+    private val currentTimestamp: Long,
     private val addNewCompletedSet: AddNewCompletedExerciseInteractor,
     private val getAllExercises: GetAllCompletedExercisesInteractor,
     private val updateCompletedExercise: UpdateCompletedExerciseInteractor,
@@ -69,25 +72,22 @@ class TrainingViewModel(
     }
 
     private fun subscribeOnSetsList() {
-        launch(
-            action = {
-                getAllExercises(date = currentDate).collect { list ->
-                    TrainingScreenState.Loading.let(mutableStateFlow::update)
+        getAllExercises(timestamp = currentTimestamp).onEach { list ->
+            TrainingScreenState.Loading.let(mutableStateFlow::update)
 
-                    completedExercises.clear()
-                    list.let(completedExercises::addAll)
-                    list.map(::mapToCardDto)
-                        .let(TrainingScreenState::Data)
-                        .let(mutableStateFlow::update)
-                }
-            }
-        )
+            completedExercises.clear()
+            list.let(completedExercises::addAll)
+            list.map(::mapToCardDto)
+                .let(TrainingScreenState::Data)
+                .let(mutableStateFlow::update)
+        }
+            .launchIn(viewModelScope)
     }
 
     private suspend fun addNewCompletedExercise(dialogResult: NewSetDialogResult.Success) {
         getExerciseById(id = dialogResult.exerciseTitle)?.let {
             addNewCompletedSet(
-                dateString = currentDate,
+                timestamp = currentTimestamp,
                 exercise = it,
                 sets = listOf(
                     dialogResult.weight to dialogResult.reps,
@@ -127,7 +127,9 @@ class TrainingViewModel(
 
     private suspend fun removeSet(setDto: CompletedExerciseCardDto, setIndex: Int) {
         val completedExercise = completedExercises.firstOrNull {
-            it.id == setDto.setId && it.date == setDto.setDate && it.exercise.title == setDto.exerciseTitle
+            it.id == setDto.setId &&
+                    it.dayTimestamp == setDto.timestamp &&
+                    it.exercise.title == setDto.exerciseTitle
         }
             ?: return
 
@@ -148,7 +150,7 @@ class TrainingViewModel(
 
     private fun mapToCardDto(item: CompletedExercise) = CompletedExerciseCardDto(
         setId = item.id,
-        setDate = item.date,
+        timestamp = item.dayTimestamp,
         exerciseTitle = item.exercise.title,
         sets = item.sets,
         muscles = item.exercise.muscles.map(Muscle::id),
