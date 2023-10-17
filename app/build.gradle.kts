@@ -68,6 +68,8 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":new_training_api"))
     implementation(project(":new_training_presentation"))
+    implementation(project(":training_calendar_api"))
+    implementation(project(":training_calendar_presentation"))
 
     implementation(project(":home_presentation"))
     implementation(project(":statistics_presentation"))

@@ -9,6 +9,9 @@ internal val palette: TrainColors = TrainColors(
     white = Color.White,
     lime = Color(0xFFD0FD3E),
     red = Color(0xFFFF2D55),
+    blue = Color(0xFF2DB3FF),
+    orange = Color(0xFFFF792D),
+    yellow = Color(0xFFFFEA2D),
 )
 
 @Immutable
@@ -18,4 +21,7 @@ data class TrainColors(
     val white: Color,
     val lime: Color,
     val red: Color,
+    val blue: Color,
+    val orange: Color,
+    val yellow: Color,
 )

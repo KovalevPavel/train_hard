@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "09e5874fc97789dee770811722dba6c7",
+    "identityHash": "60747461d909433d61e7fea597cb7cfb",
     "entities": [
       {
         "tableName": "exercises",
@@ -32,7 +32,7 @@
       },
       {
         "tableName": "completedExercises",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `date` TEXT NOT NULL, `exerciseId` TEXT NOT NULL, `sets` TEXT NOT NULL, PRIMARY KEY(`id`, `date`, `exerciseId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `date` TEXT NOT NULL, `exerciseId` TEXT NOT NULL, `sets` TEXT NOT NULL, `dayTimestamp` INTEGER NOT NULL, PRIMARY KEY(`id`, `date`, `exerciseId`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -57,6 +57,12 @@
             "columnName": "sets",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "dayTimestamp",
+            "columnName": "dayTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -74,7 +80,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '09e5874fc97789dee770811722dba6c7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '60747461d909433d61e7fea597cb7cfb')"
     ]
   }
 }

@@ -94,6 +94,10 @@ class HomeViewModel(
                     editGymCardDates()
                 }
 
+                is HomeEvent.OnCalendarClick -> {
+                    HomeAction.OpenTrainingCalendar.let { mutableActionFlow.emit(it) }
+                }
+
                 null -> {
                     HomeAction.Empty.let { mutableActionFlow.emit(it) }
                 }

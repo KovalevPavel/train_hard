@@ -11,6 +11,8 @@ import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
 import me.kovp.trainhard.parameters_presentation.data.ExerciseScreenArgument
 import me.kovp.trainhard.parameters_presentation.destinations.AlertConfirmationDialogDestination
 import me.kovp.trainhard.parameters_presentation.destinations.NewExerciseScreenDestination
+import me.kovp.trainhard.training_calendar_api.TrainingCalendarScreen
+import me.kovp.trainhard.training_calendar_presentation.destinations.TrainingCalendarDestination
 import trainhard.core_dialogs.AlertConfirmationDialogScreen
 
 val appScreenMapper = AppScreenMapper {
@@ -42,6 +44,10 @@ val appScreenMapper = AppScreenMapper {
                 ),
                 requestAction = it.requestAction,
             )
+        }
+
+        is TrainingCalendarScreen -> {
+            TrainingCalendarDestination
         }
 
         //TODO: сделать что-то с диалогами. В текущей версии либы их нельзя вынести в отдельный

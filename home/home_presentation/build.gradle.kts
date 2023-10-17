@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":components"))
     implementation(project(":navigation"))
     implementation(project(":new_training_api"))
+    implementation(project(":training_calendar_api"))
 
     implementation(libs.koin.compose)
     implementation(libs.destinations.core)
