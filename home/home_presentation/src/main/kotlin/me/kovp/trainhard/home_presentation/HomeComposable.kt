@@ -40,6 +40,7 @@ import me.kovp.trainhard.home_presentation.components.ExerciseCard
 import me.kovp.trainhard.home_presentation.components.GymCardHealth
 import me.kovp.trainhard.home_presentation.di.homeModule
 import me.kovp.trainhard.navigation_api.localScreenMapper
+import me.kovp.trainhard.navigation_api.navigation_styles.BottomNavigationTransition
 import me.kovp.trainhard.new_training_api.TrainingScreen
 import me.kovp.trainhard.training_calendar_api.TrainingCalendarScreen
 import me.kovp.trainhard.ui_theme.providers.themeColors
@@ -49,7 +50,7 @@ import org.koin.core.context.loadKoinModules
 import java.time.LocalDate
 import java.time.ZoneId
 
-@Destination
+@Destination(style = BottomNavigationTransition::class)
 @Composable
 fun HomeComposable(
     navigator: DestinationsNavigator,
