@@ -24,6 +24,7 @@ import me.kovp.trainhard.components.fab.TrainFab
 import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.components.train_card.CompletedExerciseCard
 import me.kovp.trainhard.navigation_api.localScreenMapper
+import me.kovp.trainhard.navigation_api.navigation_styles.SlideFromRightTransition
 import me.kovp.trainhard.new_training_api.NewSetDialogScreen
 import me.kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
 import me.kovp.trainhard.new_training_api.SelectExerciseTypeScreen
@@ -35,7 +36,7 @@ import me.kovp.trainhard.ui_theme.providers.themeColors
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
 
-@Destination
+@Destination(style = SlideFromRightTransition::class)
 @Composable
 fun TrainingComposable(
     currentTimestamp: Long,

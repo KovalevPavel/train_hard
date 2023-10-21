@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
                         sheetBackgroundColor = themeColors.gray,
                     ) {
                         Scaffold(
+                            containerColor = backgroundColor,
                             bottomBar = {
                                 BottomBar(navController = navController)
                             }
