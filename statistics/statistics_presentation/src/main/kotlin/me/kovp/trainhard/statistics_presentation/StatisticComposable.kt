@@ -9,11 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import me.kovp.trainhard.navigation_api.navigation_styles.BottomNavigationTransition
 import me.kovp.trainhard.statistics_presentation.destinations.StatisticsDetailsComposableDestination
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 
-@Destination
+@Destination(style = BottomNavigationTransition::class)
 @Composable
 fun StatisticComposable(
     navigator: DestinationsNavigator,

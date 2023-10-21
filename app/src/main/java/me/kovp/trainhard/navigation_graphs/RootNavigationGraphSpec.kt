@@ -5,11 +5,13 @@ import com.ramcosta.composedestinations.spec.NavGraphSpec
 import com.ramcosta.composedestinations.spec.Route
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import me.kovp.trainhard.CurrentHostScreenFlowHolder
+import me.kovp.trainhard.navigation_api.BottomNavGraphRoutes
 
-object RootNavigationGraphSpec : NavGraphSpec {
+object RootNavigationGraphSpec : NavGraphSpec, CurrentHostScreenFlowHolder {
 
     override val nestedNavGraphs: List<NavGraphSpec> = listOf(
         HomeNavGraph,
@@ -22,16 +24,18 @@ object RootNavigationGraphSpec : NavGraphSpec {
     override val route: String = "root"
     override val startRoute: Route = HomeNavGraph
 
-    val currentGraphFlow: Flow<Route>
-        get() = _currentGraphFlow
+    override val currentGraphFlow: StateFlow<BottomNavGraphRoutes> by lazy { _currentGraphFlow }
 
     private val scope = CoroutineScope(Dispatchers.Main)
 
-    private val _currentGraphFlow = MutableSharedFlow<Route>()
+    private val _currentGraphFlow = MutableStateFlow(
+        value = startRoute.route.let(BottomNavGraphRoutes::findByRoute),
+    )
 
     fun updateSelectedGraph(newGraph: NavGraphSpec) {
         scope.launch {
-            _currentGraphFlow.emit(newGraph)
+            val newRoute = newGraph.route.let(BottomNavGraphRoutes::findByRoute)
+            _currentGraphFlow.emit(newRoute)
         }
     }
 }

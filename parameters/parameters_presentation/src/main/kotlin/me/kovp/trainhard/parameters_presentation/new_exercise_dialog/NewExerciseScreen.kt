@@ -30,13 +30,14 @@ import me.kovp.trainhard.components.text_field.TrainTextField
 import me.kovp.trainhard.core_domain.Muscle
 import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.core_domain.Muscles
+import me.kovp.trainhard.navigation_api.navigation_styles.SlideFromBottomTransition
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen.RequestAction
 import me.kovp.trainhard.parameters_presentation.data.ExerciseScreenArgument
 import me.kovp.trainhard.parameters_presentation.new_exercise_dialog.NewExerciseScreenResult.Success.ScreenAction
 import me.kovp.trainhard.ui_theme.providers.themeColors
 import me.kovp.trainhard.ui_theme.providers.themeTypography
 
-@Destination
+@Destination(style = SlideFromBottomTransition::class)
 @Composable
 fun NewExerciseScreen(
     argument: ExerciseScreenArgument? = null,

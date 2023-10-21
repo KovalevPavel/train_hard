@@ -29,6 +29,7 @@ import me.kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
 import me.kovp.trainhard.components.fab.TrainFab
 import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.navigation_api.localScreenMapper
+import me.kovp.trainhard.navigation_api.navigation_styles.BottomNavigationTransition
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen
 import me.kovp.trainhard.parameters_api.NewExerciseDialogScreen.RequestAction
 import me.kovp.trainhard.parameters_presentation.ParametersViewModel.Companion.CONFIRM_DELETE_EXERCISE_DIALOG_LABEL
@@ -43,7 +44,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
 import trainhard.core_dialogs.AlertConfirmationDialogScreen
 
-@Destination
+@Destination(style = BottomNavigationTransition::class)
 @Composable
 fun ParametersComposable(
     navigator: DestinationsNavigator,

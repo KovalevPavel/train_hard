@@ -1,5 +1,8 @@
 package me.kovp.trainhard
 
+import me.kovp.trainhard.components.selectors.DateRangeSelectorState
+import me.kovp.trainhard.home_presentation.SelectGymDatesScreen
+import me.kovp.trainhard.home_presentation.destinations.GymCardDatesDialogDestination
 import me.kovp.trainhard.navigation_api.AppScreenMapper
 import me.kovp.trainhard.new_training_api.NewSetDialogScreen
 import me.kovp.trainhard.new_training_api.SelectExerciseTypeScreen
@@ -48,6 +51,15 @@ val appScreenMapper = AppScreenMapper {
 
         is TrainingCalendarScreen -> {
             TrainingCalendarDestination
+        }
+
+        is SelectGymDatesScreen -> {
+            GymCardDatesDialogDestination(
+                initDateRangeState = DateRangeSelectorState(
+                    startTimestamp = it.startDate,
+                    endTimestamp = it.endDate,
+                )
+            )
         }
 
         //TODO: сделать что-то с диалогами. В текущей версии либы их нельзя вынести в отдельный

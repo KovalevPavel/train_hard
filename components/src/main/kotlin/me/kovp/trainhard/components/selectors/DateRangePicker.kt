@@ -26,14 +26,14 @@ import me.kovp.trainhard.ui_theme.providers.themeColors
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowDatePickerDialog(
-    startDateTimeStamp: Long? = null,
-    endDateTimeStamp: Long? = null,
-    onApplyDateRange: (start: Long, end: Long) -> Unit,
+    startTimestamp: Long? = null,
+    endTimestamp: Long? = null,
+    onApplyDateRange: (startTimestamp: Long, endTimestamp: Long) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val datePickerState = rememberDateRangePickerState(
-        initialSelectedStartDateMillis = startDateTimeStamp,
-        initialSelectedEndDateMillis = endDateTimeStamp,
+        initialSelectedStartDateMillis = startTimestamp,
+        initialSelectedEndDateMillis = endTimestamp,
     )
     val datePickerFormatter = remember { DatePickerFormatter() }
 

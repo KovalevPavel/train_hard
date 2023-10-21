@@ -19,17 +19,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ramcosta.composedestinations.navigation.navigate
-import com.ramcosta.composedestinations.navigation.popUpTo
+import me.kovp.trainhard.CurrentHostScreenFlowHolder
 import me.kovp.trainhard.navigation_graphs.RootNavigationGraphSpec
 import me.kovp.trainhard.ui_theme.providers.themeColors
+import org.koin.compose.koinInject
 
 @Composable
 fun BottomBar(
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
-    val currentGraph by RootNavigationGraphSpec.currentGraphFlow
-        .collectAsState(initial = RootNavigationGraphSpec.startRoute)
+    val currentScreenHolder = koinInject<CurrentHostScreenFlowHolder>()
+    val currentGraph by currentScreenHolder.currentGraphFlow.collectAsState()
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -54,7 +55,7 @@ fun BottomBar(
                         unselectedIconColor = themeColors.gray,
                         disabledIconColor = themeColors.gray,
                     ),
-                    selected = currentGraph == it.direction,
+                    selected = currentGraph.route.equals(it.direction.route, ignoreCase = true),
                     icon = {
                         Icon(painter = painterResource(id = it.icon), contentDescription = null)
                     },
@@ -62,7 +63,7 @@ fun BottomBar(
                     alwaysShowLabel = false,
                     onClick = {
                         navController.navigate(it.direction) {
-                            popUpTo(currentGraph) {
+                            popUpTo(currentGraph.route) {
                                 saveState = true
                                 inclusive = true
                             }

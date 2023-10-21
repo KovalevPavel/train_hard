@@ -27,9 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultRecipient
+import com.ramcosta.composedestinations.result.getOr
 import me.kovp.home_presentation.R
 import me.kovp.trainhard.components.progress.FullscreenLoader
-import me.kovp.trainhard.components.selectors.ShowDatePickerDialog
+import me.kovp.trainhard.components.selectors.DateRangeSelectorState
 import me.kovp.trainhard.core_domain.DATE_FORMAT_dd_newLine_MMMM
 import me.kovp.trainhard.core_domain.formatToDateString
 import me.kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
@@ -38,8 +40,10 @@ import me.kovp.trainhard.home_presentation.TodayPlan.TrainingDay
 import me.kovp.trainhard.home_presentation.components.CurrentDateCard
 import me.kovp.trainhard.home_presentation.components.ExerciseCard
 import me.kovp.trainhard.home_presentation.components.GymCardHealth
+import me.kovp.trainhard.home_presentation.destinations.GymCardDatesDialogDestination
 import me.kovp.trainhard.home_presentation.di.homeModule
 import me.kovp.trainhard.navigation_api.localScreenMapper
+import me.kovp.trainhard.navigation_api.navigation_styles.BottomNavigationTransition
 import me.kovp.trainhard.new_training_api.TrainingScreen
 import me.kovp.trainhard.training_calendar_api.TrainingCalendarScreen
 import me.kovp.trainhard.ui_theme.providers.themeColors
@@ -49,16 +53,29 @@ import org.koin.core.context.loadKoinModules
 import java.time.LocalDate
 import java.time.ZoneId
 
-@Destination
+@Destination(style = BottomNavigationTransition::class)
 @Composable
 fun HomeComposable(
     navigator: DestinationsNavigator,
+    resultRecipient: ResultRecipient<GymCardDatesDialogDestination, DateRangeSelectorState>,
 ) {
     loadKoinModules(homeModule)
 
     val vm = koinViewModel<HomeViewModel>()
     val screenState by vm.stateFlow.collectAsState()
     val action by vm.actionFlow.collectAsState(initial = HomeAction.Empty)
+
+    resultRecipient.onNavResult {
+        val (start, end) = it.getOr {
+            vm.obtainEvent(null)
+            return@onNavResult
+        }
+        HomeEvent.EditGymCardDates(
+            startTimestamp = start ?: return@onNavResult,
+            endTimestamp = end ?: return@onNavResult,
+        )
+            .let(vm::obtainEvent)
+    }
 
     when (val st = screenState) {
         is HomeScreenState.Loading -> {
@@ -70,13 +87,12 @@ fun HomeComposable(
         }
     }
 
-    SubscribeToAction(action = action, viewModel = vm, navigator = navigator)
+    SubscribeToAction(action = action, navigator = navigator)
 }
 
 @Composable
 private fun SubscribeToAction(
     action: HomeAction,
-    viewModel: HomeViewModel,
     navigator: DestinationsNavigator,
 ) {
     val screenMapper = localScreenMapper.current
@@ -100,18 +116,12 @@ private fun SubscribeToAction(
         }
 
         is HomeAction.OpenDatePickerDialog -> {
-            ShowDatePickerDialog(
-                startDateTimeStamp = action.startDate,
-                endDateTimeStamp = action.endDate,
-                onApplyDateRange = { start, end ->
-                    HomeEvent.EditGymCardDates(
-                        startTimestamp = start,
-                        endTimestamp = end,
-                    )
-                        .let(viewModel::obtainEvent)
-                },
-                onDismiss = { viewModel.obtainEvent(null) }
+            SelectGymDatesScreen(
+                startDate = action.startDate,
+                endDate = action.endDate,
             )
+                .let(screenMapper::invoke)
+                .let(navigator::navigate)
         }
 
         is HomeAction.OpenNewTrainingScreen -> {

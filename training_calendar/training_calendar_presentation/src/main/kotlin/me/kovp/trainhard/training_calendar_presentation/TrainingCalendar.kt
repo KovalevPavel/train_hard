@@ -17,6 +17,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import me.kovp.trainhard.components.progress.FullscreenLoader
 import me.kovp.trainhard.core_domain.MuscleGroup
 import me.kovp.trainhard.navigation_api.localScreenMapper
+import me.kovp.trainhard.navigation_api.navigation_styles.SlideFromRightTransition
 import me.kovp.trainhard.new_training_api.TrainingScreen
 import me.kovp.trainhard.training_calendar_presentation.di.trainingCalendarModule
 import me.kovp.trainhard.training_calendar_presentation.legend.Legend
@@ -27,7 +28,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
 import java.time.LocalDate
 
-@Destination
+@Destination(style = SlideFromRightTransition::class)
 @Composable
 fun TrainingCalendar(
     navigator: DestinationsNavigator,
