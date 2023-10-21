@@ -59,6 +59,7 @@ dependencies {
 
     implementation(libs.destinations.core)
 
+    implementation(project(":components"))
     implementation(project(":core_domain"))
     implementation(project(":core_dialogs"))
     implementation(project(":core_storage"))

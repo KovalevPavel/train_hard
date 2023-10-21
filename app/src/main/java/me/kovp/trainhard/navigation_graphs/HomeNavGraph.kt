@@ -3,6 +3,7 @@ package me.kovp.trainhard.navigation_graphs
 import com.ramcosta.composedestinations.spec.DestinationSpec
 import com.ramcosta.composedestinations.spec.NavGraphSpec
 import com.ramcosta.composedestinations.spec.Route
+import me.kovp.trainhard.home_presentation.destinations.GymCardDatesDialogDestination
 import me.kovp.trainhard.home_presentation.destinations.HomeComposableDestination
 import me.kovp.trainhard.navigation_api.BottomNavGraphRoutes
 import me.kovp.trainhard.new_training_presentation.destinations.NewSetDialogDestination
@@ -20,6 +21,7 @@ object HomeNavGraph : NavGraphSpec {
         SelectNewExerciseTypeComposableDestination,
         NewSetDialogDestination,
         TrainingCalendarDestination,
+        GymCardDatesDialogDestination,
     )
         .associateBy { it.route }
 }

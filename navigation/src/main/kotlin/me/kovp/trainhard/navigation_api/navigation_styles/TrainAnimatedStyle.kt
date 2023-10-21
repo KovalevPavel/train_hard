@@ -14,6 +14,8 @@ import me.kovp.trainhard.navigation_api.BottomNavGraphRoutes
 abstract class TrainAnimatedStyle : DestinationStyle.Animated {
     internal abstract val enterAnimations: TrainScreenEnterAnim
     internal abstract val exitAnimations: TrainScreenExitAnim
+    internal open val popEnterAnimations: TrainScreenEnterAnim = TrainScreenEnterAnim()
+    internal open val popExitAnimations: TrainScreenExitAnim = TrainScreenExitAnim()
 
     protected val defaultFiniteAnimationSpec: FiniteAnimationSpec<IntOffset> =
         tween(ANIMATION_DURATION_MS)
@@ -39,6 +41,28 @@ abstract class TrainAnimatedStyle : DestinationStyle.Animated {
             targetGraph == startGraph -> exitAnimations.onCurrentGraph()
             targetGraph > startGraph -> exitAnimations.onNextGraph()
             else -> exitAnimations.onPreviousGraph()
+        }
+    }
+
+    override fun AnimatedContentTransitionScope<NavBackStackEntry>.popEnterTransition(): EnterTransition? {
+        val targetGraph = targetRouteGraph()
+        val startGraph = startRouteGraph()
+
+        return when {
+            targetGraph == startGraph -> popEnterAnimations.onCurrentGraph()
+            targetGraph > startGraph -> popEnterAnimations.onNextGraph()
+            else -> popEnterAnimations.onPreviousGraph()
+        }
+    }
+
+    override fun AnimatedContentTransitionScope<NavBackStackEntry>.popExitTransition(): ExitTransition? {
+        val targetGraph = targetRouteGraph()
+        val startGraph = startRouteGraph()
+
+        return when {
+            targetGraph == startGraph -> popExitAnimations.onCurrentGraph()
+            targetGraph > startGraph -> popExitAnimations.onNextGraph()
+            else -> popExitAnimations.onPreviousGraph()
         }
     }
 
