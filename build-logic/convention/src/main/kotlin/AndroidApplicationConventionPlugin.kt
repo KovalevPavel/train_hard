@@ -1,12 +1,11 @@
-package me.kovp.trainhard.convention
-
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import me.kovp.trainhard.convention.consts.Config
-import me.kovp.trainhard.convention.consts.Plugins
-import me.kovp.trainhard.convention.utils.configureKotlinAndroid
+import consts.Config
+import consts.Plugins
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import utils.configureKotlinAndroid
+import utils.trainProperties
 
 @Suppress("unused")
 class AndroidApplicationConventionPlugin : Plugin<Project> {
@@ -18,7 +17,17 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<BaseAppModuleExtension> {
-                defaultConfig.targetSdk = Config.targetSdk
+                defaultConfig {
+                    val props = trainProperties()
+
+                    targetSdk = Config.targetSdk
+
+                    applicationId = props["applicationId"].toString()
+                    versionCode = 1
+                    versionName = "1.0"
+
+                    setProperty("archivesBaseName", "TrainHard($versionCode)_$versionName")
+                }
 
                 this@with.configureKotlinAndroid(this)
 

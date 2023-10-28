@@ -1,15 +1,13 @@
-package me.kovp.trainhard.convention
-
 import com.android.build.gradle.LibraryExtension
-import me.kovp.trainhard.convention.consts.Config
-import me.kovp.trainhard.convention.consts.Plugins
-import me.kovp.trainhard.convention.utils.addDependencies
-import me.kovp.trainhard.convention.utils.configureKotlinAndroid
+import consts.Config
+import consts.Plugins
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
+import utils.addDependencies
+import utils.configureKotlinAndroid
 
 @Suppress("unused")
 class AndroidLibraryConventionPlugin : Plugin<Project> {

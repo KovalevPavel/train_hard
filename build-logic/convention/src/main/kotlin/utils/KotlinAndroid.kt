@@ -1,7 +1,8 @@
-package me.kovp.trainhard.convention.utils
+package utils
 
 import com.android.build.api.dsl.CommonExtension
-import me.kovp.trainhard.convention.consts.Config
+import consts.Config
+import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.plugins.ExtensionAware
@@ -13,6 +14,9 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *>,
 ) {
     commonExtension.apply {
+        val props = trainProperties()
+        val javaVersion = props["javaVersion"].toString()
+
         namespace = "me.kovp.$name"
         compileSdk = Config.compileSdk
 
@@ -21,13 +25,13 @@ internal fun Project.configureKotlinAndroid(
         }
 
         compileOptions {
-            sourceCompatibility = Config.javaVersion
-            targetCompatibility = Config.javaVersion
+            sourceCompatibility = JavaVersion.toVersion(javaVersion.toInt())
+            targetCompatibility = JavaVersion.toVersion(javaVersion.toInt())
             isCoreLibraryDesugaringEnabled = true
         }
 
         kotlinOptions {
-            jvmTarget = Config.javaVersion.toString()
+            jvmTarget = javaVersion
         }
 
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")

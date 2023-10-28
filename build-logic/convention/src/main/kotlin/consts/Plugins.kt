@@ -1,4 +1,4 @@
-package me.kovp.trainhard.convention.consts
+package consts
 
 object Plugins {
     const val application = "com.android.application"

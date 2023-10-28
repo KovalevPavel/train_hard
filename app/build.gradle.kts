@@ -1,4 +1,3 @@
-import me.kovp.trainhard.convention.consts.Config
 
 plugins {
     id("trainhard.android.application")
@@ -7,23 +6,8 @@ plugins {
 }
 
 android {
-    namespace = "me.kovp.trainhard"
-
-    defaultConfig {
-        applicationId = "me.kovp.trainhard"
-        versionCode = 1
-        versionName = "1.0"
-
-        compileSdkPreview = "UpsideDownCake"
-
-        setProperty("archivesBaseName", "TrainHard($versionCode)_$versionName")
-    }
     ksp {
         arg("compose-destinations.generateNavGraphs", "false")
-    }
-
-    java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(Config.javaVersion.toString()))
     }
 
     buildFeatures {

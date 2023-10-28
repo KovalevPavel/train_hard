@@ -1,19 +1,25 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.Properties
 
 plugins {
     `kotlin-dsl`
 }
 
-group = "me.kovp.trainhard.buildlogic"
+val trainProps = Properties().apply {
+    file("${rootProject.projectDir}/build.properties").inputStream().use(this::load)
+}
+
+val javaVersion = trainProps["javaVersion"].toString()
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        toolchain.languageVersion.set(JavaLanguageVersion.of(javaVersion.toInt()))
+    }
 }
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = javaVersion
     }
 }
 
@@ -26,19 +32,19 @@ gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "trainhard.android.application"
-            implementationClass = "me.kovp.trainhard.convention.AndroidApplicationConventionPlugin"
+            implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
             id = "trainhard.android.library"
-            implementationClass = "me.kovp.trainhard.convention.AndroidLibraryConventionPlugin"
+            implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidLibraryCompose") {
             id = "trainhard.android.compose"
-            implementationClass = "me.kovp.trainhard.convention.AndroidComposeConventionPlugin"
+            implementationClass = "AndroidComposeConventionPlugin"
         }
         register("kotlinLibrary") {
             id = "trainhard.kotlin.library"
-            implementationClass = "me.kovp.trainhard.convention.KotlinLibraryConventionPlugin"
+            implementationClass = "KotlinLibraryConventionPlugin"
         }
     }
 }
