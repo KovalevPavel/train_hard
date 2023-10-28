@@ -16,8 +16,9 @@ internal fun Project.configureKotlinAndroid(
     commonExtension.apply {
         val props = trainProperties()
         val javaVersion = props["javaVersion"].toString()
+        val appId = props["applicationId"].toString().filterNot { it == '\"' }
 
-        namespace = "me.kovp.$name"
+        namespace = "$appId.$name"
         compileSdk = Config.compileSdk
 
         defaultConfig {

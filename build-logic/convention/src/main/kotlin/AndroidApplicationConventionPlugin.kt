@@ -22,7 +22,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
                     targetSdk = Config.targetSdk
 
-                    applicationId = props["applicationId"].toString()
+                    applicationId = props["applicationId"].toString().filterNot { it == '\"' }
                     versionCode = 1
                     versionName = "1.0"
 
