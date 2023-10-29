@@ -1,6 +1,7 @@
 package kovp.trainhard.training_calendar_presentation
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -53,6 +54,7 @@ class TrainingCalendarViewModel(
 
         getTrainingData(startDate, currentDate)
             .onEach {
+                delay(STATE_UPDATE_DELAY_MS)
                 it.mapKeys { (timestamp, _) ->
                     val instant = Instant.ofEpochMilli(timestamp)
                     LocalDate.ofInstant(instant, ZoneId.systemDefault())
@@ -61,5 +63,12 @@ class TrainingCalendarViewModel(
                     .let(mutableStateFlow::update)
             }
             .launchIn(viewModelScope)
+    }
+
+    companion object {
+        /**
+         * Устраняет микрофриз перед показом календаря
+         */
+        private const val STATE_UPDATE_DELAY_MS = 500L
     }
 }

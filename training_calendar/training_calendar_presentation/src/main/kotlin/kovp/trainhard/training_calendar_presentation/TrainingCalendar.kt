@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.navigation_api.localScreenMapper
@@ -36,14 +37,16 @@ fun TrainingCalendar(
     val viewModel = koinViewModel<TrainingCalendarViewModel>()
     val state by viewModel.stateFlow.collectAsState()
 
-    when (val st = state) {
-        is TrainingCalendarState.Loading -> {
-            FullscreenLoader()
-        }
+    StateContainer(state = state) { trainingCalendarState ->
+        when (trainingCalendarState) {
+            is TrainingCalendarState.Loading -> {
+                FullscreenLoader()
+            }
 
-        is TrainingCalendarState.Data -> {
-            Data(muscleGroups = st.trainings) { day ->
-                TrainingCalendarEvent.OnTrainingDayClick(day = day).let(viewModel::obtainEvent)
+            is TrainingCalendarState.Data -> {
+                Data(muscleGroups = trainingCalendarState.trainings) { day ->
+                    TrainingCalendarEvent.OnTrainingDayClick(day = day).let(viewModel::obtainEvent)
+                }
             }
         }
     }

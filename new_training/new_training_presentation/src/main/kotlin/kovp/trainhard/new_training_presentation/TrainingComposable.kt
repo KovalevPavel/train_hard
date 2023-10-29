@@ -20,6 +20,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
+import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.fab.TrainFab
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.train_card.CompletedExerciseCard
@@ -73,13 +74,15 @@ fun TrainingComposable(
         TrainingEvent.AddNewCompletedExercise(result).let(vm::obtainEvent)
     }
 
-    when (val st = state) {
-        is TrainingScreenState.Loading -> {
-            FullscreenLoader()
-        }
+    StateContainer(state = state) {
+        when (it) {
+            is TrainingScreenState.Loading -> {
+                FullscreenLoader()
+            }
 
-        is TrainingScreenState.Data -> {
-            DataContent(state = st, vm = vm)
+            is TrainingScreenState.Data -> {
+                DataContent(state = it, vm = vm)
+            }
         }
     }
 
