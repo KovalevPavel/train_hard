@@ -4,8 +4,8 @@ import consts.Plugins
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import utils.TrainProps
 import utils.configureKotlinAndroid
-import utils.trainProperties
 
 @Suppress("unused")
 class AndroidApplicationConventionPlugin : Plugin<Project> {
@@ -18,7 +18,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<BaseAppModuleExtension> {
                 defaultConfig {
-                    val props = trainProperties()
+                    val props = TrainProps.getProperties()
 
                     targetSdk = Config.targetSdk
 

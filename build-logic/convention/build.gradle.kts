@@ -20,6 +20,7 @@ java {
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = javaVersion
+        freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
     }
 }
 

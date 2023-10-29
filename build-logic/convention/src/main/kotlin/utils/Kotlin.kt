@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlin(extensions: JavaPluginExtension) {
-    val props = trainProperties()
+    val props = TrainProps.getProperties()
     val javaVersion = props["javaVersion"].toString()
 
     extensions.apply {
