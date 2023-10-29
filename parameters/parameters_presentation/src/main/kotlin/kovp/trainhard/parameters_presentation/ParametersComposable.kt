@@ -22,6 +22,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
+import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.exercise_type.ExerciseCard
 import kovp.trainhard.components.exercise_type.ExerciseCardDto
 import kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
@@ -72,13 +73,15 @@ fun ParametersComposable(
         confirmationResultRecipient = confirmationResultRecipient,
     )
 
-    when (val st = state) {
-        is ParametersScreenState.Loading -> {
-            FullscreenLoader()
-        }
+    StateContainer(state = state) {
+        when (it) {
+            is ParametersScreenState.Loading -> {
+                FullscreenLoader()
+            }
 
-        is ParametersScreenState.Data -> {
-            DataContent(state = st, vm = vm)
+            is ParametersScreenState.Data -> {
+                DataContent(state = it, vm = vm)
+            }
         }
     }
 }
