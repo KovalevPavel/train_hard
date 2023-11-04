@@ -37,6 +37,7 @@ include(":components")
 include(":core_design")
 include(":core_dialogs")
 include(":core_presentation")
+include(":lint_rules")
 
 withDirectory("home") {
     includeProject("home_presentation")

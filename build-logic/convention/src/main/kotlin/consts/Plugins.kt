@@ -6,4 +6,5 @@ object Plugins {
     const val java = "java-library"
     const val kotlin = "kotlin"
     const val kotlinAndroid = "org.jetbrains.kotlin.android"
+    const val detekt = "io.gitlab.arturbosch.detekt"
 }
