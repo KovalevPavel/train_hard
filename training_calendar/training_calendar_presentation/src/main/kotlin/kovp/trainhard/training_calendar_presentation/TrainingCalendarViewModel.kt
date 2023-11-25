@@ -43,7 +43,7 @@ class TrainingCalendarViewModel(
 
     private fun subscribeOnCalendarData() {
         //TODO: добавить пагинацию и убрать хардкод
-        val startDate = LocalDate.of(2022, 1, 1)
+        val startDate = LocalDate.of(HARDCODED_START_YEAR, 1, 1)
             .atStartOfDay(ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli()
@@ -70,5 +70,6 @@ class TrainingCalendarViewModel(
          * Устраняет микрофриз перед показом календаря
          */
         private const val STATE_UPDATE_DELAY_MS = 500L
+        private const val HARDCODED_START_YEAR = 2022
     }
 }

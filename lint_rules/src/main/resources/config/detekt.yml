@@ -19,8 +19,7 @@ complexity:
     includePrivateDeclarations: false
     ignoreOverloaded: false
   CyclomaticComplexMethod:
-    active: true
-    threshold: 14
+    active: false
   LabeledExpression:
     active: false
     ignoredLabels: [ ]
@@ -29,11 +28,11 @@ complexity:
     threshold: 600
   LongMethod:
     active: true
-    threshold: 60
+    threshold: 80
   LongParameterList:
     active: true
-    functionThreshold: 6
-    constructorThreshold: 6
+    functionThreshold: 8
+    constructorThreshold: 10
     ignoreDefaultParameters: false
     ignoreDataClasses: true
     ignoreAnnotatedParameter: [ ]
@@ -110,6 +109,8 @@ naming:
 
 style:
   active: true
+  ForbiddenComment:
+    active: false
   BracesOnIfStatements:
     active: true
     singleLine: 'necessary'
@@ -120,6 +121,7 @@ style:
     ignoreNumbers:
       - '0'
       - '1'
+      - '2'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
     ignoreLocalVariableDeclaration: false

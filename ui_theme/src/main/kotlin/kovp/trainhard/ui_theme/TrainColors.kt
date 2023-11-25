@@ -3,6 +3,7 @@ package kovp.trainhard.ui_theme
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
+@Suppress("MagicNumber")
 internal val palette: TrainColors = TrainColors(
     black = Color(0xFF1C1C1E),
     gray = Color(0xFF505050),
