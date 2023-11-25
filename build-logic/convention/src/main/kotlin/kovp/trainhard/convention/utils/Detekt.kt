@@ -1,4 +1,4 @@
-package utils
+package kovp.trainhard.convention.utils
 
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
@@ -23,11 +23,10 @@ internal fun Project.configureDetekt() {
             DetektExtension.DEFAULT_TEST_SRC_DIR_JAVA,
         )
 
-        parallel = true
         allRules = false
-        ignoreFailures = false
+        autoCorrect = true
         buildUponDefaultConfig = true
-        config.from("../lint_rules/src/main/resources/config/detekt_rules.yml")
+        config.from("${rootDir}/lint_rules/src/main/resources/config/detekt.yml")
 
         tasks.withType<Detekt>().configureEach {
             jvmTarget = javaVersion

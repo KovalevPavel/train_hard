@@ -31,7 +31,7 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import com.ramcosta.composedestinations.result.getOr
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.selectors.DateRangeSelectorState
-import kovp.trainhard.core_domain.DATE_FORMAT_dd_newLine_MMMM
+import kovp.trainhard.core_domain.DATE_FORMAT_dd_MMMM
 import kovp.trainhard.core_domain.formatToDateString
 import kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
 import kovp.trainhard.home_presentation.TodayPlan.RestDay
@@ -202,7 +202,7 @@ private fun HomeScreen(
         }
         item {
             CurrentDateCard(
-                currentDate = dateString.formatToDateString(DATE_FORMAT_dd_newLine_MMMM, locale),
+                currentDate = dateString.formatToDateString(DATE_FORMAT_dd_MMMM, locale),
                 currentProgramName = "",
                 onDateClick = onDateClick,
             )

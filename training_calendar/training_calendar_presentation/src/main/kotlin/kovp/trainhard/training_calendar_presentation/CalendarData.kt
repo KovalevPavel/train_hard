@@ -17,7 +17,7 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.DayPosition.MonthDate
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import kovp.trainhard.core_domain.DATE_FORMAT_LLLL_yyyy
+import kovp.trainhard.core_domain.DATE_FORMAT_LLLL_YYYY
 import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.core_domain.formatToDateString
 import kovp.trainhard.training_calendar_presentation.day.Day
@@ -56,7 +56,7 @@ fun CalendarData(
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = calendarMonth.yearMonth
-                    .formatToDateString(DATE_FORMAT_LLLL_yyyy)
+                    .formatToDateString(DATE_FORMAT_LLLL_YYYY)
                     .replaceFirstChar(Char::uppercase),
                 style = themeTypography.body1,
             )

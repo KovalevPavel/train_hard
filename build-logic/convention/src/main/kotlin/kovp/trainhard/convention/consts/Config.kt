@@ -1,4 +1,4 @@
-package consts
+package kovp.trainhard.convention.consts
 
 object Config {
     const val targetSdk = 34

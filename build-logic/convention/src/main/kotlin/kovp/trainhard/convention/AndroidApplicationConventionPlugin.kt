@@ -1,11 +1,13 @@
+package kovp.trainhard.convention
+
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import consts.Config
-import consts.Plugins
+import kovp.trainhard.convention.consts.Config
+import kovp.trainhard.convention.consts.Plugins
+import kovp.trainhard.convention.utils.TrainProps
+import kovp.trainhard.convention.utils.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import utils.TrainProps
-import utils.configureKotlinAndroid
 
 @Suppress("unused")
 class AndroidApplicationConventionPlugin : Plugin<Project> {

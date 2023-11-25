@@ -1,4 +1,4 @@
-package utils
+package kovp.trainhard.convention.utils
 
 import org.gradle.api.Project
 import java.util.Properties

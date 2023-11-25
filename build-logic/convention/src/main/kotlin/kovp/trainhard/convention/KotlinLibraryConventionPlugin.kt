@@ -1,9 +1,11 @@
-import consts.Plugins
+package kovp.trainhard.convention
+
+import kovp.trainhard.convention.consts.Plugins
+import kovp.trainhard.convention.utils.configureDetekt
+import kovp.trainhard.convention.utils.configureKotlin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import utils.configureDetekt
-import utils.configureKotlin
 
 @Suppress("unused")
 class KotlinLibraryConventionPlugin : Plugin<Project> {

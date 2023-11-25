@@ -34,19 +34,19 @@ gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "trainhard.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
+            implementationClass = "kovp.trainhard.convention.AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
             id = "trainhard.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
+            implementationClass = "kovp.trainhard.convention.AndroidLibraryConventionPlugin"
         }
         register("androidLibraryCompose") {
             id = "trainhard.android.compose"
-            implementationClass = "AndroidComposeConventionPlugin"
+            implementationClass = "kovp.trainhard.convention.AndroidComposeConventionPlugin"
         }
         register("kotlinLibrary") {
             id = "trainhard.kotlin.library"
-            implementationClass = "KotlinLibraryConventionPlugin"
+            implementationClass = "kovp.trainhard.convention.KotlinLibraryConventionPlugin"
         }
     }
 }
