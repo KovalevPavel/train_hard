@@ -1,3 +1,4 @@
+@file:Suppress("TopLevelPropertyNaming")
 package kovp.trainhard.core_domain
 
 import java.text.SimpleDateFormat
@@ -6,8 +7,8 @@ import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
-const val DATE_FORMAT_dd_newLine_MMMM = "dd\nMMMM"
-const val DATE_FORMAT_LLLL_yyyy = "LLLL yyyy"
+const val DATE_FORMAT_dd_MMMM = "dd\nMMMM"
+const val DATE_FORMAT_LLLL_YYYY = "LLLL yyyy"
 
 private val dateFormattersMap = mutableMapOf<String, SimpleDateFormat>()
 

@@ -1,4 +1,4 @@
-package consts
+package kovp.trainhard.convention.consts
 
 object Plugins {
     const val application = "com.android.application"
@@ -6,4 +6,5 @@ object Plugins {
     const val java = "java-library"
     const val kotlin = "kotlin"
     const val kotlinAndroid = "org.jetbrains.kotlin.android"
+    const val detekt = "io.gitlab.arturbosch.detekt"
 }

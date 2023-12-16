@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,116 +23,93 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType.Companion
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.components.R
-import kovp.trainhard.components.counter.CounterValue.Float
 import kovp.trainhard.core_domain.orZero
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
+@Suppress("LongMethod")
 @Composable
 fun Counter(
     modifier: Modifier = Modifier,
-    label: String = "",
     initialValue: CounterValue,
-    increment: Float,
+    increment: CounterValue.Float,
     onValueChanged: (CounterValue) -> Unit,
 ) {
     var currentValue by remember { mutableStateOf(initialValue) }
     var currentString by remember { mutableStateOf(initialValue.value.toString()) }
 
-    val regex = when (initialValue::class) {
-        CounterValue.Int::class -> "\\d{0,3}"
-        Float::class -> "\\d{0,3}?\\.?\\d{0,2}"
-        else -> ""
+    val regex = remember {
+        when (initialValue::class) {
+            CounterValue.Int::class -> "\\d{0,3}"
+            Float::class -> "\\d{0,3}?\\.?\\d{0,2}"
+            else -> ""
+        }
+            .toRegex()
     }
-        .toRegex()
 
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = label,
-            style = themeTypography.body1
-        )
-        Row {
-            CounterButton(
-                iconRes = R.drawable.ic_minus,
-                isDecreaseButton = true,
-            ) {
-                val newValue = (currentValue - increment).value
-                    .let {
-                        when (initialValue) {
-                            is CounterValue.Int -> it.toInt().coerceAtLeast(0)
-                            else -> it.toFloat().coerceAtLeast(0f)
-                        }
+    Row(modifier = modifier) {
+        CounterButton(
+            iconRes = R.drawable.ic_minus,
+            isDecreaseButton = true,
+        ) {
+            val newValue = (currentValue - increment).value
+                .let {
+                    when (initialValue) {
+                        is CounterValue.Int -> it.toInt().coerceAtLeast(0)
+                        else -> it.toFloat().coerceAtLeast(0f)
                     }
-                    .toCounterValue()
+                }
+                .toCounterValue()
 
-                currentValue = newValue
-                currentString = currentValue.value.toString()
+            currentValue = newValue
+            currentString = currentValue.value.toString()
 
-                onValueChanged(currentValue)
+            onValueChanged(currentValue)
+        }
+        CounterTextField(
+            modifier = Modifier
+                .height(40.dp)
+                .width(70.dp)
+                .background(color = themeColors.white)
+                .padding(horizontal = 8.dp),
+            currentString = currentString,
+        ) { rawString ->
+            val newString = rawString.takeIf { it.matches(regex) } ?: currentString
+            val newValue = when (initialValue) {
+                is CounterValue.Int -> {
+                    newString.toIntOrNull()?.coerceAtLeast(0).orZero()
+                }
+
+                else -> {
+                    newString.toFloatOrNull()?.coerceAtLeast(0f).orZero() as Number
+                }
             }
-            Row(
-                modifier = Modifier
-                    .height(40.dp)
-                    .width(70.dp)
-                    .background(color = themeColors.white)
-                    .padding(horizontal = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-            ) {
-                BasicTextField(
-                    textStyle = themeTypography.body1.copy(color = themeColors.black),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = Companion.Number,
-                    ),
-                    singleLine = true,
-                    cursorBrush = SolidColor(themeColors.lime),
-                    value = currentString,
-                    onValueChange = { rawString ->
-                        val newString = rawString.takeIf { it.matches(regex) } ?: currentString
-                        val newValue = when (initialValue) {
-                            is CounterValue.Int -> {
-                                newString.toIntOrNull()?.coerceAtLeast(0).orZero()
-                            }
+                .toCounterValue()
+            if (newString == currentString) return@CounterTextField
 
-                            else -> {
-                                newString.toFloatOrNull()?.coerceAtLeast(0f).orZero() as Number
-                            }
-                        }
-                            .toCounterValue()
-
-                        if (newString != currentString) {
-                            currentValue = newValue
-                            currentString = newString
-                            onValueChanged(currentValue)
-                        }
-                    },
-                )
-            }
-            CounterButton(
-                iconRes = R.drawable.ic_plus,
-                isDecreaseButton = false,
-            ) {
-                val newValue = (currentValue + increment).value
-                    .let {
-                        when (initialValue) {
-                            is CounterValue.Int -> it.toInt()
-                            else -> it.toFloat()
-                        }
+            currentValue = newValue
+            currentString = newString
+            onValueChanged(currentValue)
+        }
+        CounterButton(
+            iconRes = R.drawable.ic_plus,
+            isDecreaseButton = false,
+        ) {
+            val newValue = (currentValue + increment).value
+                .let {
+                    when (initialValue) {
+                        is CounterValue.Int -> it.toInt()
+                        else -> it.toFloat()
                     }
-                    .toCounterValue()
+                }
+                .toCounterValue()
 
-                currentValue = newValue
-                currentString = currentValue.value.toString()
-
-                onValueChanged(currentValue)
-            }
+            currentValue = newValue
+            currentString = currentValue.value.toString()
+            onValueChanged(currentValue)
         }
     }
 }
@@ -164,5 +140,29 @@ private fun CounterButton(
                 contentDescription = null
             )
         }
+    }
+}
+
+@Composable
+private fun CounterTextField(
+    modifier: Modifier = Modifier,
+    currentString: String,
+    onValueChange: (String) -> Unit,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+    ) {
+        BasicTextField(
+            textStyle = themeTypography.body1.copy(color = themeColors.black),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+            ),
+            singleLine = true,
+            cursorBrush = SolidColor(themeColors.lime),
+            value = currentString,
+            onValueChange = onValueChange,
+        )
     }
 }

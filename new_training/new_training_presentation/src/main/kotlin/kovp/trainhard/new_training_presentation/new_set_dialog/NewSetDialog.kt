@@ -20,12 +20,14 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
 import kovp.trainhard.components.button.TrainButton
-import kovp.trainhard.components.counter.Counter
 import kovp.trainhard.components.counter.CounterValue
+import kovp.trainhard.components.counter.TrainCounter
 import kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
 import kovp.trainhard.new_training_presentation.R
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
+
+private const val DEFAULT_COUNTER_WEIGHT_INCREMENT = 2.5f
 
 @Destination(style = DestinationStyle.Dialog::class)
 @Composable
@@ -56,15 +58,15 @@ fun NewSetDialog(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(text = exerciseTitle, style = themeTypography.header1)
-        Counter(
+        TrainCounter(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.weight_label),
             initialValue = CounterValue.Float(initWeight),
-            increment = CounterValue.Float(2.5f),
+            increment = CounterValue.Float(DEFAULT_COUNTER_WEIGHT_INCREMENT),
         ) {
             selectedWeight = it
         }
-        Counter(
+        TrainCounter(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.reps_label),
             initialValue = CounterValue.Int(initReps),
