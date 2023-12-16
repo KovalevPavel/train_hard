@@ -71,9 +71,4 @@ detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gr
 # logging
 logging-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
-# lint
-lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
-lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "lint" }
-detekt-api = { group = "io.gitlab.arturbosch.detekt", name = "detekt-api", version.ref = "detekt" }
-
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "uiController" }

@@ -4,7 +4,9 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import kovp.trainhard.convention.consts.Config
 import kovp.trainhard.convention.consts.Plugins
 import kovp.trainhard.convention.utils.TrainProps
+import kovp.trainhard.convention.utils.configureAndroidLint
 import kovp.trainhard.convention.utils.configureKotlinAndroid
+import kovp.trainhard.convention.utils.configureLint
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -23,6 +25,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     val props = TrainProps.getProperties()
 
                     targetSdk = Config.targetSdk
+
+                    configureAndroidLint()
+                    configureLint(lint)
 
                     applicationId = props["applicationId"].toString().filterNot { it == '\"' }
                     versionCode = 1
