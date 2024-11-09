@@ -2,6 +2,7 @@ package kovp.trainhard.convention
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.LibraryExtension
+import kovp.trainhard.convention.consts.Plugins
 import kovp.trainhard.convention.utils.configureAndroidCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,6 +16,8 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
                 ?.let { configureAndroidCompose(it) }
                 ?: extensions.findByType<ApplicationExtension>()
                     ?.let { configureAndroidCompose(it) }
+
+            Plugins.composeCompiler.let(pluginManager::apply)
         }
     }
 }

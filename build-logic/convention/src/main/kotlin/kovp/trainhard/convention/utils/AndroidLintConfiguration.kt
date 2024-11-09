@@ -15,7 +15,7 @@ private val ignoreRules = listOf(
     "UnusedResources",
 )
 
-fun CommonExtension<*, *, *, *, *>.configureAndroidLint() = lint {
+fun CommonExtension<*, *, *, *, *, *>.configureAndroidLint() = lint {
     abortOnError = false
     warningsAsErrors = false
     htmlReport = false

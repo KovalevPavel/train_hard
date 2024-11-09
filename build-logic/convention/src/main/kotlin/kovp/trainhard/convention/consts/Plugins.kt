@@ -7,4 +7,5 @@ object Plugins {
     const val kotlin = "kotlin"
     const val kotlinAndroid = "org.jetbrains.kotlin.android"
     const val detekt = "io.gitlab.arturbosch.detekt"
+    const val composeCompiler = "org.jetbrains.kotlin.plugin.compose"
 }

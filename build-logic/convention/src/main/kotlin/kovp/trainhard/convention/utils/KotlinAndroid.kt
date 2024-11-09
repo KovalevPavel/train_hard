@@ -5,13 +5,14 @@ import kovp.trainhard.convention.consts.Config
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
         val props = TrainProps.getProperties()
@@ -25,14 +26,16 @@ internal fun Project.configureKotlinAndroid(
             minSdk = Config.minSdk
         }
 
+        tasks.withType<KotlinCompile>().configureEach {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.values().first { it.name.contains(javaVersion) })
+            }
+        }
+
         compileOptions {
             sourceCompatibility = JavaVersion.toVersion(javaVersion.toInt())
             targetCompatibility = JavaVersion.toVersion(javaVersion.toInt())
             isCoreLibraryDesugaringEnabled = true
-        }
-
-        kotlinOptions {
-            jvmTarget = javaVersion
         }
 
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -41,8 +44,4 @@ internal fun Project.configureKotlinAndroid(
             add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
         }
     }
-}
-
-fun CommonExtension<*, *, *, *, *>.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("kotlinOptions", block)
 }

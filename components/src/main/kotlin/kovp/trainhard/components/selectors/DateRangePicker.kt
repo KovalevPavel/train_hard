@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DateRangePickerDefaults
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
@@ -69,8 +69,10 @@ fun ShowDatePickerDialog(
             showModeToggle = false,
             headline = {
                 DateRangePickerDefaults.DateRangePickerHeadline(
-                    datePickerState,
-                    datePickerFormatter,
+                    selectedStartDateMillis = datePickerState.selectedStartDateMillis,
+                    selectedEndDateMillis = datePickerState.selectedEndDateMillis,
+                    displayMode = DisplayMode.Picker,
+                    dateFormatter = datePickerFormatter,
                 )
             },
         )

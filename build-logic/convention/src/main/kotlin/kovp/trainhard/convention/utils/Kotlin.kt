@@ -6,6 +6,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlin(extensions: JavaPluginExtension) {
@@ -19,8 +20,8 @@ internal fun Project.configureKotlin(extensions: JavaPluginExtension) {
     val libs = this.extensions.getByType<VersionCatalogsExtension>().named("libs")
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = javaVersion
+        compilerOptions {
+            jvmTarget.set(JvmTarget.values().first { it.name.contains(javaVersion) })
         }
     }
 
