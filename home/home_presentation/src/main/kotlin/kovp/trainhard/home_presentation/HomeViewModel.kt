@@ -2,7 +2,6 @@ package kovp.trainhard.home_presentation
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import kovp.trainhard.core_domain.update
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.home_domain.EditGymCardHealthInteractor
 import kovp.trainhard.home_domain.GetCurrentDateInteractor
@@ -17,7 +16,7 @@ class HomeViewModel(
     private val currentDate: GetCurrentDateInteractor,
     private val getGymCardHealth: GetGymCardHealthInteractor,
     private val editGymCardHealth: EditGymCardHealthInteractor,
-) : BaseViewModel<HomeScreenState, HomeEvent, HomeAction>(initialState = HomeScreenState.Loading) {
+) : BaseViewModel<HomeScreenState, HomeAction, HomeEvent>(initialState = HomeScreenState.Loading) {
 
     private val mockPlanList = TrainingDay(
         items = listOf(
@@ -75,31 +74,31 @@ class HomeViewModel(
         )
     }
 
-    override fun obtainEvent(event: HomeEvent?) {
+    override fun handleAction(event: HomeAction?) {
         viewModelScope.launch {
             when (event) {
-                is HomeEvent.OnStartTrainingClick -> {
-                    HomeAction.OpenNewTrainingScreen.let { mutableActionFlow.emit(it) }
+                is HomeAction.OnStartTrainingClick -> {
+                    HomeEvent.OpenNewTrainingScreen.let { mutableActionFlow.emit(it) }
                 }
 
-                is HomeEvent.OnGymCardPlateClick -> {
-                    HomeAction.OpenDatePickerDialog(startDate = startDate, endDate = endDate)
+                is HomeAction.OnGymCardPlateClick -> {
+                    HomeEvent.OpenDatePickerDialog(startDate = startDate, endDate = endDate)
                         .let { mutableActionFlow.emit(it) }
                 }
 
-                is HomeEvent.EditGymCardDates -> {
-                    obtainEvent(null)
+                is HomeAction.EditGymCardDates -> {
+                    handleAction(null)
                     startDate = event.startTimestamp
                     endDate = event.endTimestamp
                     editGymCardDates()
                 }
 
-                is HomeEvent.OnCalendarClick -> {
-                    HomeAction.OpenTrainingCalendar.let { mutableActionFlow.emit(it) }
+                is HomeAction.OnCalendarClick -> {
+                    HomeEvent.OpenTrainingCalendar.let { mutableActionFlow.emit(it) }
                 }
 
                 null -> {
-                    HomeAction.Empty.let { mutableActionFlow.emit(it) }
+                    HomeEvent.Empty.let { mutableActionFlow.emit(it) }
                 }
             }
         }
@@ -111,7 +110,7 @@ class HomeViewModel(
             gymHealth = GymCardDates(startDate, endDate),
             todayPlan = mockPlans.random(),
         )
-            .let(mutableStateFlow::update)
+            .let { state = it }
     }
 
     private suspend fun editGymCardDates() {

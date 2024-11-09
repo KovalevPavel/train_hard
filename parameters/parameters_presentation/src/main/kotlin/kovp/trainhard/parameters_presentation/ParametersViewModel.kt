@@ -5,7 +5,6 @@ import kotlinx.coroutines.launch
 import kovp.trainhard.components.exercise_type.ExerciseCardDto
 import kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
 import kovp.trainhard.core_domain.Muscles
-import kovp.trainhard.core_domain.update
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.errors.EntityExistsException
 import kovp.trainhard.database_api.models.Exercise
@@ -29,7 +28,7 @@ class ParametersViewModel(
         subscribeOnExercisesList()
     }
 
-    override fun obtainEvent(event: ParametersEvent?) {
+    override fun handleAction(event: ParametersEvent?) {
         launch(
             action = {
                 when (event) {
@@ -68,7 +67,7 @@ class ParametersViewModel(
             },
         )
             .let { removeExistingExercise(it) }
-        obtainEvent(null)
+        handleAction(null)
     }
 
     private suspend fun addOrEditExercise(exercise: NewExerciseScreenResult.Success) {
@@ -78,13 +77,13 @@ class ParametersViewModel(
             ScreenAction.ADD -> addNewExercise(exercise = mappedExercise)
             ScreenAction.EDIT -> editExercise(exercise = mappedExercise)
         }
-        obtainEvent(null)
+        handleAction(null)
     }
 
     private fun subscribeOnExercisesList() {
         viewModelScope.launch {
             getExercises().collect { list ->
-                ParametersScreenState.Loading.let(mutableStateFlow::update)
+                state = ParametersScreenState.Loading
 
                 list.map {
                     ExerciseCardDto(
@@ -98,7 +97,7 @@ class ParametersViewModel(
                     )
                 }
                     .let(ParametersScreenState::Data)
-                    .let(mutableStateFlow::update)
+                    .let { state = it }
             }
         }
     }

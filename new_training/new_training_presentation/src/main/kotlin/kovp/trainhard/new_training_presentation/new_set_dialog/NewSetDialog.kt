@@ -72,7 +72,7 @@ fun NewSetDialog(
 
         TrainButton(
             modifier = Modifier.align(Alignment.End),
-            label = stringResource(id = kovp.trainhard.components.R.string.save),
+            label = stringResource(id = kovp.trainhard.design_system.R.string.save),
         ) {
 //            resultNavigator.navigateBack(
 //                result = NewSetDialogResult.Success(

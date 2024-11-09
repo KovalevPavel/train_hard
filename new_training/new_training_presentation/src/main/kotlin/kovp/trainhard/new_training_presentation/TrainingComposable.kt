@@ -22,7 +22,7 @@ import kovp.trainhard.components.train_card.CompletedExerciseCard
 import kovp.trainhard.new_training_api.NewSetDialogScreen
 import kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
 import kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction.EDIT
-import kovp.trainhard.new_training_presentation.TrainingEvent.OnRemoveSetClick
+import kovp.trainhard.new_training_presentation.TrainingAction.OnRemoveSetClick
 import kovp.trainhard.new_training_presentation.di.newTrainingModule
 import kovp.trainhard.ui_theme.providers.themeColors
 import org.koin.androidx.compose.koinViewModel
@@ -38,8 +38,7 @@ fun TrainingComposable(
 
     val vm = koinViewModel<TrainingViewModel>()
 
-    val state by vm.stateFlow.collectAsState()
-    val action by vm.actionFlow.collectAsState(initial = TrainingAction.Empty)
+    val action by vm.actionFlow.collectAsState(initial = TrainingEvent.Empty)
 
 //    editSetResRecipient.onNavResult {
 //        val result = it.getOr { NewSetDialogResult.Error } as? NewSetDialogResult.Success
@@ -59,7 +58,7 @@ fun TrainingComposable(
 //        TrainingEvent.AddNewCompletedExercise(result).let(vm::obtainEvent)
 //    }
 
-    StateContainer(state = state) {
+    StateContainer(state = vm.state) {
         when (it) {
             is TrainingScreenState.Loading -> {
                 FullscreenLoader()
@@ -106,7 +105,7 @@ private fun DataContent(
     Scaffold(
         floatingActionButton = {
             TrainFab(icon = Icons.Default.Add) {
-                TrainingEvent.OnAddExerciseClick.let(vm::obtainEvent)
+                TrainingAction.OnAddExerciseClick.let(vm::handleAction)
             }
         },
     ) { paddings ->
@@ -131,16 +130,16 @@ private fun DataContent(
                     initReps = initReps,
                     requestAction = RequestAction.ADD,
                 )
-                    .let(TrainingEvent::NavigateToSetDialog)
+                    .let(TrainingAction::NavigateToSetDialog)
 
                 CompletedExerciseCard(
                     card = it,
                     onAddSetClick = {
-                        vm.obtainEvent(newSetDialog)
+                        vm.handleAction(newSetDialog)
                     },
                     onRemoveSetClick = { id ->
                         OnRemoveSetClick(setDto = it, setIndex = id)
-                            .let(vm::obtainEvent)
+                            .let(vm::handleAction)
                     },
                     onEditSetClick = { id ->
                         NewSetDialogScreen(
@@ -151,8 +150,8 @@ private fun DataContent(
                             initReps = initReps,
                             requestAction = EDIT,
                         )
-                            .let(TrainingEvent::NavigateToSetDialog)
-                            .let(vm::obtainEvent)
+                            .let(TrainingAction::NavigateToSetDialog)
+                            .let(vm::handleAction)
                     }
                 )
             }

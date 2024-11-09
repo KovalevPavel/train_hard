@@ -44,17 +44,16 @@ fun SelectNewExerciseTypeComposable() {
 
     val viewModel = koinViewModel<SelectNewExerciseTypeViewModel>()
 
-    val screenState by viewModel.stateFlow.collectAsState()
     val action by viewModel.actionFlow.collectAsState(initial = SelectExerciseAction.Empty)
 
-    when (val st = screenState) {
+    when (val st = viewModel.state) {
         is SelectExerciseScreenState.Loading -> {
             FullscreenLoader()
         }
 
         is SelectExerciseScreenState.Data -> {
             DataContent(screenState = st) {
-                SelectExerciseEvent.OnExerciseClick(it).let(viewModel::obtainEvent)
+                SelectExerciseEvent.OnExerciseClick(it).let(viewModel::handleAction)
             }
         }
     }

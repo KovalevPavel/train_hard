@@ -5,20 +5,20 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseViewModel<State : Any, Event : Any, Action : Any>(
+abstract class BaseViewModel<State : Any, Action : Any, Event : Any>(
     initialState: State,
 ) : ViewModel() {
-    val stateFlow: StateFlow<State> by lazy { mutableStateFlow }
-    val actionFlow: Flow<Action> by lazy { mutableActionFlow }
-    protected val mutableStateFlow = MutableStateFlow(initialState)
-    protected val mutableActionFlow = MutableSharedFlow<Action>()
+    var state: State = initialState
+        protected set
 
-    abstract fun obtainEvent(event: Event?)
+    val actionFlow: Flow<Event> by lazy { mutableActionFlow }
+
+    protected val mutableActionFlow = MutableSharedFlow<Event>()
+
+    abstract fun handleAction(event: Action?)
 
     fun launch(
         context: CoroutineContext = Dispatchers.IO,

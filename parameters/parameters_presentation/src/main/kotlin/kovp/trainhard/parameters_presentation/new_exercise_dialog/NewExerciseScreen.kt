@@ -78,7 +78,7 @@ fun NewExerciseScreen(
                 .height(56.dp)
                 .fillMaxWidth(),
 //            isEnabled = currentQuery.isNotEmpty() && selectedMuscleGroups.isNotEmpty(),
-            label = stringResource(id = kovp.trainhard.components.R.string.save),
+            label = stringResource(id = kovp.trainhard.design_system.R.string.save),
         ) {
 //            resultNavigator.navigateBack(
 //                result = NewExerciseScreenResult.Success(

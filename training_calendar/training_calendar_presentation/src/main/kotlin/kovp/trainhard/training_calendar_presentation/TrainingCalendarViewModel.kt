@@ -22,7 +22,7 @@ class TrainingCalendarViewModel(
         subscribeOnCalendarData()
     }
 
-    override fun obtainEvent(event: TrainingCalendarEvent?) {
+    override fun handleAction(event: TrainingCalendarEvent?) {
         viewModelScope.launch {
             when (event) {
                 is TrainingCalendarEvent.OnTrainingDayClick -> {
@@ -60,7 +60,7 @@ class TrainingCalendarViewModel(
                     LocalDate.ofInstant(instant, ZoneId.systemDefault())
                 }
                     .let(TrainingCalendarState::Data)
-                    .let(mutableStateFlow::update)
+                    .let { st -> state = st }
             }
             .launchIn(viewModelScope)
     }

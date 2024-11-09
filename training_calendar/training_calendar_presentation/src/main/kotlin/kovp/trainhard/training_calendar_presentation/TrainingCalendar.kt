@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,9 +25,8 @@ import java.time.LocalDate
 fun TrainingCalendar() {
     loadKoinModules(trainingCalendarModule)
     val viewModel = koinViewModel<TrainingCalendarViewModel>()
-    val state by viewModel.stateFlow.collectAsState()
 
-    StateContainer(state = state) { trainingCalendarState ->
+    StateContainer(state = viewModel.state) { trainingCalendarState ->
         when (trainingCalendarState) {
             is TrainingCalendarState.Loading -> {
                 FullscreenLoader()
@@ -37,7 +34,7 @@ fun TrainingCalendar() {
 
             is TrainingCalendarState.Data -> {
                 Data(muscleGroups = trainingCalendarState.trainings) { day ->
-                    TrainingCalendarEvent.OnTrainingDayClick(day = day).let(viewModel::obtainEvent)
+                    TrainingCalendarEvent.OnTrainingDayClick(day = day).let(viewModel::handleAction)
                 }
             }
         }

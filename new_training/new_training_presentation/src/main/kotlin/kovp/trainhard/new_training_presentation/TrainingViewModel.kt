@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kovp.trainhard.components.train_card.CompletedExerciseCardDto
 import kovp.trainhard.core_domain.Muscle
-import kovp.trainhard.core_domain.update
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.models.CompletedExercise
 import kovp.trainhard.database_api.models.minus
@@ -25,7 +24,7 @@ class TrainingViewModel(
     private val updateCompletedExercise: UpdateCompletedExerciseInteractor,
     private val getExerciseById: GetExerciseByIdInteractor,
     private val removeCompletedExercise: RemoveCompletedExerciseInteractor,
-) : BaseViewModel<TrainingScreenState, TrainingEvent, TrainingAction>(
+) : BaseViewModel<TrainingScreenState, TrainingAction, TrainingEvent>(
     initialState = TrainingScreenState.Loading,
 ) {
     private val completedExercises: MutableList<CompletedExercise> = mutableListOf()
@@ -34,29 +33,29 @@ class TrainingViewModel(
         subscribeOnSetsList()
     }
 
-    override fun obtainEvent(event: TrainingEvent?) {
+    override fun handleAction(event: TrainingAction?) {
         launch(
             action = {
                 when (event) {
-                    is TrainingEvent.OnAddExerciseClick -> {
-                        TrainingAction.NavigateToSelectExerciseType
+                    is TrainingAction.OnAddExerciseClick -> {
+                        TrainingEvent.NavigateToSelectExerciseType
                             .let { mutableActionFlow.emit(it) }
                     }
 
-                    is TrainingEvent.NavigateToSetDialog -> {
-                        TrainingAction.NavigateToEditSetDialog(data = event.dialog)
+                    is TrainingAction.NavigateToSetDialog -> {
+                        TrainingEvent.NavigateToEditSetDialog(data = event.dialog)
                             .let { mutableActionFlow.emit(it) }
                     }
 
-                    is TrainingEvent.AddOrEditSet -> {
+                    is TrainingAction.AddOrEditSet -> {
                         addOrEditSet(dialogResult = event.data)
                     }
 
-                    is TrainingEvent.AddNewCompletedExercise -> {
+                    is TrainingAction.AddNewCompletedExercise -> {
                         addNewCompletedExercise(dialogResult = event.data)
                     }
 
-                    is TrainingEvent.OnRemoveSetClick -> {
+                    is TrainingAction.OnRemoveSetClick -> {
                         removeSet(
                             setDto = event.setDto,
                             setIndex = event.setIndex,
@@ -64,7 +63,7 @@ class TrainingViewModel(
                     }
 
                     null -> {
-                        mutableActionFlow.emit(TrainingAction.Empty)
+                        mutableActionFlow.emit(TrainingEvent.Empty)
                     }
                 }
             },
@@ -73,13 +72,13 @@ class TrainingViewModel(
 
     private fun subscribeOnSetsList() {
         getAllExercises(timestamp = currentTimestamp).onEach { list ->
-            TrainingScreenState.Loading.let(mutableStateFlow::update)
+            state = TrainingScreenState.Loading
 
             completedExercises.clear()
             list.let(completedExercises::addAll)
             list.map(::mapToCardDto)
                 .let(TrainingScreenState::Data)
-                .let(mutableStateFlow::update)
+                .let { state = it }
         }
             .launchIn(viewModelScope)
     }
@@ -94,7 +93,7 @@ class TrainingViewModel(
                 )
             )
         }
-        obtainEvent(null)
+        handleAction(null)
     }
 
     private suspend fun addOrEditSet(dialogResult: NewSetDialogResult.Success) {
@@ -122,7 +121,7 @@ class TrainingViewModel(
         }
 
         updateCompletedExercise(editedCompletedExercise = updatedExercise)
-        obtainEvent(null)
+        handleAction(null)
     }
 
     private suspend fun removeSet(setDto: CompletedExerciseCardDto, setIndex: Int) {
@@ -145,7 +144,7 @@ class TrainingViewModel(
 
         completedExercises[index] = updateSet
         updateCompletedExercise(editedCompletedExercise = updateSet)
-        obtainEvent(null)
+        handleAction(null)
     }
 
     private fun mapToCardDto(item: CompletedExercise) = CompletedExerciseCardDto(

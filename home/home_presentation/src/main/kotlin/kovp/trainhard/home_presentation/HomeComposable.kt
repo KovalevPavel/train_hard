@@ -46,8 +46,7 @@ fun HomeComposable() {
     loadKoinModules(homeModule)
 
     val vm = koinViewModel<HomeViewModel>()
-    val screenState by vm.stateFlow.collectAsState()
-    val action by vm.actionFlow.collectAsState(initial = HomeAction.Empty)
+    val action by vm.actionFlow.collectAsState(initial = HomeEvent.Empty)
 
 //    resultRecipient.onNavResult {
 //        val (start, end) = it.getOr {
@@ -61,17 +60,25 @@ fun HomeComposable() {
 //            .let(vm::obtainEvent)
 //    }
 
-    when (val st = screenState) {
+    HomeContent(vm.state, vm::handleAction)
+
+//    SubscribeToAction(action = action, navigator = navigator)
+}
+
+@Composable
+fun HomeContent(
+    state: HomeScreenState,
+    handleAction: (HomeAction) -> Unit,
+) {
+    when (state) {
         is HomeScreenState.Loading -> {
             FullscreenLoader()
         }
 
         is HomeScreenState.Data -> {
-            DataContent(screenState = st, viewModel = vm)
+            DataContent(screenState = state, handleAction = handleAction)
         }
     }
-
-//    SubscribeToAction(action = action, navigator = navigator)
 }
 
 //@Composable
@@ -122,7 +129,7 @@ fun HomeComposable() {
 @Composable
 private fun DataContent(
     screenState: HomeScreenState.Data,
-    viewModel: HomeViewModel,
+    handleAction: (HomeAction) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.background(color = Color.Cyan),
@@ -132,7 +139,7 @@ private fun DataContent(
                 containerColor = themeColors.lime,
                 shape = RoundedCornerShape(size = 100.dp),
                 onClick = {
-                    viewModel.obtainEvent(HomeEvent.OnStartTrainingClick)
+                    handleAction(HomeAction.OnStartTrainingClick)
                 },
             ) {
                 Text(
@@ -150,10 +157,10 @@ private fun DataContent(
             screenState = screenState,
             modifier = Modifier,
             onGymCardPlateClick = {
-                viewModel.obtainEvent(HomeEvent.OnGymCardPlateClick)
+                handleAction(HomeAction.OnGymCardPlateClick)
             },
             onDateClick = {
-                viewModel.obtainEvent(HomeEvent.OnCalendarClick)
+                handleAction(HomeAction.OnCalendarClick)
             },
         )
     }

@@ -36,7 +36,6 @@ fun ParametersComposable() {
 
     val vm = koinViewModel<ParametersViewModel>()
 
-    val state by vm.stateFlow.collectAsState()
     val action by vm.actionFlow.collectAsState(initial = ParametersAction.Empty)
 
 //    resultRecipient.onNavResult {
@@ -52,7 +51,7 @@ fun ParametersComposable() {
 //        confirmationResultRecipient = confirmationResultRecipient,
 //    )
 
-    StateContainer(state = state) {
+    StateContainer(state = vm.state) {
         when (it) {
             is ParametersScreenState.Loading -> {
                 FullscreenLoader()
@@ -117,7 +116,7 @@ private fun DataContent(
                     },
                     onRemoveClick = { exerciseCard ->
                         ParametersEvent.ShowConfirmDeleteDialog(exerciseCard)
-                            .let(vm::obtainEvent)
+                            .let(vm::handleAction)
                     },
                 )
             }

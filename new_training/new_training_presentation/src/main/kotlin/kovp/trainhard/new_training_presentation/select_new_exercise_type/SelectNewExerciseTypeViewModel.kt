@@ -17,12 +17,12 @@ class SelectNewExerciseTypeViewModel(
         viewModelScope.launch {
             exercisesApi.getExercises().collect { list ->
                 list.let(SelectExerciseScreenState::Data)
-                    .let(mutableStateFlow::update)
+                    .let { state = it }
             }
         }
     }
 
-    override fun obtainEvent(event: SelectExerciseEvent?) {
+    override fun handleAction(event: SelectExerciseEvent?) {
         viewModelScope.launch {
             when (event) {
                 is SelectExerciseEvent.OnExerciseClick -> {
