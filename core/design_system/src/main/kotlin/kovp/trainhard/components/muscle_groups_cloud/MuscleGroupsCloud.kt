@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kovp.trainhard.components.R
+import kovp.trainhard.design_system.R
 import kovp.trainhard.core_domain.Muscle
 import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.core_domain.Muscles

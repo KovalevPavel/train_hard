@@ -1,4 +1,4 @@
-package kovp.trainhard.core_design
+package kovp.trainhard.components
 
 import androidx.compose.ui.Modifier
 

@@ -1,8 +1,9 @@
-package kovp.trainhard.core_design
+package kovp.trainhard.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import kovp.trainhard.core_domain.Muscles
+import kovp.trainhard.design_system.R
 
 @Composable
 fun mapMuscleTitle(muscleId: String): String {

@@ -32,12 +32,14 @@ include(":core_domain")
 include(":database")
 include(":database_api")
 include(":navigation")
-include(":ui_theme")
-include(":components")
-include(":core_design")
 include(":core_dialogs")
 include(":core_presentation")
 include(":lint_rules")
+
+withDirectory("core") {
+    includeProject("ui_theme")
+    includeProject("design_system")
+}
 
 withDirectory("home") {
     includeProject("home_api")

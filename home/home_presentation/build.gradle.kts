@@ -9,7 +9,7 @@ dependencies {
     implementation(project(":home_domain"))
     implementation(project(":core_domain"))
     implementation(project(":core_presentation"))
-    implementation(project(":components"))
+    implementation(project(":design_system"))
     implementation(project(":navigation"))
     implementation(project(":new_training_api"))
     implementation(project(":training_calendar_api"))

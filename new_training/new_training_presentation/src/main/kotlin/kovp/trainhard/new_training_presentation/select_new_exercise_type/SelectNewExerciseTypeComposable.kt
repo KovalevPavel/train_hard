@@ -23,8 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.text_field.TrainTextField
-import kovp.trainhard.core_design.joinToStringComposable
-import kovp.trainhard.core_design.mapMuscleTitle
+import kovp.trainhard.components.joinToStringComposable
+import kovp.trainhard.components.mapMuscleTitle
 import kovp.trainhard.database_api.models.Exercise
 import kovp.trainhard.new_training_presentation.R
 import kovp.trainhard.new_training_presentation.di.selectExerciseModule

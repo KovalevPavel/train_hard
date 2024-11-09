@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="muscle_groups">Мышечные группы: %s</string>
+    <string name="add_set">Добавить подход</string>
+    <string name="save">Сохранить</string>
+    <string name="weight_reps_template">%.2f кг на %d повторений</string>
+    <string name="gym_card_date_range_title">Выберите интервал действия абонемента</string>
+
+    <string name="group_chest">Грудные</string>
+    <string name="group_legs">Ноги</string>
+    <string name="group_back">Спина</string>
+    <string name="group_deltoids">Плечи</string>
+    <string name="group_arms">Руки</string>
+    <string name="group_abs">Пресс</string>
+
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Отмена</string>
+
     <string name="legs_quad">квадрицепс</string>
     <string name="legs_bic">бицепс бедра</string>
     <string name="legs_calves">икры</string>

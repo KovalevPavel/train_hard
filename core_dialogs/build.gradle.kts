@@ -14,7 +14,7 @@ android {
 dependencies {
     implementation(project(":navigation"))
     implementation(project(":ui_theme"))
-    implementation(project(":components"))
+    implementation(project(":design_system"))
 
     implementation(libs.koin.compose)
 }

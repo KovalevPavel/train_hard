@@ -15,10 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kovp.trainhard.components.R
+import kovp.trainhard.design_system.R
 import kovp.trainhard.components.button.TrainButton
-import kovp.trainhard.core_design.joinToStringComposable
-import kovp.trainhard.core_design.mapMuscleTitle
+import kovp.trainhard.components.joinToStringComposable
+import kovp.trainhard.components.mapMuscleTitle
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
