@@ -4,12 +4,6 @@ plugins {
     alias(libs.plugins.google.ksp)
 }
 
-android {
-    ksp {
-        arg("compose-destinations.mode", "destinations")
-    }
-}
-
 dependencies {
     implementation(project(":ui_theme"))
     implementation(project(":home_domain"))
@@ -21,6 +15,4 @@ dependencies {
     implementation(project(":training_calendar_api"))
 
     implementation(libs.koin.compose)
-    implementation(libs.destinations.core)
-    ksp(libs.destinations.ksp)
 }

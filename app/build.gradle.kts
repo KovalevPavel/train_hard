@@ -2,13 +2,9 @@
 plugins {
     id("trainhard.android.application")
     id("trainhard.android.compose")
-    alias(libs.plugins.google.ksp)
 }
 
 android {
-    ksp {
-        arg("compose-destinations.generateNavGraphs", "false")
-    }
 
     buildFeatures {
         buildConfig = true
@@ -40,8 +36,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material)
-
-    implementation(libs.destinations.core)
+    implementation(libs.navigation)
+    implementation(project(":home_api"))
+    implementation(project(":statistics_api"))
 
     implementation(project(":components"))
     implementation(project(":core_domain"))

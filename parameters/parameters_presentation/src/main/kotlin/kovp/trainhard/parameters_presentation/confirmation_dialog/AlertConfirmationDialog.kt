@@ -13,19 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.result.ResultBackNavigator
-import com.ramcosta.composedestinations.spec.DestinationStyle
 import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.core_dialogs.AlertConfirmationDialogScreen
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
-@Destination(style = DestinationStyle.Dialog::class)
 @Composable
 fun AlertConfirmationDialog(
     arguments: AlertConfirmationDialogScreen,
-    resultNavigator: ResultBackNavigator<Boolean>,
 ) {
     Column(
         modifier = Modifier
@@ -58,7 +53,7 @@ fun AlertConfirmationDialog(
                         label = it,
                         isPrimary = false,
                     ) {
-                        resultNavigator.navigateBack(result = false)
+//                        resultNavigator.navigateBack(result = false)
                     }
                 }
                     // Чтобы positiveAction оставался у правого края
@@ -69,7 +64,7 @@ fun AlertConfirmationDialog(
                         label = it,
                         isPrimary = true,
                     ) {
-                        resultNavigator.navigateBack(result = true)
+//                        resultNavigator.navigateBack(result = true)
                     }
                 }
             }

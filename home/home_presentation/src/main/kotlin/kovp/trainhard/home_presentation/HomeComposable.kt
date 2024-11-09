@@ -1,5 +1,6 @@
 package kovp.trainhard.home_presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,20 +18,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.result.ResultRecipient
-import com.ramcosta.composedestinations.result.getOr
 import kovp.trainhard.components.progress.FullscreenLoader
-import kovp.trainhard.components.selectors.DateRangeSelectorState
 import kovp.trainhard.core_domain.DATE_FORMAT_dd_MMMM
 import kovp.trainhard.core_domain.formatToDateString
 import kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
@@ -39,42 +35,31 @@ import kovp.trainhard.home_presentation.TodayPlan.TrainingDay
 import kovp.trainhard.home_presentation.components.CurrentDateCard
 import kovp.trainhard.home_presentation.components.ExerciseCard
 import kovp.trainhard.home_presentation.components.GymCardHealth
-import kovp.trainhard.home_presentation.destinations.GymCardDatesDialogDestination
 import kovp.trainhard.home_presentation.di.homeModule
-import kovp.trainhard.navigation_api.localScreenMapper
-import kovp.trainhard.navigation_api.navigation_styles.BottomNavigationTransition
-import kovp.trainhard.new_training_api.TrainingScreen
-import kovp.trainhard.training_calendar_api.TrainingCalendarScreen
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
-import java.time.LocalDate
-import java.time.ZoneId
 
-@Destination(style = BottomNavigationTransition::class)
 @Composable
-fun HomeComposable(
-    navigator: DestinationsNavigator,
-    resultRecipient: ResultRecipient<GymCardDatesDialogDestination, DateRangeSelectorState>,
-) {
+fun HomeComposable() {
     loadKoinModules(homeModule)
 
     val vm = koinViewModel<HomeViewModel>()
     val screenState by vm.stateFlow.collectAsState()
     val action by vm.actionFlow.collectAsState(initial = HomeAction.Empty)
 
-    resultRecipient.onNavResult {
-        val (start, end) = it.getOr {
-            vm.obtainEvent(null)
-            return@onNavResult
-        }
-        HomeEvent.EditGymCardDates(
-            startTimestamp = start ?: return@onNavResult,
-            endTimestamp = end ?: return@onNavResult,
-        )
-            .let(vm::obtainEvent)
-    }
+//    resultRecipient.onNavResult {
+//        val (start, end) = it.getOr {
+//            vm.obtainEvent(null)
+//            return@onNavResult
+//        }
+//        HomeEvent.EditGymCardDates(
+//            startTimestamp = start ?: return@onNavResult,
+//            endTimestamp = end ?: return@onNavResult,
+//        )
+//            .let(vm::obtainEvent)
+//    }
 
     when (val st = screenState) {
         is HomeScreenState.Loading -> {
@@ -86,59 +71,61 @@ fun HomeComposable(
         }
     }
 
-    SubscribeToAction(action = action, navigator = navigator)
+//    SubscribeToAction(action = action, navigator = navigator)
 }
 
-@Composable
-private fun SubscribeToAction(
-    action: HomeAction,
-    navigator: DestinationsNavigator,
-) {
-    val screenMapper = localScreenMapper.current
-    val currentDateString = LocalDate.now()
-        .atStartOfDay()
-        .atZone(ZoneId.systemDefault())
-        .toInstant()
-        .toEpochMilli()
+//@Composable
+//private fun SubscribeToAction(
+//    action: HomeAction,
+//    navigator: DestinationsNavigator,
+//) {
+//    val screenMapper = localScreenMapper.current
+//    val currentDateString = LocalDate.now()
+//        .atStartOfDay()
+//        .atZone(ZoneId.systemDefault())
+//        .toInstant()
+//        .toEpochMilli()
+//
+//    val newTrainingDestination = remember {
+//        screenMapper(TrainingScreen(timestamp = currentDateString))
+//    }
+//
+//    val trainingCalendarDestination = remember {
+//        screenMapper(TrainingCalendarScreen(0))
+//    }
+//
+//    when (action) {
+//        is HomeAction.Empty -> {
+//            // do nothing
+//        }
+//
+//        is HomeAction.OpenDatePickerDialog -> {
+//            SelectGymDatesScreen(
+//                startDate = action.startDate,
+//                endDate = action.endDate,
+//            )
+//                .let(screenMapper::invoke)
+//                .let(navigator::navigate)
+//        }
+//
+//        is HomeAction.OpenNewTrainingScreen -> {
+//            navigator.navigate(newTrainingDestination)
+//        }
+//
+//        is HomeAction.OpenTrainingCalendar -> {
+//            navigator.navigate(trainingCalendarDestination)
+//        }
+//    }
+//}
 
-    val newTrainingDestination = remember {
-        screenMapper(TrainingScreen(timestamp = currentDateString))
-    }
-
-    val trainingCalendarDestination = remember {
-        screenMapper(TrainingCalendarScreen(0))
-    }
-
-    when (action) {
-        is HomeAction.Empty -> {
-            // do nothing
-        }
-
-        is HomeAction.OpenDatePickerDialog -> {
-            SelectGymDatesScreen(
-                startDate = action.startDate,
-                endDate = action.endDate,
-            )
-                .let(screenMapper::invoke)
-                .let(navigator::navigate)
-        }
-
-        is HomeAction.OpenNewTrainingScreen -> {
-            navigator.navigate(newTrainingDestination)
-        }
-
-        is HomeAction.OpenTrainingCalendar -> {
-            navigator.navigate(trainingCalendarDestination)
-        }
-    }
-}
-
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 private fun DataContent(
     screenState: HomeScreenState.Data,
     viewModel: HomeViewModel,
 ) {
     Scaffold(
+        modifier = Modifier.background(color = Color.Cyan),
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -161,7 +148,7 @@ private fun DataContent(
     ) {
         HomeScreen(
             screenState = screenState,
-            modifier = Modifier.padding(it),
+            modifier = Modifier,
             onGymCardPlateClick = {
                 viewModel.obtainEvent(HomeEvent.OnGymCardPlateClick)
             },

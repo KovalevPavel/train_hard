@@ -1,7 +1,6 @@
 package kovp.trainhard.parameters_presentation
 
 import kovp.trainhard.components.exercise_type.ExerciseCardDto
-import kovp.trainhard.parameters_api.NewExerciseDialogScreen
 
 sealed interface ParametersAction {
     data object Empty : ParametersAction
@@ -11,7 +10,7 @@ sealed interface ParametersAction {
         val title: String,
     ) : ParametersAction
 
-    data class OpenNewExerciseScreen(
-        val data: NewExerciseDialogScreen,
-    ) : ParametersAction
+//    data class OpenNewExerciseScreen(
+//        val data: NewExerciseDialogScreen,
+//    ) : ParametersAction
 }

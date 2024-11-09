@@ -38,10 +38,10 @@ class ParametersViewModel(
                             .let { mutableActionFlow.emit(it) }
                     }
 
-                    is ParametersEvent.NavigateToNewExerciseScreen -> {
-                        ParametersAction.OpenNewExerciseScreen(data = event.data)
-                            .let { mutableActionFlow.emit(it) }
-                    }
+//                    is ParametersEvent.NavigateToNewExerciseScreen -> {
+//                        ParametersAction.OpenNewExerciseScreen(data = event.data)
+//                            .let { mutableActionFlow.emit(it) }
+//                    }
 
                     is ParametersEvent.RemoveExercise -> {
                         removeExercise(exercise = event.data)

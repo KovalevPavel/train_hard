@@ -5,8 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":navigation"))
     implementation(libs.navigation)
-    implementation(project(":parameters_presentation"))
+    implementation(project(":statistics_presentation"))
     implementation(libs.kotlinx.serialization.json)
 }

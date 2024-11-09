@@ -17,6 +17,4 @@ dependencies {
     implementation(project(":components"))
 
     implementation(libs.koin.compose)
-    implementation(libs.destinations.core)
-    ksp(libs.destinations.ksp)
 }

@@ -7,7 +7,7 @@ enum class BottomNavGraphRoutes(val route: String) {
     ;
 
     companion object {
-        fun findByRoute(route: String?) = values().firstOrNull {
+        fun findByRoute(route: String?) = entries.firstOrNull {
             it.route.equals(route, ignoreCase = true)
         }
             ?: HOME

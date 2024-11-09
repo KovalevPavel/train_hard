@@ -12,14 +12,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.core_domain.MuscleGroup
-import kovp.trainhard.navigation_api.localScreenMapper
-import kovp.trainhard.navigation_api.navigation_styles.SlideFromRightTransition
-import kovp.trainhard.new_training_api.TrainingScreen
 import kovp.trainhard.training_calendar_presentation.di.trainingCalendarModule
 import kovp.trainhard.training_calendar_presentation.legend.Legend
 import kovp.trainhard.ui_theme.providers.themeColors
@@ -28,11 +23,8 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
 import java.time.LocalDate
 
-@Destination(style = SlideFromRightTransition::class)
 @Composable
-fun TrainingCalendar(
-    navigator: DestinationsNavigator,
-) {
+fun TrainingCalendar() {
     loadKoinModules(trainingCalendarModule)
     val viewModel = koinViewModel<TrainingCalendarViewModel>()
     val state by viewModel.stateFlow.collectAsState()
@@ -51,7 +43,7 @@ fun TrainingCalendar(
         }
     }
 
-    SubscribeToCalendarAction(viewModel = viewModel, navigator = navigator)
+//    SubscribeToCalendarAction(viewModel = viewModel, navigator = navigator)
 }
 
 @Composable
@@ -79,24 +71,24 @@ private fun Data(
     }
 }
 
-@Composable
-private fun SubscribeToCalendarAction(
-    viewModel: TrainingCalendarViewModel,
-    navigator: DestinationsNavigator,
-) {
-    val action by viewModel.actionFlow.collectAsState(initial = TrainingCalendarAction.Empty)
-
-    val screenMapper = localScreenMapper.current
-
-    when (val ac = action) {
-        is TrainingCalendarAction.Empty -> {
-            // do nothing
-        }
-
-        is TrainingCalendarAction.OpenNewTrainingScreen -> {
-            TrainingScreen(timestamp = ac.timestamp)
-                .let(screenMapper::invoke)
-                .let(navigator::navigate)
-        }
-    }
-}
+//@Composable
+//private fun SubscribeToCalendarAction(
+//    viewModel: TrainingCalendarViewModel,
+//    navigator: DestinationsNavigator,
+//) {
+//    val action by viewModel.actionFlow.collectAsState(initial = TrainingCalendarAction.Empty)
+//
+//    val screenMapper = localScreenMapper.current
+//
+//    when (val ac = action) {
+//        is TrainingCalendarAction.Empty -> {
+//            // do nothing
+//        }
+//
+//        is TrainingCalendarAction.OpenNewTrainingScreen -> {
+//            TrainingScreen(timestamp = ac.timestamp)
+//                .let(screenMapper::invoke)
+//                .let(navigator::navigate)
+//        }
+//    }
+//}

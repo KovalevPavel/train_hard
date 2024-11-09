@@ -40,6 +40,7 @@ include(":core_presentation")
 include(":lint_rules")
 
 withDirectory("home") {
+    includeProject("home_api")
     includeProject("home_presentation")
     includeProject("home_domain")
 }
@@ -51,6 +52,7 @@ withDirectory("new_training") {
 }
 
 withDirectory("statistics") {
+    includeProject("statistics_api")
     includeProject("statistics_presentation")
 }
 
