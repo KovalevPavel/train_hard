@@ -3,7 +3,7 @@ package kovp.trainhard.home_presentation
 sealed interface HomeScreenState {
     data class Data(
         val dateString: Long,
-        val gymHealth: GymCardDates?,
+        val gymHealth: GymCardDates,
         val todayPlan: TodayPlan,
     ) : HomeScreenState
 

@@ -87,10 +87,9 @@ class HomeViewModel(
                 }
 
                 is HomeAction.EditGymCardDates -> {
-//                    handleAction(null)
-//                    startDate = event.startTimestamp
-//                    endDate = event.endTimestamp
-//                    editGymCardDates()
+                    startDate = action.startTimestamp
+                    endDate = action.endTimestamp
+                    editGymCardDates()
                 }
 
                 is HomeAction.OnCalendarClick -> {

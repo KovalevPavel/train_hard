@@ -20,14 +20,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
+import kovp.trainhard.components.selectors.DateRangeSelectorState
 import kovp.trainhard.core_domain.DATE_FORMAT_dd_MMMM
 import kovp.trainhard.core_domain.formatToDateString
 import kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
@@ -37,8 +38,10 @@ import kovp.trainhard.home_presentation.components.CurrentDateCard
 import kovp.trainhard.home_presentation.components.ExerciseCard
 import kovp.trainhard.home_presentation.components.GymCardHealth
 import kovp.trainhard.home_presentation.di.homeModule
+import kovp.trainhard.home_presentation.gym_card_dates.SelectGymDatesScreen
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_api.TrainingScreen
+import kovp.trainhard.training_calendar_api.TrainingCalendarScreen
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
@@ -58,32 +61,19 @@ fun HomeComposable(
         action = { handleEvent(it, navController) },
     )
 
-//    resultRecipient.onNavResult {
-//        val (start, end) = it.getOr {
-//            vm.obtainEvent(null)
-//            return@onNavResult
-//        }
-//        HomeEvent.EditGymCardDates(
-//            startTimestamp = start ?: return@onNavResult,
-//            endTimestamp = end ?: return@onNavResult,
-//        )
-//            .let(vm::obtainEvent)
-//    }
-    HomeContent(state = state, handleAction = vm::handleAction)
-}
+    StateContainer(state = state) {
+        when (it) {
+            is HomeScreenState.Loading -> {
+                FullscreenLoader()
+            }
 
-@Composable
-private fun HomeContent(
-    state: HomeScreenState,
-    handleAction: (HomeAction) -> Unit,
-) {
-    when (state) {
-        is HomeScreenState.Loading -> {
-            FullscreenLoader()
-        }
-
-        is HomeScreenState.Data -> {
-            DataContent(screenState = state, handleAction = handleAction)
+            is HomeScreenState.Data -> {
+                DataContent(
+                    screenState = it,
+                    handleAction = vm::handleAction,
+                    navController = navController,
+                )
+            }
         }
     }
 }
@@ -92,10 +82,16 @@ private fun HomeContent(
 @Composable
 private fun DataContent(
     screenState: HomeScreenState.Data,
+    navController: NavController,
     handleAction: (HomeAction) -> Unit,
 ) {
+    checkCardHealthUpdates(
+        currentCardHealth = screenState.gymHealth,
+        navController = navController,
+        onAction = handleAction,
+    )
+
     Scaffold(
-        modifier = Modifier.background(color = Color.Cyan),
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -117,7 +113,9 @@ private fun DataContent(
         floatingActionButtonPosition = FabPosition.Center,
     ) {
         HomeScreen(
-            screenState = screenState,
+            todayPlan = screenState.todayPlan,
+            dateString = screenState.dateString,
+            gymCardDateDates = screenState.gymHealth,
             modifier = Modifier,
             onGymCardPlateClick = {
                 handleAction(HomeAction.OnGymCardPlateClick)
@@ -129,16 +127,32 @@ private fun DataContent(
     }
 }
 
+private fun checkCardHealthUpdates(
+    currentCardHealth: HomeScreenState.GymCardDates,
+    navController: NavController,
+    onAction: (HomeAction.EditGymCardDates) -> Unit,
+) {
+    navController.currentBackStackEntry?.savedStateHandle
+        ?.get<DateRangeSelectorState>(SelectGymDatesScreen.DATE_RANGE_KEY)
+        ?.let { (start, end) ->
+            val (currentStart, currentEnd) = currentCardHealth
+            if (start != currentStart || end != currentEnd) {
+                onAction(
+                    HomeAction.EditGymCardDates(start ?: return@let, end ?: return@let)
+                )
+            }
+        }
+}
+
 @Composable
 private fun HomeScreen(
-    screenState: HomeScreenState.Data,
+    todayPlan: TodayPlan,
+    dateString: Long,
+    gymCardDateDates: HomeScreenState.GymCardDates,
     modifier: Modifier,
     onGymCardPlateClick: () -> Unit,
     onDateClick: () -> Unit,
 ) {
-    val dateString = screenState.dateString
-    val cardHealth = screenState.gymHealth
-    val plan = screenState.todayPlan
 
     val locale = LocalContext.current.resources.configuration.locales[0]
 
@@ -152,8 +166,8 @@ private fun HomeScreen(
     ) {
         item {
             GymCardHealth(
-                startDate = cardHealth?.start,
-                endDate = cardHealth?.end,
+                startDate = gymCardDateDates.start,
+                endDate = gymCardDateDates.end,
                 onClick = onGymCardPlateClick,
             )
         }
@@ -170,7 +184,7 @@ private fun HomeScreen(
                 style = themeTypography.header1,
             )
         }
-        mapTodayPlan(plan = plan)
+        mapTodayPlan(plan = todayPlan)
     }
 }
 
@@ -213,21 +227,20 @@ private fun LazyListScope.mapTodayPlan(plan: TodayPlan) {
 private fun handleEvent(event: HomeEvent, navController: NavController) {
     when (event) {
         is HomeEvent.OpenDatePickerDialog -> {
-//            SelectGymDatesScreen(
-//                startDate = event.startDate,
-//                endDate = event.endDate,
-//            )
-//                .let(screenMapper::invoke)
-//                .let(navigator::navigate)
+            navController.navigate(
+                SelectGymDatesScreen(
+                    startDate = event.startDate,
+                    endDate = event.endDate,
+                )
+            )
         }
 
         is HomeEvent.OpenNewTrainingScreen -> {
-            navController.navigate(TrainingScreen(123))
-//            navigator.navigate(newTrainingDestination)
+            navController.navigate(TrainingScreen(System.currentTimeMillis()))
         }
 
         is HomeEvent.OpenTrainingCalendar -> {
-//            navigator.navigate(trainingCalendarDestination)
+            navController.navigate(TrainingCalendarScreen(lastAvailableDate = System.currentTimeMillis()))
         }
     }
 }

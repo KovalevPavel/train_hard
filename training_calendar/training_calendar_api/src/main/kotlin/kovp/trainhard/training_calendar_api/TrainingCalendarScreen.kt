@@ -1,5 +1,6 @@
 package kovp.trainhard.training_calendar_api
 
-import kovp.trainhard.navigation.Screen
+import kotlinx.serialization.Serializable
 
-data class TrainingCalendarScreen(val lastAvailableDate: Long): Screen
+@Serializable
+data class TrainingCalendarScreen(val lastAvailableDate: Long)

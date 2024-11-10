@@ -37,9 +37,9 @@ fun TrainingComposable(
     loadKoinModules(
         newTrainingModule(currentTimestamp = currentTimestamp),
     )
-
     val vm = koinViewModel<TrainingViewModel>()
     val state by vm.state.collectAsState()
+
     SubscribeOnEvents(
         eventFlow = vm.eventFlow,
         action = { handleEvent(event = it, navController = navController) },
@@ -82,6 +82,7 @@ private fun DataContent(
     onAction: (TrainingAction) -> Unit,
 ) {
     Scaffold(
+        modifier = Modifier.background(themeColors.black).fillMaxSize(),
         floatingActionButton = {
             TrainFab(icon = Icons.Default.Add) {
                 onAction(TrainingAction.OnAddExerciseClick)

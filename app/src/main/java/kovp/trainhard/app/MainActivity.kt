@@ -42,7 +42,6 @@ import kovp.trainhard.home_api.homeSection
 import kovp.trainhard.home_api.navigateToHome
 import kovp.trainhard.parameters_api.navigateToParams
 import kovp.trainhard.parameters_api.parametersSection
-import kovp.trainhard.statistics_presentation.StatisticsDetailsRoute
 import kovp.trainhard.statistics_api.navigateToStatistics
 import kovp.trainhard.statistics_api.statisticsSection
 import kovp.trainhard.ui_theme.TrainHardTheme
