@@ -11,17 +11,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.DisposableEffectScope
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.fab.TrainFab
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.train_card.CompletedExerciseCard
-import kovp.trainhard.new_training_api.NewSetDialogScreen
-import kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
-import kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction.EDIT
+import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_presentation.TrainingAction.OnRemoveSetClick
 import kovp.trainhard.new_training_presentation.di.newTrainingModule
 import kovp.trainhard.ui_theme.providers.themeColors
@@ -31,14 +32,18 @@ import org.koin.core.context.loadKoinModules
 @Composable
 fun TrainingComposable(
     currentTimestamp: Long,
+    navController: NavController,
 ) {
     loadKoinModules(
         newTrainingModule(currentTimestamp = currentTimestamp),
     )
 
     val vm = koinViewModel<TrainingViewModel>()
-
-    val action by vm.actionFlow.collectAsState(initial = TrainingEvent.Empty)
+    val state by vm.state.collectAsState()
+    SubscribeOnEvents(
+        eventFlow = vm.eventFlow,
+        action = { handleEvent(event = it, navController = navController) },
+    )
 
 //    editSetResRecipient.onNavResult {
 //        val result = it.getOr { NewSetDialogResult.Error } as? NewSetDialogResult.Success
@@ -58,54 +63,28 @@ fun TrainingComposable(
 //        TrainingEvent.AddNewCompletedExercise(result).let(vm::obtainEvent)
 //    }
 
-    StateContainer(state = vm.state) {
+    StateContainer(state = state) {
         when (it) {
             is TrainingScreenState.Loading -> {
                 FullscreenLoader()
             }
 
             is TrainingScreenState.Data -> {
-                DataContent(state = it, vm = vm)
+                DataContent(state = it, onAction = vm::handleAction)
             }
         }
     }
-
-//    SubscribeToActions(action = action, navigator = navigator)
 }
-
-//@Composable
-//private fun SubscribeToActions(
-//    action: TrainingAction,
-//    navigator: DestinationsNavigator,
-//) {
-//    val mapper = localScreenMapper.current
-//    val addNewSetScreen = remember { mapper(SelectExerciseTypeScreen) }
-//
-//    when (action) {
-//        is TrainingAction.Empty -> {
-//            // do nothing
-//        }
-//
-//        is TrainingAction.NavigateToSelectExerciseType -> {
-//            navigator.navigate(addNewSetScreen)
-//        }
-//
-//        is TrainingAction.NavigateToEditSetDialog -> {
-//            mapper(action.data)
-//                .let(navigator::navigate)
-//        }
-//    }
-//}
 
 @Composable
 private fun DataContent(
     state: TrainingScreenState.Data,
-    vm: TrainingViewModel,
+    onAction: (TrainingAction) -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
             TrainFab(icon = Icons.Default.Add) {
-                TrainingAction.OnAddExerciseClick.let(vm::handleAction)
+                onAction(TrainingAction.OnAddExerciseClick)
             }
         },
     ) { paddings ->
@@ -128,18 +107,17 @@ private fun DataContent(
                     exerciseTitle = it.exerciseTitle,
                     initWeight = initWeight,
                     initReps = initReps,
-                    requestAction = RequestAction.ADD,
+                    requestAction = NewSetDialogScreen.RequestAction.ADD,
                 )
                     .let(TrainingAction::NavigateToSetDialog)
 
                 CompletedExerciseCard(
                     card = it,
                     onAddSetClick = {
-                        vm.handleAction(newSetDialog)
+                        onAction(newSetDialog)
                     },
                     onRemoveSetClick = { id ->
-                        OnRemoveSetClick(setDto = it, setIndex = id)
-                            .let(vm::handleAction)
+                        onAction(OnRemoveSetClick(setDto = it, setIndex = id))
                     },
                     onEditSetClick = { id ->
                         NewSetDialogScreen(
@@ -148,13 +126,28 @@ private fun DataContent(
                             exerciseTitle = it.exerciseTitle,
                             initWeight = initWeight,
                             initReps = initReps,
-                            requestAction = EDIT,
+                            requestAction = NewSetDialogScreen.RequestAction.EDIT,
                         )
                             .let(TrainingAction::NavigateToSetDialog)
-                            .let(vm::handleAction)
+                            .let { onAction(it) }
                     }
                 )
             }
+        }
+    }
+}
+
+private fun handleEvent(
+    event: TrainingEvent,
+    navController: NavController,
+) {
+    when (event) {
+        is TrainingEvent.NavigateToSelectExerciseType -> {
+            navController.navigate(SelectExerciseTypeScreen)
+        }
+
+        is TrainingEvent.NavigateToEditSetDialog -> {
+
         }
     }
 }

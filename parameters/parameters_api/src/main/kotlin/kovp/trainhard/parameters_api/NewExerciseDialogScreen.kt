@@ -1,6 +1,6 @@
 package kovp.trainhard.parameters_api
 
-import kovp.trainhard.navigation_api.Screen
+import kovp.trainhard.navigation.Screen
 
 data class NewExerciseDialogScreen(
     val cardTitle: String? = null,

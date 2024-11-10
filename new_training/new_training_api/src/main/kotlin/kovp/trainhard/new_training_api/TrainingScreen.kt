@@ -1,5 +1,6 @@
 package kovp.trainhard.new_training_api
 
-import kovp.trainhard.navigation_api.Screen
+import kotlinx.serialization.Serializable
 
-data class TrainingScreen(val timestamp: Long) : Screen
+@Serializable
+data class TrainingScreen(val timestamp: Long)

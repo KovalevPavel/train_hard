@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
@@ -44,7 +42,7 @@ import kovp.trainhard.home_api.homeSection
 import kovp.trainhard.home_api.navigateToHome
 import kovp.trainhard.parameters_api.navigateToParams
 import kovp.trainhard.parameters_api.parametersSection
-import kovp.trainhard.statistics_api.StatisticsDetailsRoute
+import kovp.trainhard.statistics_presentation.StatisticsDetailsRoute
 import kovp.trainhard.statistics_api.navigateToStatistics
 import kovp.trainhard.statistics_api.statisticsSection
 import kovp.trainhard.ui_theme.TrainHardTheme
@@ -159,13 +157,9 @@ class MainActivity : ComponentActivity() {
                             enterTransition = { scaleIn(initialScale = 1f) },
                             exitTransition = { scaleOut(targetScale = 1f) },
                         ) {
-                            homeSection()
-                            statisticsSection(
-                                onTextClick = {
-                                    navController.navigate(StatisticsDetailsRoute)
-                                },
-                            )
-                            parametersSection()
+                            homeSection(navController = navController)
+                            statisticsSection(navController = navController)
+                            parametersSection(navController = navController)
                         }
                     }
                 }

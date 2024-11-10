@@ -15,4 +15,5 @@ dependencies {
 
     implementation(libs.calendar)
     implementation(libs.koin.compose)
+    implementation(libs.navigation)
 }

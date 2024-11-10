@@ -2,6 +2,7 @@ plugins {
     id("trainhard.android.library")
     id("trainhard.android.compose")
     alias(libs.plugins.google.ksp)
+//    alias(libs.plugins.kotlinx.serialization)
 }
 
 dependencies {
@@ -15,4 +16,6 @@ dependencies {
     implementation(project(":training_calendar_api"))
 
     implementation(libs.koin.compose)
+    implementation(libs.navigation)
+//    implementation(libs.kotlinx.serialization.json)
 }

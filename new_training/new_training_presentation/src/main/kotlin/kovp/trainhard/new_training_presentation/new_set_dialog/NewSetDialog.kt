@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.components.counter.CounterValue
 import kovp.trainhard.components.counter.TrainCounter
-import kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
+import kovp.trainhard.new_training_presentation.NewSetDialogScreen
 import kovp.trainhard.new_training_presentation.R
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
@@ -33,7 +33,7 @@ fun NewSetDialog(
     exerciseTitle: String,
     initWeight: Float,
     initReps: Int,
-    requestAction: RequestAction,
+    requestAction: NewSetDialogScreen.RequestAction,
 ) {
     var selectedWeight: CounterValue by remember {
         mutableStateOf(CounterValue.Float(initWeight))

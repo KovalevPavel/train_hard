@@ -13,4 +13,5 @@ dependencies {
     implementation(project(":parameters_domain"))
 
     implementation(libs.koin.compose)
+    implementation(libs.navigation)
 }

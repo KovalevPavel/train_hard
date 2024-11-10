@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import kotlinx.serialization.Serializable
 import kovp.trainhard.home_presentation.HomeComposable
+import kovp.trainhard.new_training_api.newTrainingFlow
 
 @Serializable
 data object HomeBaseRoute
@@ -14,9 +15,10 @@ data object HomeBaseRoute
 @Serializable
 data object HomeRoute
 
-fun NavGraphBuilder.homeSection() {
+fun NavGraphBuilder.homeSection(navController: NavController) {
     navigation<HomeBaseRoute>(startDestination = HomeRoute) {
-        composable<HomeRoute> { HomeComposable() }
+        composable<HomeRoute> { HomeComposable(navController) }
+        newTrainingFlow(navController)
     }
 }
 

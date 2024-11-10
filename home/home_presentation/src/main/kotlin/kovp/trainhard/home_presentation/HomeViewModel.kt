@@ -74,31 +74,27 @@ class HomeViewModel(
         )
     }
 
-    override fun handleAction(event: HomeAction?) {
+    override fun handleAction(action: HomeAction) {
         viewModelScope.launch {
-            when (event) {
+            when (action) {
                 is HomeAction.OnStartTrainingClick -> {
-                    HomeEvent.OpenNewTrainingScreen.let { mutableActionFlow.emit(it) }
+                    HomeEvent.OpenNewTrainingScreen.let { mutableEventFlow.emit(it) }
                 }
 
                 is HomeAction.OnGymCardPlateClick -> {
                     HomeEvent.OpenDatePickerDialog(startDate = startDate, endDate = endDate)
-                        .let { mutableActionFlow.emit(it) }
+                        .let { mutableEventFlow.emit(it) }
                 }
 
                 is HomeAction.EditGymCardDates -> {
-                    handleAction(null)
-                    startDate = event.startTimestamp
-                    endDate = event.endTimestamp
-                    editGymCardDates()
+//                    handleAction(null)
+//                    startDate = event.startTimestamp
+//                    endDate = event.endTimestamp
+//                    editGymCardDates()
                 }
 
                 is HomeAction.OnCalendarClick -> {
-                    HomeEvent.OpenTrainingCalendar.let { mutableActionFlow.emit(it) }
-                }
-
-                null -> {
-                    HomeEvent.Empty.let { mutableActionFlow.emit(it) }
+                    HomeEvent.OpenTrainingCalendar.let { mutableEventFlow.emit(it) }
                 }
             }
         }
@@ -110,7 +106,7 @@ class HomeViewModel(
             gymHealth = GymCardDates(startDate, endDate),
             todayPlan = mockPlans.random(),
         )
-            .let { state = it }
+            .let(::updateState)
     }
 
     private suspend fun editGymCardDates() {

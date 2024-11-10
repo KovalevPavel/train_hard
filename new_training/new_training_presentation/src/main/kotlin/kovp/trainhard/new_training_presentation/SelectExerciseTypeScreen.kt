@@ -1,0 +1,6 @@
+package kovp.trainhard.new_training_presentation
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+object SelectExerciseTypeScreen

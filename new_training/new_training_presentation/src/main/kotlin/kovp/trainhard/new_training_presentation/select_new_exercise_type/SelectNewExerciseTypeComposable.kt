@@ -21,11 +21,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.text_field.TrainTextField
 import kovp.trainhard.components.joinToStringComposable
 import kovp.trainhard.components.mapMuscleTitle
 import kovp.trainhard.database_api.models.Exercise
+import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_presentation.R
 import kovp.trainhard.new_training_presentation.di.selectExerciseModule
 import kovp.trainhard.ui_theme.providers.themeTypography
@@ -34,7 +37,7 @@ import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 
 @Composable
-fun SelectNewExerciseTypeComposable() {
+fun SelectNewExerciseTypeComposable(navController: NavController) {
     loadKoinModules(selectExerciseModule)
 
 //    resultRecipient.onNavResult {
@@ -43,22 +46,26 @@ fun SelectNewExerciseTypeComposable() {
 //    }
 
     val viewModel = koinViewModel<SelectNewExerciseTypeViewModel>()
+    val state by viewModel.state.collectAsState()
 
-    val action by viewModel.actionFlow.collectAsState(initial = SelectExerciseAction.Empty)
+    SubscribeOnEvents(
+        eventFlow = viewModel.eventFlow,
+        action = { handleEvent(event = it, navController = navController) },
+    )
 
-    when (val st = viewModel.state) {
-        is SelectExerciseScreenState.Loading -> {
-            FullscreenLoader()
-        }
+    StateContainer(state) {
+        when (val st = state) {
+            is SelectExerciseScreenState.Loading -> {
+                FullscreenLoader()
+            }
 
-        is SelectExerciseScreenState.Data -> {
-            DataContent(screenState = st) {
-                SelectExerciseEvent.OnExerciseClick(it).let(viewModel::handleAction)
+            is SelectExerciseScreenState.Data -> {
+                DataContent(screenState = st) {
+                    SelectExerciseAction.OnExerciseClick(it).let(viewModel::handleAction)
+                }
             }
         }
     }
-
-//    SubscribeOnAction(action = action, navigator = navigator)
 
     DisposableEffect(key1 = viewModel) {
         onDispose {
@@ -66,25 +73,6 @@ fun SelectNewExerciseTypeComposable() {
         }
     }
 }
-
-//@Composable
-//fun SubscribeOnAction(
-//    action: SelectExerciseAction,
-//    navigator: DestinationsNavigator,
-//) {
-//    val screenMapper = localScreenMapper.current
-//
-//    when (action) {
-//        is SelectExerciseAction.Empty -> {
-//            // do nothing
-//        }
-//
-//        is SelectExerciseAction.NavigateToNewSetDialog -> {
-//            screenMapper(screen = action.data)
-//                .let(navigator::navigate)
-//        }
-//    }
-//}
 
 @Composable
 private fun DataContent(
@@ -147,5 +135,13 @@ private fun ExerciseItem(
                 .joinToStringComposable { mapMuscleTitle(muscleId = it.id) },
             style = themeTypography.body1,
         )
+    }
+}
+
+private fun handleEvent(event: SelectExerciseEvent, navController: NavController) {
+    when (event) {
+        is SelectExerciseEvent.NavigateToNewSetDialog -> {
+
+        }
     }
 }

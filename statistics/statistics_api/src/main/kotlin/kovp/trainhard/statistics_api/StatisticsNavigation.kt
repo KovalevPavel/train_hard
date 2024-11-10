@@ -9,6 +9,7 @@ import androidx.navigation.compose.navigation
 import kotlinx.serialization.Serializable
 import kovp.trainhard.statistics_presentation.StatisticComposable
 import kovp.trainhard.statistics_presentation.StatisticsDetailsComposable
+import kovp.trainhard.statistics_presentation.StatisticsDetailsRoute
 
 @Serializable
 data object StatisticsBaseRoute
@@ -16,17 +17,14 @@ data object StatisticsBaseRoute
 @Serializable
 data object StatisticsRoute
 
-@Serializable
-data object StatisticsDetailsRoute
-
 fun NavGraphBuilder.statisticsSection(
-    onTextClick: () -> Unit,
+    navController: NavController,
 ) {
     navigation<StatisticsBaseRoute>(
         startDestination = StatisticsRoute,
     ) {
         composable<StatisticsRoute> {
-            StatisticComposable(onTextClick)
+            StatisticComposable(navController = navController)
         }
         composable<StatisticsDetailsRoute>(
             enterTransition = { slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Start) },

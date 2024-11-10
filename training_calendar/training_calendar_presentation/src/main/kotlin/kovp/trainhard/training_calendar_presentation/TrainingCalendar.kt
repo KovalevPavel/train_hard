@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.core_domain.MuscleGroup
+import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.training_calendar_presentation.di.trainingCalendarModule
 import kovp.trainhard.training_calendar_presentation.legend.Legend
 import kovp.trainhard.ui_theme.providers.themeColors
@@ -22,11 +26,19 @@ import org.koin.core.context.loadKoinModules
 import java.time.LocalDate
 
 @Composable
-fun TrainingCalendar() {
+fun TrainingCalendar(
+    navController: NavController,
+) {
     loadKoinModules(trainingCalendarModule)
     val viewModel = koinViewModel<TrainingCalendarViewModel>()
+    val state by viewModel.state.collectAsState()
 
-    StateContainer(state = viewModel.state) { trainingCalendarState ->
+    SubscribeOnEvents(
+        eventFlow = viewModel.eventFlow,
+        action = { handleEvent(event = it, navController = navController) }
+    )
+
+    StateContainer(state = state) { trainingCalendarState ->
         when (trainingCalendarState) {
             is TrainingCalendarState.Loading -> {
                 FullscreenLoader()
@@ -34,13 +46,12 @@ fun TrainingCalendar() {
 
             is TrainingCalendarState.Data -> {
                 Data(muscleGroups = trainingCalendarState.trainings) { day ->
-                    TrainingCalendarEvent.OnTrainingDayClick(day = day).let(viewModel::handleAction)
+                    TrainingCalendarAction.OnTrainingDayClick(day = day)
+                        .let(viewModel::handleAction)
                 }
             }
         }
     }
-
-//    SubscribeToCalendarAction(viewModel = viewModel, navigator = navigator)
 }
 
 @Composable
@@ -68,24 +79,12 @@ private fun Data(
     }
 }
 
-//@Composable
-//private fun SubscribeToCalendarAction(
-//    viewModel: TrainingCalendarViewModel,
-//    navigator: DestinationsNavigator,
-//) {
-//    val action by viewModel.actionFlow.collectAsState(initial = TrainingCalendarAction.Empty)
-//
-//    val screenMapper = localScreenMapper.current
-//
-//    when (val ac = action) {
-//        is TrainingCalendarAction.Empty -> {
-//            // do nothing
-//        }
-//
-//        is TrainingCalendarAction.OpenNewTrainingScreen -> {
+private fun handleEvent(event: TrainingCalendarEvent, navController: NavController) {
+    when (event) {
+        is TrainingCalendarEvent.OpenNewTrainingScreen -> {
 //            TrainingScreen(timestamp = ac.timestamp)
 //                .let(screenMapper::invoke)
 //                .let(navigator::navigate)
-//        }
-//    }
-//}
+        }
+    }
+}

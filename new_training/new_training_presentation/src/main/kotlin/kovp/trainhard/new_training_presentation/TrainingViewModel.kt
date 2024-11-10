@@ -33,37 +33,33 @@ class TrainingViewModel(
         subscribeOnSetsList()
     }
 
-    override fun handleAction(event: TrainingAction?) {
+    override fun handleAction(action: TrainingAction) {
         launch(
             action = {
-                when (event) {
+                when (action) {
                     is TrainingAction.OnAddExerciseClick -> {
                         TrainingEvent.NavigateToSelectExerciseType
-                            .let { mutableActionFlow.emit(it) }
+                            .let { mutableEventFlow.emit(it) }
                     }
 
                     is TrainingAction.NavigateToSetDialog -> {
-                        TrainingEvent.NavigateToEditSetDialog(data = event.dialog)
-                            .let { mutableActionFlow.emit(it) }
+                        TrainingEvent.NavigateToEditSetDialog(data = action.dialog)
+                            .let { mutableEventFlow.emit(it) }
                     }
 
                     is TrainingAction.AddOrEditSet -> {
-                        addOrEditSet(dialogResult = event.data)
+                        addOrEditSet(dialogResult = action.data)
                     }
 
                     is TrainingAction.AddNewCompletedExercise -> {
-                        addNewCompletedExercise(dialogResult = event.data)
+                        addNewCompletedExercise(dialogResult = action.data)
                     }
 
                     is TrainingAction.OnRemoveSetClick -> {
                         removeSet(
-                            setDto = event.setDto,
-                            setIndex = event.setIndex,
+                            setDto = action.setDto,
+                            setIndex = action.setIndex,
                         )
-                    }
-
-                    null -> {
-                        mutableActionFlow.emit(TrainingEvent.Empty)
                     }
                 }
             },
@@ -72,13 +68,13 @@ class TrainingViewModel(
 
     private fun subscribeOnSetsList() {
         getAllExercises(timestamp = currentTimestamp).onEach { list ->
-            state = TrainingScreenState.Loading
+            TrainingScreenState.Loading.let(::updateState)
 
             completedExercises.clear()
             list.let(completedExercises::addAll)
             list.map(::mapToCardDto)
                 .let(TrainingScreenState::Data)
-                .let { state = it }
+                .let(::updateState)
         }
             .launchIn(viewModelScope)
     }
@@ -93,7 +89,6 @@ class TrainingViewModel(
                 )
             )
         }
-        handleAction(null)
     }
 
     private suspend fun addOrEditSet(dialogResult: NewSetDialogResult.Success) {
@@ -121,7 +116,6 @@ class TrainingViewModel(
         }
 
         updateCompletedExercise(editedCompletedExercise = updatedExercise)
-        handleAction(null)
     }
 
     private suspend fun removeSet(setDto: CompletedExerciseCardDto, setIndex: Int) {
@@ -144,7 +138,6 @@ class TrainingViewModel(
 
         completedExercises[index] = updateSet
         updateCompletedExercise(editedCompletedExercise = updateSet)
-        handleAction(null)
     }
 
     private fun mapToCardDto(item: CompletedExercise) = CompletedExerciseCardDto(

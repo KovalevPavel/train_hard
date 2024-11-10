@@ -1,7 +1,6 @@
 package kovp.trainhard.new_training_presentation
 
 import kovp.trainhard.components.train_card.CompletedExerciseCardDto
-import kovp.trainhard.new_training_api.NewSetDialogScreen
 import kovp.trainhard.new_training_presentation.new_set_dialog.NewSetDialogResult
 
 sealed interface TrainingAction {

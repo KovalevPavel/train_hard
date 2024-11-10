@@ -14,10 +14,10 @@ data object ParametersBaseRoute
 @Serializable
 data object ParametersRoute
 
-fun NavGraphBuilder.parametersSection() {
+fun NavGraphBuilder.parametersSection(navController: NavController) {
     navigation<ParametersBaseRoute>(startDestination = ParametersRoute) {
         composable<ParametersRoute> {
-            ParametersComposable()
+            ParametersComposable(navController = navController)
         }
     }
 }

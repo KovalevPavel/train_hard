@@ -21,37 +21,27 @@ class ParametersViewModel(
     private val insertExercise: InsertNewExerciseInteractor,
     private val updateExercise: UpdateExistingExerciseInteractor,
     private val removeExistingExercise: RemoveExerciseInteractor,
-) : BaseViewModel<ParametersScreenState, ParametersEvent, ParametersAction>(
+) : BaseViewModel<ParametersScreenState, ParametersAction, ParametersEvent>(
     initialState = ParametersScreenState.Loading,
 ) {
     init {
         subscribeOnExercisesList()
     }
 
-    override fun handleAction(event: ParametersEvent?) {
+    override fun handleAction(action: ParametersAction) {
         launch(
             action = {
-                when (event) {
-                    is ParametersEvent.ShowConfirmDeleteDialog -> {
-                        ParametersAction.ShowDeleteConfirmationDialog(exercise = event.exercise)
-                            .let { mutableActionFlow.emit(it) }
+                when (action) {
+                    is ParametersAction.ShowConfirmDeleteDialog -> {
+
                     }
 
-//                    is ParametersEvent.NavigateToNewExerciseScreen -> {
-//                        ParametersAction.OpenNewExerciseScreen(data = event.data)
-//                            .let { mutableActionFlow.emit(it) }
-//                    }
-
-                    is ParametersEvent.RemoveExercise -> {
-                        removeExercise(exercise = event.data)
+                    is ParametersAction.RemoveExercise -> {
+                        removeExercise(action.data)
                     }
 
-                    is ParametersEvent.AddOrEditExercise -> {
-                        addOrEditExercise(exercise = event.result)
-                    }
-
-                    null -> {
-                        mutableActionFlow.emit(ParametersAction.Empty)
+                    is ParametersAction.AddOrEditExercise -> {
+                        addOrEditExercise(exercise = action.result)
                     }
                 }
             },
@@ -67,7 +57,6 @@ class ParametersViewModel(
             },
         )
             .let { removeExistingExercise(it) }
-        handleAction(null)
     }
 
     private suspend fun addOrEditExercise(exercise: NewExerciseScreenResult.Success) {
@@ -77,13 +66,12 @@ class ParametersViewModel(
             ScreenAction.ADD -> addNewExercise(exercise = mappedExercise)
             ScreenAction.EDIT -> editExercise(exercise = mappedExercise)
         }
-        handleAction(null)
     }
 
     private fun subscribeOnExercisesList() {
         viewModelScope.launch {
             getExercises().collect { list ->
-                state = ParametersScreenState.Loading
+                ParametersScreenState.Loading.let(::updateState)
 
                 list.map {
                     ExerciseCardDto(
@@ -97,7 +85,7 @@ class ParametersViewModel(
                     )
                 }
                     .let(ParametersScreenState::Data)
-                    .let { state = it }
+                    .let(::updateState)
             }
         }
     }
@@ -111,8 +99,8 @@ class ParametersViewModel(
         viewModelScope.launch {
             when (e) {
                 is EntityExistsException -> {
-                    ParametersAction.ShowItemIsAlreadyExistedDialog(title = e.title)
-                        .let { mutableActionFlow.emit(it) }
+                    ParametersEvent.ShowItemIsAlreadyExistedDialog(title = e.title)
+                        .let { mutableEventFlow.emit(it) }
                 }
             }
         }

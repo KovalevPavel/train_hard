@@ -18,10 +18,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.exercise_type.ExerciseCard
 import kovp.trainhard.components.fab.TrainFab
 import kovp.trainhard.components.progress.FullscreenLoader
+import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.parameters_presentation.di.parametersModule
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
@@ -29,14 +31,15 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
 
 @Composable
-fun ParametersComposable() {
-    loadKoinModules(
-        parametersModule,
-    )
+fun ParametersComposable(
+    navController: NavController,
+) {
+    loadKoinModules(parametersModule)
 
     val vm = koinViewModel<ParametersViewModel>()
+    val state by vm.state.collectAsState()
 
-    val action by vm.actionFlow.collectAsState(initial = ParametersAction.Empty)
+    SubscribeOnEvents(eventFlow = vm.eventFlow, action = { handleEvent(event = it, navController = navController) })
 
 //    resultRecipient.onNavResult {
 //        val result = it.getOr { NewExerciseScreenResult.Fail } as? NewExerciseScreenResult.Success
@@ -44,21 +47,14 @@ fun ParametersComposable() {
 //        ParametersEvent.AddOrEditExercise(result).let(vm::obtainEvent)
 //    }
 
-//    SubscribeOnAction(
-//        action = action,
-//        navigator = navigator,
-//        viewModel = vm,
-//        confirmationResultRecipient = confirmationResultRecipient,
-//    )
-
-    StateContainer(state = vm.state) {
+    StateContainer(state = state) {
         when (it) {
             is ParametersScreenState.Loading -> {
                 FullscreenLoader()
             }
 
             is ParametersScreenState.Data -> {
-                DataContent(state = it, vm = vm)
+                DataContent(state = it, handleAction = vm::handleAction)
             }
         }
     }
@@ -67,7 +63,7 @@ fun ParametersComposable() {
 @Composable
 private fun DataContent(
     state: ParametersScreenState.Data,
-    vm: ParametersViewModel,
+    handleAction: (ParametersAction) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -115,8 +111,9 @@ private fun DataContent(
 //                            .let(vm::obtainEvent)
                     },
                     onRemoveClick = { exerciseCard ->
-                        ParametersEvent.ShowConfirmDeleteDialog(exerciseCard)
-                            .let(vm::handleAction)
+                        handleAction(
+                            ParametersAction.ShowConfirmDeleteDialog(exerciseCard)
+                        )
                     },
                 )
             }
@@ -124,36 +121,15 @@ private fun DataContent(
     }
 }
 
-@Composable
-private fun SubscribeOnAction(
-    action: ParametersAction,
-    viewModel: ParametersViewModel,
-//    confirmationResultRecipient: ResultRecipient<AlertConfirmationDialogDestination, Boolean>,
-) {
-    when (action) {
-        is ParametersAction.Empty -> {
-            // do nothing
+private fun handleEvent(event: ParametersEvent, navController: NavController) {
+    when(event) {
+        is ParametersEvent.ShowDeleteConfirmationDialog -> {
+
         }
 
-        is ParametersAction.ShowDeleteConfirmationDialog -> {
-//            ShowDeleteConfDialog(
-//                navigator = navigator,
-//                exercise = action.exercise,
-//                viewModel = viewModel,
-//                resultRecipient = confirmationResultRecipient,
-//            )
-        }
+        is ParametersEvent.ShowItemIsAlreadyExistedDialog -> {
 
-        is ParametersAction.ShowItemIsAlreadyExistedDialog -> {
-//            ShowExerciseExistsDialog(
-//                navigator = navigator,
-//                exerciseTitle = action.title,
-//            )
         }
-
-//        is ParametersAction.OpenNewExerciseScreen -> {
-//            ShowNewExerciseScreen(screen = action.data, navigator = navigator)
-//        }
     }
 }
 

@@ -2,7 +2,7 @@ package kovp.trainhard.core_dialogs
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import kovp.trainhard.navigation_api.Screen
+import kovp.trainhard.navigation.Screen
 
 @Parcelize
 data class AlertConfirmationDialogScreen(

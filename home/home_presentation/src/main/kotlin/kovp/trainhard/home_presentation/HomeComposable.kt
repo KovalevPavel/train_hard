@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.core_domain.DATE_FORMAT_dd_MMMM
 import kovp.trainhard.core_domain.formatToDateString
@@ -36,17 +37,26 @@ import kovp.trainhard.home_presentation.components.CurrentDateCard
 import kovp.trainhard.home_presentation.components.ExerciseCard
 import kovp.trainhard.home_presentation.components.GymCardHealth
 import kovp.trainhard.home_presentation.di.homeModule
+import kovp.trainhard.navigation.SubscribeOnEvents
+import kovp.trainhard.new_training_api.TrainingScreen
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.loadKoinModules
 
 @Composable
-fun HomeComposable() {
+fun HomeComposable(
+    navController: NavController,
+) {
     loadKoinModules(homeModule)
 
     val vm = koinViewModel<HomeViewModel>()
-    val action by vm.actionFlow.collectAsState(initial = HomeEvent.Empty)
+    val state by vm.state.collectAsState()
+
+    SubscribeOnEvents(
+        eventFlow = vm.eventFlow,
+        action = { handleEvent(it, navController) },
+    )
 
 //    resultRecipient.onNavResult {
 //        val (start, end) = it.getOr {
@@ -59,14 +69,11 @@ fun HomeComposable() {
 //        )
 //            .let(vm::obtainEvent)
 //    }
-
-    HomeContent(vm.state, vm::handleAction)
-
-//    SubscribeToAction(action = action, navigator = navigator)
+    HomeContent(state = state, handleAction = vm::handleAction)
 }
 
 @Composable
-fun HomeContent(
+private fun HomeContent(
     state: HomeScreenState,
     handleAction: (HomeAction) -> Unit,
 ) {
@@ -80,50 +87,6 @@ fun HomeContent(
         }
     }
 }
-
-//@Composable
-//private fun SubscribeToAction(
-//    action: HomeAction,
-//    navigator: DestinationsNavigator,
-//) {
-//    val screenMapper = localScreenMapper.current
-//    val currentDateString = LocalDate.now()
-//        .atStartOfDay()
-//        .atZone(ZoneId.systemDefault())
-//        .toInstant()
-//        .toEpochMilli()
-//
-//    val newTrainingDestination = remember {
-//        screenMapper(TrainingScreen(timestamp = currentDateString))
-//    }
-//
-//    val trainingCalendarDestination = remember {
-//        screenMapper(TrainingCalendarScreen(0))
-//    }
-//
-//    when (action) {
-//        is HomeAction.Empty -> {
-//            // do nothing
-//        }
-//
-//        is HomeAction.OpenDatePickerDialog -> {
-//            SelectGymDatesScreen(
-//                startDate = action.startDate,
-//                endDate = action.endDate,
-//            )
-//                .let(screenMapper::invoke)
-//                .let(navigator::navigate)
-//        }
-//
-//        is HomeAction.OpenNewTrainingScreen -> {
-//            navigator.navigate(newTrainingDestination)
-//        }
-//
-//        is HomeAction.OpenTrainingCalendar -> {
-//            navigator.navigate(trainingCalendarDestination)
-//        }
-//    }
-//}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -243,6 +206,28 @@ private fun LazyListScope.mapTodayPlan(plan: TodayPlan) {
             items(plan.items, key = { it.id }) {
                 ExerciseCard(exercise = it)
             }
+        }
+    }
+}
+
+private fun handleEvent(event: HomeEvent, navController: NavController) {
+    when (event) {
+        is HomeEvent.OpenDatePickerDialog -> {
+//            SelectGymDatesScreen(
+//                startDate = event.startDate,
+//                endDate = event.endDate,
+//            )
+//                .let(screenMapper::invoke)
+//                .let(navigator::navigate)
+        }
+
+        is HomeEvent.OpenNewTrainingScreen -> {
+            navController.navigate(TrainingScreen(123))
+//            navigator.navigate(newTrainingDestination)
+        }
+
+        is HomeEvent.OpenTrainingCalendar -> {
+//            navigator.navigate(trainingCalendarDestination)
         }
     }
 }
