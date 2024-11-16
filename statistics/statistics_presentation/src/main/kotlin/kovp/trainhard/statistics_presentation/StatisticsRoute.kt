@@ -1,4 +1,4 @@
-package kovp.trainhard.home_presentation
+package kovp.trainhard.statistics_presentation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -7,8 +7,10 @@ import kotlinx.serialization.Serializable
 import kovp.trainhard.navigation.ComposableScreen
 
 @Serializable
-data object HomeRoute: ComposableScreen {
+data object StatisticsRoute : ComposableScreen {
     override fun createScreen(navGraphBuilder: NavGraphBuilder, navController: NavController) {
-        navGraphBuilder.composable<HomeRoute> { HomeComposable(navController) }
+        navGraphBuilder.composable<StatisticsRoute> {
+            StatisticComposable(navController = navController)
+        }
     }
 }

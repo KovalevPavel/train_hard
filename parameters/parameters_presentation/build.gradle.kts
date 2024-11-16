@@ -2,6 +2,7 @@ plugins {
     id("trainhard.android.library")
     id("trainhard.android.compose")
     id("kotlin-parcelize")
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 dependencies {
@@ -14,4 +15,5 @@ dependencies {
 
     implementation(libs.koin.compose)
     implementation(libs.navigation)
+    implementation(libs.kotlinx.serialization.json)
 }

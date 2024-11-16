@@ -38,12 +38,8 @@ import androidx.navigation.navOptions
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kovp.trainhard.app.bottom_navigation.BottomBarDestination
 import kovp.trainhard.home_api.HomeBaseRoute
-import kovp.trainhard.home_api.homeSection
-import kovp.trainhard.home_api.navigateToHome
-import kovp.trainhard.parameters_api.navigateToParams
-import kovp.trainhard.parameters_api.parametersSection
-import kovp.trainhard.statistics_api.navigateToStatistics
-import kovp.trainhard.statistics_api.statisticsSection
+import kovp.trainhard.parameters_api.ParametersBaseRoute
+import kovp.trainhard.statistics_api.StatisticsBaseRoute
 import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import org.koin.androidx.compose.koinViewModel
@@ -130,17 +126,17 @@ class MainActivity : ComponentActivity() {
                                                 }
 
                                                 when (topLevelRoute) {
-                                                    BottomBarDestination.Home -> navController.navigateToHome(
-                                                        options
-                                                    )
+                                                    BottomBarDestination.Home -> {
+                                                        HomeBaseRoute.navigateHome(navController, options)
+                                                    }
 
-                                                    BottomBarDestination.Statistics -> navController.navigateToStatistics(
-                                                        options
-                                                    )
+                                                    BottomBarDestination.Statistics -> {
+                                                        StatisticsBaseRoute.navigateHome(navController, options)
+                                                    }
 
-                                                    BottomBarDestination.Parameters -> navController.navigateToParams(
-                                                        options
-                                                    )
+                                                    BottomBarDestination.Parameters -> {
+                                                        ParametersBaseRoute.navigateHome(navController, options)
+                                                    }
                                                 }
                                             },
                                         )
@@ -156,9 +152,9 @@ class MainActivity : ComponentActivity() {
                             enterTransition = { scaleIn(initialScale = 1f) },
                             exitTransition = { scaleOut(targetScale = 1f) },
                         ) {
-                            homeSection(navController = navController)
-                            statisticsSection(navController = navController)
-                            parametersSection(navController = navController)
+                            HomeBaseRoute.createScreen(navGraphBuilder = this, navController = navController)
+                            StatisticsBaseRoute.createScreen(navGraphBuilder = this, navController = navController)
+                            ParametersBaseRoute.createScreen(navGraphBuilder = this, navController = navController)
                         }
                     }
                 }

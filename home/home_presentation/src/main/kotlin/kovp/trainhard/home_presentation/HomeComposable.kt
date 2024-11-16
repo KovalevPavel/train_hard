@@ -236,7 +236,7 @@ private fun handleEvent(event: HomeEvent, navController: NavController) {
         }
 
         is HomeEvent.OpenNewTrainingScreen -> {
-            navController.navigate(TrainingScreen(System.currentTimeMillis()))
+            navController.navigate(TrainingScreen(timestamp = System.currentTimeMillis()))
         }
 
         is HomeEvent.OpenTrainingCalendar -> {
