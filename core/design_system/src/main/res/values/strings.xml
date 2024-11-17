@@ -3,6 +3,7 @@
     <string name="muscle_groups">Мышечные группы: %s</string>
     <string name="add_set">Добавить подход</string>
     <string name="save">Сохранить</string>
+    <string name="add">Добавить</string>
     <string name="weight_reps_template">%.2f кг на %d повторений</string>
     <string name="gym_card_date_range_title">Выберите интервал действия абонемента</string>
 

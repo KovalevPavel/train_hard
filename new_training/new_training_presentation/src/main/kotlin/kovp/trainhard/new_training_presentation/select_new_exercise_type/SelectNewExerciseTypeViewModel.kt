@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.new_training_presentation.NewSetDialogScreen
+import trainhard.kovp.core.RequestAction
 
 class SelectNewExerciseTypeViewModel(
     private val exercisesApi: ExercisesApi,
@@ -26,7 +27,7 @@ class SelectNewExerciseTypeViewModel(
                 is SelectExerciseAction.OnExerciseClick -> {
                     NewSetDialogScreen(
                         exerciseTitle = action.data.title,
-                        requestAction = NewSetDialogScreen.RequestAction.ADD,
+                        requestAction = RequestAction.Add,
                     )
                         .let(SelectExerciseEvent::NavigateToNewSetDialog)
                 }

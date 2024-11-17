@@ -37,6 +37,7 @@ include(":core_presentation")
 include(":lint_rules")
 
 withDirectory("core") {
+    includeProject("core")
     includeProject("ui_theme")
     includeProject("design_system")
 }

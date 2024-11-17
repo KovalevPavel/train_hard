@@ -4,4 +4,5 @@ plugins {
 
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
+    api(libs.kotlinx.collections.immutable)
 }

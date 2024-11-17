@@ -1,22 +1,20 @@
 package kovp.trainhard.parameters_presentation
 
 import kovp.trainhard.components.exercise_type.ExerciseCardDto
-import kovp.trainhard.parameters_presentation.new_exercise_dialog.NewExerciseScreenResult
+import kovp.trainhard.core_dialogs.DialogState
 
 sealed interface ParametersAction {
-    data class AddOrEditExercise(
-        val result: NewExerciseScreenResult.Success,
-    ) : ParametersAction
-
-    data class ShowConfirmDeleteDialog(
+    data class OnDeleteExerciseClicked(
         val exercise: ExerciseCardDto,
     ) : ParametersAction
 
-//    data class NavigateToNewExerciseScreen(
-//        val data: NewExerciseDialogScreen,
-//    ) : ParametersEvent
+    data class OnExerciseClick(
+        val exercise: ExerciseCardDto,
+    ) : ParametersAction
 
-    data class RemoveExercise(
-        val data: ExerciseCardDto,
+    data object OnAddButtonClick : ParametersAction
+
+    data class OnDialogPositiveClick(
+        val state: DialogState?,
     ) : ParametersAction
 }

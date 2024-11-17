@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":statistics_api"))
     implementation(project(":design_system"))
 
+    implementation(project(":core"))
     implementation(project(":core_domain"))
     implementation(project(":core_dialogs"))
     implementation(project(":core_storage"))

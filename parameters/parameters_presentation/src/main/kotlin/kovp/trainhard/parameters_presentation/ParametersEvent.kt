@@ -1,15 +1,9 @@
 package kovp.trainhard.parameters_presentation
 
-import kovp.trainhard.components.exercise_type.ExerciseCardDto
+import kovp.trainhard.core_dialogs.DialogState
+import kovp.trainhard.parameters_presentation.exercise_parameters.ExerciseParametersArg
 
 sealed interface ParametersEvent {
-    data class ShowDeleteConfirmationDialog(val exercise: ExerciseCardDto) : ParametersEvent
-
-    data class ShowItemIsAlreadyExistedDialog(
-        val title: String,
-    ) : ParametersEvent
-
-//    data class OpenNewExerciseScreen(
-//        val data: NewExerciseDialogScreen,
-//    ) : ParametersAction
+    data class ShowBottomSheetDialog(val dialogState: DialogState) : ParametersEvent
+    data class NavigateToExerciseParams(val arg: ExerciseParametersArg) : ParametersEvent
 }

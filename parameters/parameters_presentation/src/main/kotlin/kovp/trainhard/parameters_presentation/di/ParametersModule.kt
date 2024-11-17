@@ -17,9 +17,8 @@ val parametersModule = module {
     viewModel {
         ParametersViewModel(
             getExercises = get(),
-            insertExercise = get(),
-            updateExercise = get(),
             removeExistingExercise = get(),
+            resourceProvider = get(),
         )
     }
 }

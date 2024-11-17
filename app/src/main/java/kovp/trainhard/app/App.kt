@@ -1,6 +1,7 @@
 package kovp.trainhard.app
 
 import android.app.Application
+import kovp.trainhard.app.di.coreModule
 import kovp.trainhard.app.di.initializationModule
 import kovp.trainhard.core_storage.di.storageModule
 import kovp.trainhard.database.di.dbModule
@@ -19,6 +20,7 @@ class App : Application() {
         startKoin {
             androidContext(this@App)
             modules(
+                coreModule,
                 dbModule,
                 initializationModule,
                 storageModule(context = this@App),

@@ -11,8 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.DisposableEffectScope
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,6 +20,7 @@ import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.fab.TrainFab
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.train_card.CompletedExerciseCard
+import trainhard.kovp.core.RequestAction
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_presentation.TrainingAction.OnRemoveSetClick
 import kovp.trainhard.new_training_presentation.di.newTrainingModule
@@ -108,7 +107,7 @@ private fun DataContent(
                     exerciseTitle = it.exerciseTitle,
                     initWeight = initWeight,
                     initReps = initReps,
-                    requestAction = NewSetDialogScreen.RequestAction.ADD,
+                    requestAction = RequestAction.Add,
                 )
                     .let(TrainingAction::NavigateToSetDialog)
 
@@ -127,7 +126,7 @@ private fun DataContent(
                             exerciseTitle = it.exerciseTitle,
                             initWeight = initWeight,
                             initReps = initReps,
-                            requestAction = NewSetDialogScreen.RequestAction.EDIT,
+                            requestAction = RequestAction.Edit,
                         )
                             .let(TrainingAction::NavigateToSetDialog)
                             .let { onAction(it) }

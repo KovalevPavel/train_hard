@@ -7,6 +7,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
@@ -20,7 +21,7 @@ fun TrainButton(
     onClick: () -> Unit,
 ) {
     TrainButton(
-        modifier = modifier.sizeIn(minWidth = 100.dp),
+        modifier = modifier.sizeIn(minWidth = 100.dp, minHeight = 50.dp),
         onClick = onClick,
         isEnabled = isEnabled,
         isPrimary = isPrimary,
@@ -30,6 +31,8 @@ fun TrainButton(
             style = themeTypography.body2.copy(
                 color = if (isPrimary) themeColors.black else themeColors.lime,
             ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

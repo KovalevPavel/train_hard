@@ -1,26 +1,26 @@
 package kovp.trainhard.parameters_presentation
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import kovp.trainhard.components.exercise_type.ExerciseCardDto
 import kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
+import kovp.trainhard.core_dialogs.DialogState
+import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
 import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.core_presentation.BaseViewModel
-import kovp.trainhard.database_api.errors.EntityExistsException
 import kovp.trainhard.database_api.models.Exercise
 import kovp.trainhard.parameters_domain.GetAllExercisesInteractor
-import kovp.trainhard.parameters_domain.InsertNewExerciseInteractor
 import kovp.trainhard.parameters_domain.RemoveExerciseInteractor
-import kovp.trainhard.parameters_domain.UpdateExistingExerciseInteractor
-import kovp.trainhard.parameters_presentation.new_exercise_dialog.NewExerciseScreenResult
-import kovp.trainhard.parameters_presentation.new_exercise_dialog.NewExerciseScreenResult.Success.ScreenAction
+import kovp.trainhard.parameters_presentation.exercise_parameters.ExerciseParametersArg
 import timber.log.Timber
+import trainhard.kovp.core.ResourceProvider
+import java.util.UUID
 
 class ParametersViewModel(
     private val getExercises: GetAllExercisesInteractor,
-    private val insertExercise: InsertNewExerciseInteractor,
-    private val updateExercise: UpdateExistingExerciseInteractor,
     private val removeExistingExercise: RemoveExerciseInteractor,
+    private val resourceProvider: ResourceProvider,
 ) : BaseViewModel<ParametersScreenState, ParametersAction, ParametersEvent>(
     initialState = ParametersScreenState.Loading,
 ) {
@@ -32,20 +32,64 @@ class ParametersViewModel(
         launch(
             action = {
                 when (action) {
-                    is ParametersAction.ShowConfirmDeleteDialog -> {
-
+                    is ParametersAction.OnDeleteExerciseClicked -> {
+                        mutableEventFlow.emit(
+                            ParametersEvent.ShowBottomSheetDialog(
+                                dialogState = getRemoveExerciseAlert(exercise = action.exercise),
+                            ),
+                        )
                     }
 
-                    is ParametersAction.RemoveExercise -> {
-                        removeExercise(action.data)
+                    is ParametersAction.OnDialogPositiveClick -> {
+                        handleDialogPositiveAction(
+                            dialogId = action.state?.dialogId,
+                            payload = action.state?.payload,
+                        )
                     }
 
-                    is ParametersAction.AddOrEditExercise -> {
-                        addOrEditExercise(exercise = action.result)
+                    is ParametersAction.OnAddButtonClick -> {
+                        mutableEventFlow.emit(
+                            ParametersEvent.NavigateToExerciseParams(
+                                arg = ExerciseParametersArg(
+                                    title = "",
+                                    muscleIds = emptyList(),
+                                )
+                            ),
+                        )
+                    }
+
+                    is ParametersAction.OnExerciseClick -> {
+                        mutableEventFlow.emit(
+                            ParametersEvent.NavigateToExerciseParams(
+                                arg = ExerciseParametersArg(
+                                    title = action.exercise.title,
+                                    muscleIds = action.exercise.muscles.map(MuscleDto::id),
+                                )
+                            )
+                        )
                     }
                 }
             },
             error = ::handleError,
+        )
+    }
+
+    private fun getRemoveExerciseAlert(exercise: ExerciseCardDto): DialogState {
+        return MessageDialogState(
+            dialogId = CONFIRM_DELETE_EXERCISE_DIALOG_LABEL,
+            title = exercise.title,
+            message = resourceProvider.getString(R.string.exercise_delete_message),
+            positiveAction = DialogState.Action(
+                action = resourceProvider.getString(
+                    kovp.trainhard.design_system.R.string.action_ok,
+                ),
+            ),
+            negativeAction = DialogState.Action(
+                action = resourceProvider.getString(
+                    kovp.trainhard.design_system.R.string.action_cancel,
+                ),
+            ),
+            payload = exercise,
         )
     }
 
@@ -57,15 +101,6 @@ class ParametersViewModel(
             },
         )
             .let { removeExistingExercise(it) }
-    }
-
-    private suspend fun addOrEditExercise(exercise: NewExerciseScreenResult.Success) {
-        val muscles = Muscles.allMuscles.filter { it.id in exercise.muscleIds }
-        val mappedExercise = Exercise(title = exercise.title, muscles = muscles)
-        when (exercise.screenAction) {
-            ScreenAction.ADD -> addNewExercise(exercise = mappedExercise)
-            ScreenAction.EDIT -> editExercise(exercise = mappedExercise)
-        }
     }
 
     private fun subscribeOnExercisesList() {
@@ -84,36 +119,38 @@ class ParametersViewModel(
                         },
                     )
                 }
+                    .toImmutableList()
                     .let(ParametersScreenState::Data)
                     .let(::updateState)
             }
         }
     }
 
-    private suspend fun addNewExercise(exercise: Exercise) {
-        insertExercise(exercise)
+    private suspend fun handleDialogPositiveAction(dialogId: String?, payload: Any?) {
+        when (dialogId) {
+            CONFIRM_DELETE_EXERCISE_DIALOG_LABEL -> {
+                (payload as? ExerciseCardDto)?.let { removeExercise(it) }
+            }
+        }
     }
 
     private fun handleError(e: Throwable) {
         Timber.e(e)
         viewModelScope.launch {
-            when (e) {
-                is EntityExistsException -> {
-                    ParametersEvent.ShowItemIsAlreadyExistedDialog(title = e.title)
-                        .let { mutableEventFlow.emit(it) }
-                }
-            }
+            ParametersEvent.ShowBottomSheetDialog(
+                dialogState = MessageDialogState(
+                    dialogId = UUID.randomUUID().toString(),
+                    title = "e.title",
+                    positiveAction = DialogState.Action(
+                        resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok),
+                    ),
+                )
+            )
+                .let { mutableEventFlow.emit(it) }
         }
     }
 
-    private fun editExercise(exercise: Exercise) {
-        launch(
-            action = { updateExercise(exercise) },
-        )
-    }
-
     companion object {
-        const val EXERCISE_ALREADY_EXISTS_DIALOG_LABEL = "EXERCISE_ALREADY_EXISTS_DIALOG_LABEL"
-        const val CONFIRM_DELETE_EXERCISE_DIALOG_LABEL = "CONFIRM_DELETE_EXERCISE_DIALOG_LABEL"
+        private const val CONFIRM_DELETE_EXERCISE_DIALOG_LABEL = "CONFIRM_DELETE_EXERCISE_DIALOG_LABEL"
     }
 }

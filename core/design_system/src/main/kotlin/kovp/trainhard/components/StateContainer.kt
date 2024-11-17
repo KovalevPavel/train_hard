@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 @Composable
 inline fun <reified State : Any> StateContainer(
     state: State,
+    modifier: Modifier = Modifier,
     noinline content: @Composable (State) -> Unit,
 ) {
     AnimatedContent(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         targetState = state,
         label = State::class.java.toString(),
         contentKey = { it::class.java },
