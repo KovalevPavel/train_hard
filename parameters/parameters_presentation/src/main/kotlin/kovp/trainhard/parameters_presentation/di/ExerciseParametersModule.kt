@@ -1,7 +1,7 @@
 package kovp.trainhard.parameters_presentation.di
 
-import kovp.trainhard.parameters_presentation.exercise_parameters.ExerciseParametersArg
-import kovp.trainhard.parameters_presentation.exercise_parameters.ExerciseParametersViewModel
+import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
+import kovp.trainhard.parameters_presentation.exercise_parameters.presentation.ExerciseParametersViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

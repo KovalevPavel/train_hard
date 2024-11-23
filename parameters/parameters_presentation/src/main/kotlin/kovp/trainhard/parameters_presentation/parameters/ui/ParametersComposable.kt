@@ -1,17 +1,15 @@
-package kovp.trainhard.parameters_presentation
+package kovp.trainhard.parameters_presentation.parameters.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,17 +18,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
-import kovp.trainhard.components.exercise_type.ExerciseCard
 import kovp.trainhard.components.fab.TrainFab
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.core_dialogs.BottomSheetDialog
 import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.navigation.SubscribeOnEvents
+import kovp.trainhard.parameters_presentation.R
 import kovp.trainhard.parameters_presentation.di.parametersModule
-import kovp.trainhard.parameters_presentation.exercise_parameters.ExerciseParametersRoute
+import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersRoute
+import kovp.trainhard.parameters_presentation.parameters.presentation.ParametersAction
+import kovp.trainhard.parameters_presentation.parameters.presentation.ParametersEvent
+import kovp.trainhard.parameters_presentation.parameters.presentation.ParametersScreenState
+import kovp.trainhard.parameters_presentation.parameters.presentation.ParametersViewModel
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
@@ -87,6 +88,7 @@ fun ParametersComposable(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenContent(
     state: ParametersScreenState,
@@ -96,27 +98,27 @@ private fun ScreenContent(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
-            Text(
-                modifier = Modifier
-                    .background(color = themeColors.black)
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                text = stringResource(id = R.string.exercises_list),
-                style = themeTypography.header1.copy(color = themeColors.lime),
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.exercises_list),
+                        style = themeTypography.header1,
+                        color = themeColors.lime,
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = themeColors.black),
             )
         },
         floatingActionButton = {
             TrainFab(icon = Icons.Filled.Add) {
-                handleAction(
-                    ParametersAction.OnAddButtonClick
-                )
+                handleAction(ParametersAction.OnAddButtonClick)
             }
-        }
+        },
     ) {
         StateContainer(
             modifier = Modifier
                 .background(color = themeColors.black)
-                .padding(it),
+                .padding(top = it.calculateTopPadding()),
             state = state,
         ) { st ->
             when (st) {
@@ -131,41 +133,6 @@ private fun ScreenContent(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun DataContent(
-    state: ParametersScreenState.Data,
-    handleAction: (ParametersAction) -> Unit,
-) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = themeColors.black),
-        contentPadding = PaddingValues(
-            top = 16.dp,
-            start = 16.dp,
-            end = 16.dp,
-            bottom = 100.dp,
-        ),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(state.items) { dto ->
-            ExerciseCard(
-                card = dto,
-                onCardClick = { exerciseCard ->
-                    handleAction(
-                        ParametersAction.OnExerciseClick(exercise = exerciseCard),
-                    )
-                },
-                onRemoveClick = { exerciseCard ->
-                    handleAction(
-                        ParametersAction.OnDeleteExerciseClicked(exerciseCard)
-                    )
-                },
-            )
         }
     }
 }

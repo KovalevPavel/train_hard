@@ -1,4 +1,4 @@
-package kovp.trainhard.parameters_presentation.exercise_parameters
+package kovp.trainhard.parameters_presentation.exercise_parameters.presentation
 
 import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
 

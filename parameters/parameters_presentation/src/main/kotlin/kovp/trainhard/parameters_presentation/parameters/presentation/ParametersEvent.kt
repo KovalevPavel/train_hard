@@ -1,7 +1,7 @@
-package kovp.trainhard.parameters_presentation
+package kovp.trainhard.parameters_presentation.parameters.presentation
 
 import kovp.trainhard.core_dialogs.DialogState
-import kovp.trainhard.parameters_presentation.exercise_parameters.ExerciseParametersArg
+import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 
 sealed interface ParametersEvent {
     data class ShowBottomSheetDialog(val dialogState: DialogState) : ParametersEvent

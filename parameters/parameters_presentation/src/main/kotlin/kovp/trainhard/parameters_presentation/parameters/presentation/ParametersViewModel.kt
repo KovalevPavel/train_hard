@@ -1,4 +1,4 @@
-package kovp.trainhard.parameters_presentation
+package kovp.trainhard.parameters_presentation.parameters.presentation
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
@@ -9,10 +9,11 @@ import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
 import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.core_presentation.BaseViewModel
-import kovp.trainhard.database_api.models.Exercise
+import kovp.trainhard.database_api.models.ExerciseVo
 import kovp.trainhard.parameters_domain.GetAllExercisesInteractor
 import kovp.trainhard.parameters_domain.RemoveExerciseInteractor
-import kovp.trainhard.parameters_presentation.exercise_parameters.ExerciseParametersArg
+import kovp.trainhard.parameters_presentation.R
+import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 import timber.log.Timber
 import trainhard.kovp.core.ResourceProvider
 import java.util.UUID
@@ -94,7 +95,7 @@ class ParametersViewModel(
     }
 
     private suspend fun removeExercise(exercise: ExerciseCardDto) {
-        Exercise(
+        ExerciseVo(
             title = exercise.title,
             muscles = exercise.muscles.mapNotNull {
                 Muscles.getMuscleById(it.id)

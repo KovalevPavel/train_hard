@@ -1,4 +1,4 @@
-package kovp.trainhard.parameters_presentation.exercise_parameters
+package kovp.trainhard.parameters_presentation.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.navigation.NavController
@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import kovp.trainhard.navigation.ComposableScreen
+import kovp.trainhard.parameters_presentation.exercise_parameters.ui.ExerciseParametersComposable
 
 @Serializable
 data class ExerciseParametersRoute(

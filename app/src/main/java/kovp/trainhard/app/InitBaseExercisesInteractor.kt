@@ -2,20 +2,20 @@ package kovp.trainhard.app
 
 import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.database_api.ExercisesApi
-import kovp.trainhard.database_api.models.Exercise
+import kovp.trainhard.database_api.models.ExerciseVo
 
 class InitBaseExercisesInteractor(
     private val exercisesApi: ExercisesApi,
 ) {
     suspend operator fun invoke() {
         listOf(
-            Exercise(
+            ExerciseVo(
                 title = "Приседания",
                 muscles = listOf(
                     Muscles.quadriceps,
                 ),
             ),
-            Exercise(
+            ExerciseVo(
                 title = "Становая тяга",
                 muscles = listOf(
                     Muscles.quadriceps,
@@ -28,7 +28,7 @@ class InitBaseExercisesInteractor(
                     Muscles.abs,
                 ),
             ),
-            Exercise(
+            ExerciseVo(
                 title = "Жим лежа",
                 muscles = listOf(
                     Muscles.upperChest,

@@ -6,8 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.navigation
 import kotlinx.serialization.Serializable
 import kovp.trainhard.navigation.HostScreen
-import kovp.trainhard.parameters_presentation.ParametersRoute
-import kovp.trainhard.parameters_presentation.exercise_parameters.ExerciseParametersRoute
+import kovp.trainhard.parameters_presentation.navigation.ParametersRoute
+import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersRoute
 
 @Serializable
 data object ParametersBaseRoute : HostScreen {

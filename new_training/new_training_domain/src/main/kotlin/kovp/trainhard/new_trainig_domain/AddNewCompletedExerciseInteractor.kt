@@ -4,13 +4,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kovp.trainhard.database_api.CompletedExerciseApi
 import kovp.trainhard.database_api.models.CompletedExercise
-import kovp.trainhard.database_api.models.Exercise
+import kovp.trainhard.database_api.models.ExerciseVo
 import kovp.trainhard.database_api.models.Sets
 
 class AddNewCompletedExerciseInteractor(
     private val completedExerciseApi: CompletedExerciseApi,
 ) {
-    suspend operator fun invoke(timestamp: Long, exercise: Exercise, sets: Sets) {
+    suspend operator fun invoke(timestamp: Long, exercise: ExerciseVo, sets: Sets) {
         withContext(Dispatchers.IO) {
             val existingExercises = completedExerciseApi.getCompletedExercisesByDateAndExercise(
                 timestamp = timestamp,
@@ -29,7 +29,7 @@ class AddNewCompletedExerciseInteractor(
 
     private suspend fun addNewRecord(
         completedExerciseId: Long,
-        exercise: Exercise,
+        exercise: ExerciseVo,
         sets: Sets,
         timestamp: Long,
     ) {

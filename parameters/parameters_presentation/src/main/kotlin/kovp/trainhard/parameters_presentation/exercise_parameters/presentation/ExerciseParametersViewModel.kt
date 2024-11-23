@@ -1,4 +1,4 @@
-package kovp.trainhard.parameters_presentation.exercise_parameters
+package kovp.trainhard.parameters_presentation.exercise_parameters.presentation
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
@@ -9,10 +9,11 @@ import kovp.trainhard.core_domain.Muscle
 import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.errors.EntityExistsException
-import kovp.trainhard.database_api.models.Exercise
+import kovp.trainhard.database_api.models.ExerciseVo
 import kovp.trainhard.parameters_domain.InsertNewExerciseInteractor
 import kovp.trainhard.parameters_domain.UpdateExistingExerciseInteractor
 import kovp.trainhard.parameters_presentation.R
+import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 import timber.log.Timber
 import trainhard.kovp.core.ResourceProvider
 import java.util.UUID
@@ -28,7 +29,7 @@ class ExerciseParametersViewModel(
     private val isNewExercise = exerciseArgument == ExerciseParametersArg.empty
 
     private val initExercise = exerciseArgument.let {
-        Exercise(
+        ExerciseVo(
             title = it.title,
             muscles = it.muscleIds.mapNotNull(Muscles::getMuscleByFullId).sortedBy(Muscle::id),
         )
@@ -38,9 +39,9 @@ class ExerciseParametersViewModel(
     private val musclesCloud = buildList { exerciseArgument.muscleIds.let(::addAll) }
         .toMutableList()
 
-    private val currentExercise: Exercise
+    private val currentExercise: ExerciseVo
         get() {
-            return Exercise(
+            return ExerciseVo(
                 title = currentName,
                 muscles = musclesCloud.mapNotNull(Muscles::getMuscleByFullId).sortedBy(Muscle::id),
             )

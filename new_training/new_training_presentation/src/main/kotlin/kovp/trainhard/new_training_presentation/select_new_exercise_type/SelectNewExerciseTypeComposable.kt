@@ -27,7 +27,7 @@ import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.text_field.TrainTextField
 import kovp.trainhard.components.joinToStringComposable
 import kovp.trainhard.components.mapMuscleTitle
-import kovp.trainhard.database_api.models.Exercise
+import kovp.trainhard.database_api.models.ExerciseVo
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_presentation.R
 import kovp.trainhard.new_training_presentation.di.selectExerciseModule
@@ -77,7 +77,7 @@ fun SelectNewExerciseTypeComposable(navController: NavController) {
 @Composable
 private fun DataContent(
     screenState: SelectExerciseScreenState.Data,
-    onItemClick: (Exercise) -> Unit,
+    onItemClick: (ExerciseVo) -> Unit,
 ) {
     var currentQuery by remember { mutableStateOf("") }
 
@@ -118,8 +118,8 @@ private fun DataContent(
 @Composable
 private fun ExerciseItem(
     modifier: Modifier = Modifier,
-    item: Exercise,
-    onItemClick: (Exercise) -> Unit,
+    item: ExerciseVo,
+    onItemClick: (ExerciseVo) -> Unit,
 ) {
     Column(
         modifier = modifier

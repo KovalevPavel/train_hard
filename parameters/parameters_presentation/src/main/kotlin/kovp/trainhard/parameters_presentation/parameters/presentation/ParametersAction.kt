@@ -1,4 +1,4 @@
-package kovp.trainhard.parameters_presentation
+package kovp.trainhard.parameters_presentation.parameters.presentation
 
 import kovp.trainhard.components.exercise_type.ExerciseCardDto
 import kovp.trainhard.core_dialogs.DialogState
