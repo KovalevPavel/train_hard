@@ -1,4 +1,4 @@
-package kovp.trainhard.home_presentation
+package kovp.trainhard.home_presentation.home.presentation
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -6,11 +6,11 @@ import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.home_domain.EditGymCardHealthInteractor
 import kovp.trainhard.home_domain.GetCurrentDateInteractor
 import kovp.trainhard.home_domain.GetGymCardHealthInteractor
-import kovp.trainhard.home_presentation.HomeScreenState.GymCardDates
-import kovp.trainhard.home_presentation.TodayPlan.NoProgramSelected
-import kovp.trainhard.home_presentation.TodayPlan.RestDay
-import kovp.trainhard.home_presentation.TodayPlan.TrainingDay
-import kovp.trainhard.home_presentation.TodayPlan.TrainingDay.Exercise
+import kovp.trainhard.home_presentation.home.presentation.HomeScreenState.GymCardDates
+import kovp.trainhard.home_presentation.home.presentation.TodayPlan.NoProgramSelected
+import kovp.trainhard.home_presentation.home.presentation.TodayPlan.RestDay
+import kovp.trainhard.home_presentation.home.presentation.TodayPlan.TrainingDay
+import kovp.trainhard.home_presentation.home.presentation.TodayPlan.TrainingDay.Exercise
 
 class HomeViewModel(
     private val currentDate: GetCurrentDateInteractor,

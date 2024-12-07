@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
@@ -56,14 +57,9 @@ class MainActivity : ComponentActivity() {
                         onDispose { }
                     }
 
-                    Scaffold(
-                        containerColor = backgroundColor,
-                        bottomBar = {
-                            BottomBar(navController = navController)
-                        },
-                    ) { paddingValues ->
+                    Column {
                         NavHost(
-                            modifier = Modifier.padding(paddingValues),
+                            modifier = Modifier.weight(1f),
                             navController = navController,
                             startDestination = HomeBaseRoute,
                             enterTransition = { scaleIn(initialScale = 1f) },
@@ -73,6 +69,7 @@ class MainActivity : ComponentActivity() {
                             StatisticsBaseRoute.createScreen(navGraphBuilder = this, navController = navController)
                             ParametersBaseRoute.createScreen(navGraphBuilder = this, navController = navController)
                         }
+                        BottomBar(navController = navController)
                     }
                 }
             }

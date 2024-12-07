@@ -2,26 +2,30 @@ package kovp.trainhard.components.selectors
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DateRangePickerDefaults
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kovp.trainhard.design_system.R
 import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.core_domain.orZero
+import kovp.trainhard.design_system.R
 import kovp.trainhard.ui_theme.providers.themeColors
+import kovp.trainhard.ui_theme.providers.themeTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,15 +41,46 @@ fun ShowDatePickerDialog(
     )
     val datePickerFormatter = remember { DatePickerFormatter() }
 
-    Column(
-        modifier = Modifier
-            .background(color = themeColors.black)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.End,
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.gym_card_date_range_title),
+                        style = themeTypography.header2,
+                        color = themeColors.lime,
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = themeColors.black)
+            )
+
+        },
+        floatingActionButton = {
+            TrainButton(
+                label = stringResource(id = R.string.action_ok),
+                isEnabled = datePickerState.selectedStartDateMillis != null &&
+                        datePickerState.selectedEndDateMillis != null,
+            ) {
+                onApplyDateRange(
+                    datePickerState.selectedStartDateMillis.orZero(),
+                    datePickerState.selectedEndDateMillis.orZero(),
+                )
+            }
+        },
+        containerColor = themeColors.black,
     ) {
+        Box(
+            modifier = Modifier
+                .size(60.dp)
+                .padding(16.dp)
+                .background(themeColors.red)
+        )
         DateRangePicker(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .windowInsetsPadding(TopAppBarDefaults.windowInsets)
+                .padding(top = it.calculateTopPadding())
+//                .padding(horizontal = 16.dp)
+            ,
             state = datePickerState,
             colors = DatePickerDefaults.colors(
                 containerColor = themeColors.black,
@@ -61,11 +96,10 @@ fun ShowDatePickerDialog(
                 todayContentColor = themeColors.lime,
                 dayInSelectionRangeContentColor = themeColors.lime,
             ),
-            title = {
-                Text(
-                    text = stringResource(id = R.string.gym_card_date_range_title),
-                )
-            },
+//            title = {
+//
+//            },
+            title = null,
             showModeToggle = false,
             headline = {
                 DateRangePickerDefaults.DateRangePickerHeadline(
@@ -76,16 +110,6 @@ fun ShowDatePickerDialog(
                 )
             },
         )
-        TrainButton(
-            label = stringResource(id = R.string.action_ok),
-            isEnabled = datePickerState.selectedStartDateMillis != null &&
-                    datePickerState.selectedEndDateMillis != null,
-        ) {
-            onApplyDateRange(
-                datePickerState.selectedStartDateMillis.orZero(),
-                datePickerState.selectedEndDateMillis.orZero(),
-            )
-        }
     }
 
     BackHandler { onDismiss() }

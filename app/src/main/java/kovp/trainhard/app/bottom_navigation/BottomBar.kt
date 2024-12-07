@@ -62,11 +62,21 @@ fun BottomBar(modifier: Modifier = Modifier, navController: NavController) {
                     alwaysShowLabel = false,
                     onClick = {
                         val options = navOptions {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+                            // NavGraph текущей вкладки
+                            navController.currentDestination?.parent
+                                // начальный экран
+                                ?.findStartDestination()
+                                ?.route
+                                ?.let { start ->
+                                    popUpTo(start) {
+                                        // сохраняем стейты
+                                        saveState = true
+                                        // дропаем в т.ч. саму вкладку
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                         }
 
                         when (topLevelRoute) {

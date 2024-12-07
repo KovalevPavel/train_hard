@@ -4,8 +4,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,28 +61,39 @@ fun TrainingCalendar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Data(
     muscleGroups: Map<LocalDate, List<MuscleGroup>>,
     onDayClick: (LocalDate) -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .background(color = themeColors.black)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+    Scaffold(
+        topBar = {
+            Column(
+                modifier = Modifier
+                    .background(color = themeColors.black)
+                    .windowInsetsPadding(TopAppBarDefaults.windowInsets)
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                Text(
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                    text = stringResource(id = R.string.training_calendar_title),
+                    style = themeTypography.header1.copy(color = themeColors.lime),
+                )
+
+                Legend(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            }
+        },
+        containerColor = themeColors.black
     ) {
-        Text(
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
-            text = stringResource(id = R.string.training_calendar_title),
-            style = themeTypography.header1.copy(color = themeColors.lime),
+        CalendarData(
+            modifier = Modifier.padding(top = it.calculateTopPadding()),
+            muscleGroups = muscleGroups, onDayClick = onDayClick
         )
-
-        Legend(
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
-
-        CalendarData(muscleGroups = muscleGroups, onDayClick = onDayClick)
     }
 }
 

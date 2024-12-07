@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.home_presentation.R
-import kovp.trainhard.home_presentation.TodayPlan.TrainingDay.Exercise
+import kovp.trainhard.home_presentation.home.presentation.TodayPlan.TrainingDay.Exercise
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
 @Composable
-fun ExerciseCard(exercise: Exercise) {
+fun ExerciseCardComposable(exercise: Exercise) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

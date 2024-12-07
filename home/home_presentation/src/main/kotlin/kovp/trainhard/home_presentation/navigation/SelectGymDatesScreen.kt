@@ -1,4 +1,4 @@
-package kovp.trainhard.home_presentation.gym_card_dates
+package kovp.trainhard.home_presentation.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.navigation.NavController
@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import kovp.trainhard.components.selectors.DateRangeSelectorState
+import kovp.trainhard.home_presentation.gym_card_dates.GymCardDatesDialog
 import kovp.trainhard.navigation.ComposableScreen
 
 @Serializable

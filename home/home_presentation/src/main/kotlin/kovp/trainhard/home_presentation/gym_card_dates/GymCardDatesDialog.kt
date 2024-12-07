@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import kovp.trainhard.components.selectors.DateRangeSelectorState
 import kovp.trainhard.components.selectors.ShowDatePickerDialog
+import kovp.trainhard.home_presentation.navigation.SelectGymDatesScreen
 
 @Composable
 fun GymCardDatesDialog(
