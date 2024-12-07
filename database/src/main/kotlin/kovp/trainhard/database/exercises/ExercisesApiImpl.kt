@@ -41,7 +41,7 @@ internal class ExercisesApiImpl(
         exerciseDao.removeExercise(exerciseTitle = exercise.title)
     }
 
-    override suspend fun getExercises(): Flow<List<ExerciseVo>> {
+    override fun getExercises(): Flow<List<ExerciseVo>> {
         return exerciseDao.getExercises()
             .transform {
                 val newList = it.map(exerciseMapper::mapToDomain)

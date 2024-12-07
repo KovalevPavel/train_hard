@@ -97,6 +97,7 @@ private fun ScreenContent(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        containerColor = themeColors.black,
         topBar = {
             ParamsTopAppBar(
                 title = state.screenTitle,
@@ -104,17 +105,16 @@ private fun ScreenContent(
                 handleAction = handleAction,
             )
         }
-    ) {
+    ) { paddings ->
         StateContainer(
             modifier = Modifier
-                .background(themeColors.black)
-                .padding(top = it.calculateTopPadding())
+                .padding(top = paddings.calculateTopPadding())
                 .fillMaxSize(),
             state = state,
         ) { st ->
             when (st) {
                 ExerciseParametersState.Loading -> {
-
+                    // Ничего не делаем. Если появятся запросы к БД, надо поставить лоадер
                 }
 
                 is ExerciseParametersState.Content -> {

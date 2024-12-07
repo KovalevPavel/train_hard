@@ -8,6 +8,6 @@ interface ExercisesApi {
     suspend fun addNewExercise(exercise: ExerciseVo)
     suspend fun updateExistingExercise(exercise: ExerciseVo): Int
     suspend fun removeExercise(exercise: ExerciseVo)
-    suspend fun getExercises(): Flow<List<ExerciseVo>>
+    fun getExercises(): Flow<List<ExerciseVo>>
     suspend fun getExerciseById(id: String): ExerciseVo?
 }

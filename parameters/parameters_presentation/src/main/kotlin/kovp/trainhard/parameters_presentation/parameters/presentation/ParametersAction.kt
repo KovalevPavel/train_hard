@@ -1,15 +1,15 @@
 package kovp.trainhard.parameters_presentation.parameters.presentation
 
-import kovp.trainhard.components.exercise_type.ExerciseCardDto
+import kovp.trainhard.components.exercise_type.ExerciseCardVs
 import kovp.trainhard.core_dialogs.DialogState
 
 sealed interface ParametersAction {
     data class OnDeleteExerciseClicked(
-        val exercise: ExerciseCardDto,
+        val exercise: ExerciseCardVs,
     ) : ParametersAction
 
     data class OnExerciseClick(
-        val exercise: ExerciseCardDto,
+        val exercise: ExerciseCardVs,
     ) : ParametersAction
 
     data object OnAddButtonClick : ParametersAction

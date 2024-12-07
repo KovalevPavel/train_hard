@@ -21,18 +21,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import kovp.trainhard.components.dropShadow
 import kovp.trainhard.components.joinToStringComposable
 import kovp.trainhard.components.mapMuscleTitle
+import kovp.trainhard.core_domain.Muscles
+import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
 @Composable
 fun ExerciseCard(
     modifier: Modifier = Modifier,
-    card: ExerciseCardDto,
-    onCardClick: (ExerciseCardDto) -> Unit,
-    onRemoveClick: (ExerciseCardDto) -> Unit,
+    card: ExerciseCardVs,
+    onCardClick: (ExerciseCardVs) -> Unit,
+    onRemoveClick: (ExerciseCardVs) -> Unit,
 ) {
     var visible by remember { mutableStateOf(true) }
 
@@ -43,7 +49,15 @@ fun ExerciseCard(
         .replaceFirstChar { it.uppercaseChar() }
 
     Surface(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .dropShadow(
+                shape = RoundedCornerShape(16.dp),
+                color = themeColors.lime,
+                offsetY = 0.dp,
+                blur = 10.dp
+            ),
         color = themeColors.gray,
         shape = RoundedCornerShape(16.dp),
         onClick = { onCardClick(card) },
@@ -81,4 +95,30 @@ fun ExerciseCard(
             Text(text = list, style = themeTypography.body2)
         }
     }
+}
+
+@Preview
+@Composable
+private fun ExerciseCardPreview(
+    @PreviewParameter(ExerciseCardProvider::class) card: ExerciseCardVs,
+) {
+    TrainHardTheme {
+        ExerciseCard(card = card, onCardClick = {}, onRemoveClick = {})
+    }
+}
+
+private class ExerciseCardProvider : PreviewParameterProvider<ExerciseCardVs> {
+    override val values: Sequence<ExerciseCardVs>
+        get() = sequenceOf(
+            ExerciseCardVs(
+                title = "",
+                muscles = listOf(),
+            ),
+            ExerciseCardVs(
+                title = "Full body",
+                muscles = Muscles.allMuscles.map {
+                    ExerciseCardVs.MuscleVs(it.muscleId, it.muscleGroup)
+                },
+            ),
+        )
 }

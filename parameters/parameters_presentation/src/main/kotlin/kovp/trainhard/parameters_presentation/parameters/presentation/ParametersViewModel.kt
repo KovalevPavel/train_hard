@@ -2,9 +2,11 @@ package kovp.trainhard.parameters_presentation.parameters.presentation
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kovp.trainhard.components.exercise_type.ExerciseCardDto
-import kovp.trainhard.components.exercise_type.ExerciseCardDto.MuscleDto
+import kovp.trainhard.components.exercise_type.ExerciseCardVs
+import kovp.trainhard.components.exercise_type.ExerciseCardVs.MuscleVs
 import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
 import kovp.trainhard.core_domain.Muscles
@@ -30,52 +32,55 @@ class ParametersViewModel(
     }
 
     override fun handleAction(action: ParametersAction) {
+        when (action) {
+            is ParametersAction.OnDeleteExerciseClicked -> {
+                tryToDeleteExercise(exercise = action.exercise)
+            }
+
+            is ParametersAction.OnDialogPositiveClick -> {
+                handleDialogPositiveAction(
+                    dialogId = action.state?.dialogId,
+                    payload = action.state?.payload,
+                )
+            }
+
+            is ParametersAction.OnAddButtonClick -> {
+                openParametersScreen(exercise = null)
+            }
+
+            is ParametersAction.OnExerciseClick -> {
+                openParametersScreen(exercise = action.exercise)
+            }
+        }
+    }
+
+    private fun tryToDeleteExercise(exercise: ExerciseCardVs) {
         launch(
             action = {
-                when (action) {
-                    is ParametersAction.OnDeleteExerciseClicked -> {
-                        mutableEventFlow.emit(
-                            ParametersEvent.ShowBottomSheetDialog(
-                                dialogState = getRemoveExerciseAlert(exercise = action.exercise),
-                            ),
-                        )
-                    }
-
-                    is ParametersAction.OnDialogPositiveClick -> {
-                        handleDialogPositiveAction(
-                            dialogId = action.state?.dialogId,
-                            payload = action.state?.payload,
-                        )
-                    }
-
-                    is ParametersAction.OnAddButtonClick -> {
-                        mutableEventFlow.emit(
-                            ParametersEvent.NavigateToExerciseParams(
-                                arg = ExerciseParametersArg(
-                                    title = "",
-                                    muscleIds = emptyList(),
-                                )
-                            ),
-                        )
-                    }
-
-                    is ParametersAction.OnExerciseClick -> {
-                        mutableEventFlow.emit(
-                            ParametersEvent.NavigateToExerciseParams(
-                                arg = ExerciseParametersArg(
-                                    title = action.exercise.title,
-                                    muscleIds = action.exercise.muscles.map(MuscleDto::id),
-                                )
-                            )
-                        )
-                    }
-                }
+                mutableEventFlow.emit(
+                    ParametersEvent.ShowBottomSheetDialog(
+                        dialogState = getRemoveExerciseAlert(exercise = exercise),
+                    ),
+                )
             },
             error = ::handleError,
         )
     }
 
-    private fun getRemoveExerciseAlert(exercise: ExerciseCardDto): DialogState {
+    private fun openParametersScreen(exercise: ExerciseCardVs?) {
+        viewModelScope.launch {
+            mutableEventFlow.emit(
+                ParametersEvent.NavigateToExerciseParams(
+                    arg = ExerciseParametersArg(
+                        title = exercise?.title.orEmpty(),
+                        muscleIds = exercise?.muscles?.map(MuscleVs::id).orEmpty(),
+                    ),
+                )
+            )
+        }
+    }
+
+    private fun getRemoveExerciseAlert(exercise: ExerciseCardVs): DialogState {
         return MessageDialogState(
             dialogId = CONFIRM_DELETE_EXERCISE_DIALOG_LABEL,
             title = exercise.title,
@@ -94,43 +99,47 @@ class ParametersViewModel(
         )
     }
 
-    private suspend fun removeExercise(exercise: ExerciseCardDto) {
-        ExerciseVo(
-            title = exercise.title,
-            muscles = exercise.muscles.mapNotNull {
-                Muscles.getMuscleById(it.id)
+    private fun removeExercise(exercise: ExerciseCardVs) {
+        launch(
+            action = {
+                ExerciseVo(
+                    title = exercise.title,
+                    muscles = exercise.muscles.mapNotNull {
+                        Muscles.getMuscleById(it.id)
+                    },
+                )
+                    .let { removeExistingExercise(it) }
             },
+            error = ::handleError,
         )
-            .let { removeExistingExercise(it) }
     }
 
     private fun subscribeOnExercisesList() {
-        viewModelScope.launch {
-            getExercises().collect { list ->
-                ParametersScreenState.Loading.let(::updateState)
+        getExercises().onEach { list ->
+            ParametersScreenState.Loading.let(::updateState)
 
-                list.map {
-                    ExerciseCardDto(
-                        title = it.title,
-                        muscles = it.muscles.map { m ->
-                            MuscleDto(
-                                muscleId = m.muscleId,
-                                muscleGroup = m.muscleGroup,
-                            )
-                        },
-                    )
-                }
-                    .toImmutableList()
-                    .let(ParametersScreenState::Data)
-                    .let(::updateState)
+            list.map {
+                ExerciseCardVs(
+                    title = it.title,
+                    muscles = it.muscles.map { m ->
+                        MuscleVs(
+                            muscleId = m.muscleId,
+                            muscleGroup = m.muscleGroup,
+                        )
+                    },
+                )
             }
+                .toImmutableList()
+                .let(ParametersScreenState::Data)
+                .let(::updateState)
         }
+            .launchIn(viewModelScope)
     }
 
-    private suspend fun handleDialogPositiveAction(dialogId: String?, payload: Any?) {
+    private fun handleDialogPositiveAction(dialogId: String?, payload: Any?) {
         when (dialogId) {
             CONFIRM_DELETE_EXERCISE_DIALOG_LABEL -> {
-                (payload as? ExerciseCardDto)?.let { removeExercise(it) }
+                (payload as? ExerciseCardVs)?.let { removeExercise(it) }
             }
         }
     }
@@ -141,7 +150,7 @@ class ParametersViewModel(
             ParametersEvent.ShowBottomSheetDialog(
                 dialogState = MessageDialogState(
                     dialogId = UUID.randomUUID().toString(),
-                    title = "e.title",
+                    title = e.message.orEmpty(),
                     positiveAction = DialogState.Action(
                         resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok),
                     ),
@@ -152,6 +161,7 @@ class ParametersViewModel(
     }
 
     companion object {
-        private const val CONFIRM_DELETE_EXERCISE_DIALOG_LABEL = "CONFIRM_DELETE_EXERCISE_DIALOG_LABEL"
+        private const val CONFIRM_DELETE_EXERCISE_DIALOG_LABEL =
+            "CONFIRM_DELETE_EXERCISE_DIALOG_LABEL"
     }
 }

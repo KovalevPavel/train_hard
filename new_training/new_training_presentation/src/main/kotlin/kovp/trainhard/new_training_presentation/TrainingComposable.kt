@@ -1,6 +1,5 @@
 package kovp.trainhard.new_training_presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,6 @@ import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.fab.TrainFab
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.train_card.CompletedExerciseCard
-import trainhard.kovp.core.RequestAction
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_presentation.TrainingAction.OnRemoveSetClick
 import kovp.trainhard.new_training_presentation.di.newTrainingModule
@@ -28,6 +26,7 @@ import kovp.trainhard.ui_theme.providers.themeColors
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.module.rememberKoinModules
 import org.koin.core.annotation.KoinExperimentalAPI
+import trainhard.kovp.core.RequestAction
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -81,7 +80,8 @@ private fun DataContent(
     onAction: (TrainingAction) -> Unit,
 ) {
     Scaffold(
-        modifier = Modifier.background(themeColors.black).fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
+        containerColor = themeColors.black,
         floatingActionButton = {
             TrainFab(icon = Icons.Default.Add) {
                 onAction(TrainingAction.OnAddExerciseClick)
@@ -90,9 +90,8 @@ private fun DataContent(
     ) { paddings ->
         LazyColumn(
             modifier = Modifier
-                .padding(paddings)
+                .padding(top = paddings.calculateTopPadding())
                 .fillMaxSize()
-                .background(themeColors.black)
                 .padding(horizontal = 16.dp),
             contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)

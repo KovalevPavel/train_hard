@@ -1,10 +1,11 @@
 package kovp.trainhard.components.selectors
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DateRangePicker
@@ -13,8 +14,6 @@ import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -42,19 +41,10 @@ fun ShowDatePickerDialog(
     val datePickerFormatter = remember { DatePickerFormatter() }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.gym_card_date_range_title),
-                        style = themeTypography.header2,
-                        color = themeColors.lime,
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = themeColors.black)
-            )
-
-        },
+        modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
+            .padding(horizontal = 16.dp)
+            .padding(top = 16.dp),
+        containerColor = themeColors.black,
         floatingActionButton = {
             TrainButton(
                 label = stringResource(id = R.string.action_ok),
@@ -67,20 +57,9 @@ fun ShowDatePickerDialog(
                 )
             }
         },
-        containerColor = themeColors.black,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(60.dp)
-                .padding(16.dp)
-                .background(themeColors.red)
-        )
+    ) { paddings ->
         DateRangePicker(
-            modifier = Modifier
-                .windowInsetsPadding(TopAppBarDefaults.windowInsets)
-                .padding(top = it.calculateTopPadding())
-//                .padding(horizontal = 16.dp)
-            ,
+            modifier = Modifier.padding(top = paddings.calculateTopPadding()),
             state = datePickerState,
             colors = DatePickerDefaults.colors(
                 containerColor = themeColors.black,
@@ -96,10 +75,13 @@ fun ShowDatePickerDialog(
                 todayContentColor = themeColors.lime,
                 dayInSelectionRangeContentColor = themeColors.lime,
             ),
-//            title = {
-//
-//            },
-            title = null,
+            title = {
+                Text(
+                    text = stringResource(id = R.string.gym_card_date_range_title),
+                    style = themeTypography.header2,
+                    color = themeColors.lime,
+                )
+            },
             showModeToggle = false,
             headline = {
                 DateRangePickerDefaults.DateRangePickerHeadline(

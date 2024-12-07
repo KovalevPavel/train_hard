@@ -7,5 +7,5 @@ import kovp.trainhard.database_api.models.ExerciseVo
 class GetAllExercisesInteractor(
     private val exercisesApi: ExercisesApi,
 ) {
-    suspend operator fun invoke(): Flow<List<ExerciseVo>> = exercisesApi.getExercises()
+    operator fun invoke(): Flow<List<ExerciseVo>> = exercisesApi.getExercises()
 }
