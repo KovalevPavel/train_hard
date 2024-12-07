@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.HorizontalDivider
@@ -25,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import kovp.trainhard.components.dropShadow
+import kovp.trainhard.components.GlowContainer
 import kovp.trainhard.components.joinToStringComposable
 import kovp.trainhard.components.mapMuscleTitle
 import kovp.trainhard.core_domain.Muscles
@@ -48,51 +47,43 @@ fun ExerciseCard(
         }
         .replaceFirstChar { it.uppercaseChar() }
 
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .dropShadow(
-                shape = RoundedCornerShape(16.dp),
-                color = themeColors.lime,
-                offsetY = 0.dp,
-                blur = 10.dp
-            ),
-        color = themeColors.gray,
-        shape = RoundedCornerShape(16.dp),
-        onClick = { onCardClick(card) },
-    ) {
-
-        Column(
-            modifier = Modifier.padding(all = 16.dp),
+    GlowContainer(modifier = modifier) {
+        Surface(
+            color = themeColors.gray,
+            onClick = { onCardClick(card) },
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+
+            Column(
+                modifier = Modifier.padding(all = 16.dp),
             ) {
-                Text(
-                    text = card.title,
-                    style = themeTypography.header1,
-                )
-                IconButton(
-                    onClick = {
-                        visible = false
-                        onRemoveClick(card)
-                    }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Image(
-                        imageVector = Filled.Clear,
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(color = themeColors.white),
+                    Text(
+                        text = card.title,
+                        style = themeTypography.header1,
                     )
+                    IconButton(
+                        onClick = {
+                            visible = false
+                            onRemoveClick(card)
+                        }
+                    ) {
+                        Image(
+                            imageVector = Filled.Clear,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(color = themeColors.white),
+                        )
+                    }
                 }
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp),
+                )
+                Text(text = list, style = themeTypography.body2)
             }
-            HorizontalDivider(
-                modifier = Modifier
-                    .padding(vertical = 8.dp),
-            )
-            Text(text = list, style = themeTypography.body2)
         }
     }
 }

@@ -2,6 +2,7 @@ package kovp.trainhard.home_presentation.home.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +20,7 @@ import kovp.trainhard.core_domain.DATE_FORMAT_dd_MMMM
 import kovp.trainhard.core_domain.formatToDateString
 import kovp.trainhard.home_presentation.R
 import kovp.trainhard.home_presentation.components.CurrentDateCard
-import kovp.trainhard.home_presentation.components.ExerciseCardComposable
+import kovp.trainhard.home_presentation.components.ExercisePlanCardComposable
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan.NoProgramSelected
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan.RestDay
@@ -36,12 +37,13 @@ fun HomeScreen(
     val locale = LocalContext.current.resources.configuration.locales[0]
 
     LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp, start = 16.dp, end = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp, alignment = Alignment.Top),
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.Top),
     ) {
         item {
             CurrentDateCard(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 currentDate = dateString.formatToDateString(DATE_FORMAT_dd_MMMM, locale),
                 currentProgramName = "",
                 onDateClick = onDateClick,
@@ -49,6 +51,7 @@ fun HomeScreen(
         }
         item {
             Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 text = stringResource(id = R.string.today_plan),
                 style = themeTypography.header1,
             )
@@ -87,7 +90,7 @@ private fun LazyListScope.mapTodayPlan(plan: TodayPlan) {
 
         is TrainingDay -> {
             items(plan.items, key = { it.id }) {
-                ExerciseCardComposable(exercise = it)
+                ExercisePlanCardComposable(exercise = it)
             }
         }
     }

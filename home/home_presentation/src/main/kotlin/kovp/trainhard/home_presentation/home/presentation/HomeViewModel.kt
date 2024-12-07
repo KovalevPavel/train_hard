@@ -1,6 +1,7 @@
 package kovp.trainhard.home_presentation.home.presentation
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.home_domain.EditGymCardHealthInteractor
@@ -10,7 +11,7 @@ import kovp.trainhard.home_presentation.home.presentation.HomeScreenState.GymCar
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan.NoProgramSelected
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan.RestDay
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan.TrainingDay
-import kovp.trainhard.home_presentation.home.presentation.TodayPlan.TrainingDay.Exercise
+import kovp.trainhard.home_presentation.home.presentation.TodayPlan.TrainingDay.ExerciseCardVs
 
 class HomeViewModel(
     private val currentDate: GetCurrentDateInteractor,
@@ -19,31 +20,31 @@ class HomeViewModel(
 ) : BaseViewModel<HomeScreenState, HomeAction, HomeEvent>(initialState = HomeScreenState.Loading) {
 
     private val mockPlanList = TrainingDay(
-        items = listOf(
-            Exercise(
+        items = persistentListOf(
+            ExerciseCardVs(
                 id = "dead_lift",
                 title = "Становая тяга",
-                sets = listOf(
+                sets = persistentListOf(
                     "80кг : 3х6",
                     "80кг : 3х6",
                     "80кг : 3х6",
                 ),
                 muscleGroups = "спина, ноги"
             ),
-            Exercise(
+            ExerciseCardVs(
                 id = "squats",
                 title = "Приседания",
-                sets = listOf(
+                sets = persistentListOf(
                     "80кг : 3х6",
                     "80кг : 3х6",
                     "80кг : 3х6",
                 ),
                 muscleGroups = "ноги"
             ),
-            Exercise(
+            ExerciseCardVs(
                 id = "bench_press",
                 title = "Жим лежа",
-                sets = listOf(
+                sets = persistentListOf(
                     "80кг : 3х6",
                     "80кг : 3х6",
                     "80кг : 3х6",

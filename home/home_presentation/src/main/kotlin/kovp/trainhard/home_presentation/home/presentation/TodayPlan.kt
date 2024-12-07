@@ -1,14 +1,19 @@
 package kovp.trainhard.home_presentation.home.presentation
 
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+
 sealed interface TodayPlan {
 
     data class TrainingDay(
-        val items: List<Exercise>,
+        val items: ImmutableList<ExerciseCardVs>,
     ) : TodayPlan {
-        data class Exercise(
+
+        @Immutable
+        data class ExerciseCardVs(
             val id: String,
             val title: String,
-            val sets: List<String>,
+            val sets: ImmutableList<String>,
             val muscleGroups: String,
         )
     }
