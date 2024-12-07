@@ -6,9 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -57,7 +57,11 @@ class MainActivity : ComponentActivity() {
                         onDispose { }
                     }
 
-                    Column {
+                    Column(
+                        modifier = Modifier
+                            .background(themeColors.black)
+                            .fillMaxSize(),
+                    ) {
                         NavHost(
                             modifier = Modifier.weight(1f),
                             navController = navController,

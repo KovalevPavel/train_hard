@@ -3,15 +3,12 @@ package kovp.trainhard.training_calendar_presentation
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,14 +26,16 @@ import kovp.trainhard.training_calendar_presentation.legend.Legend
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.context.loadKoinModules
+import org.koin.compose.module.rememberKoinModules
+import org.koin.core.annotation.KoinExperimentalAPI
 import java.time.LocalDate
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun TrainingCalendar(
     navController: NavController,
 ) {
-    loadKoinModules(trainingCalendarModule)
+    rememberKoinModules { listOf(trainingCalendarModule) }
     val viewModel = koinViewModel<TrainingCalendarViewModel>()
     val state by viewModel.state.collectAsState()
 

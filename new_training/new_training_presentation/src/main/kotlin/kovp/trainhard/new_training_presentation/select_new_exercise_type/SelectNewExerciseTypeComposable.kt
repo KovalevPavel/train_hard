@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,17 +32,13 @@ import kovp.trainhard.new_training_presentation.R
 import kovp.trainhard.new_training_presentation.di.selectExerciseModule
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
+import org.koin.compose.module.rememberKoinModules
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun SelectNewExerciseTypeComposable(navController: NavController) {
-    loadKoinModules(selectExerciseModule)
-
-//    resultRecipient.onNavResult {
-//        val result = it.getOr { NewSetDialogResult.Error }
-//        resultNavigator.navigateBack(result)
-//    }
+    rememberKoinModules { listOf(selectExerciseModule) }
 
     val viewModel = koinViewModel<SelectNewExerciseTypeViewModel>()
     val state by viewModel.state.collectAsState()
@@ -64,12 +59,6 @@ fun SelectNewExerciseTypeComposable(navController: NavController) {
                     SelectExerciseAction.OnExerciseClick(it).let(viewModel::handleAction)
                 }
             }
-        }
-    }
-
-    DisposableEffect(key1 = viewModel) {
-        onDispose {
-            unloadKoinModules(selectExerciseModule)
         }
     }
 }

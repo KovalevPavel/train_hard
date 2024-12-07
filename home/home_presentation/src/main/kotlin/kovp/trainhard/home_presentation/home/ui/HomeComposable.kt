@@ -36,14 +36,16 @@ import kovp.trainhard.training_calendar_api.TrainingCalendarScreen
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.context.loadKoinModules
+import org.koin.compose.module.rememberKoinModules
+import org.koin.core.annotation.KoinExperimentalAPI
 import kotlin.time.Duration.Companion.milliseconds
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeComposable(
     navController: NavController,
 ) {
-    loadKoinModules(homeModule)
+    rememberKoinModules { listOf(homeModule) }
 
     val vm = koinViewModel<HomeViewModel>()
     val state by vm.state.collectAsState()

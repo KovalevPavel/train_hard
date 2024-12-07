@@ -39,14 +39,17 @@ import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.context.loadKoinModules
+import org.koin.compose.module.rememberKoinModules
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun ExerciseParametersComposable(
     argument: ExerciseParametersArg,
     navController: NavController,
 ) {
-    loadKoinModules(exerciseParametersModule(arg = argument))
+    rememberKoinModules { listOf(exerciseParametersModule(arg = argument)) }
+
     val vm = koinViewModel<ExerciseParametersViewModel>()
     val state by vm.state.collectAsState()
     var isDialogVisible by remember { mutableStateOf(false) }

@@ -26,16 +26,16 @@ import kovp.trainhard.new_training_presentation.TrainingAction.OnRemoveSetClick
 import kovp.trainhard.new_training_presentation.di.newTrainingModule
 import kovp.trainhard.ui_theme.providers.themeColors
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.context.loadKoinModules
+import org.koin.compose.module.rememberKoinModules
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun TrainingComposable(
     currentTimestamp: Long,
     navController: NavController,
 ) {
-    loadKoinModules(
-        newTrainingModule(currentTimestamp = currentTimestamp),
-    )
+    rememberKoinModules { listOf(newTrainingModule(currentTimestamp = currentTimestamp)) }
     val vm = koinViewModel<TrainingViewModel>()
     val state by vm.state.collectAsState()
 
