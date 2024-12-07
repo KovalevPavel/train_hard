@@ -10,15 +10,21 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseViewModel<State : Any, Event : Any, Action : Any>(
+abstract class BaseViewModel<State : Any, Action : Any, Event : Any>(
     initialState: State,
 ) : ViewModel() {
-    val stateFlow: StateFlow<State> by lazy { mutableStateFlow }
-    val actionFlow: Flow<Action> by lazy { mutableActionFlow }
-    protected val mutableStateFlow = MutableStateFlow(initialState)
-    protected val mutableActionFlow = MutableSharedFlow<Action>()
+    val state: StateFlow<State> get() = _state
+    private val _state = MutableStateFlow(initialState)
 
-    abstract fun obtainEvent(event: Event?)
+    val eventFlow: Flow<Event> by lazy { mutableEventFlow }
+
+    protected val mutableEventFlow = MutableSharedFlow<Event>()
+
+    abstract fun handleAction(action: Action)
+
+    fun updateState(newState: State) {
+        _state.value = newState
+    }
 
     fun launch(
         context: CoroutineContext = Dispatchers.IO,

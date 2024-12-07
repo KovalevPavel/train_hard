@@ -32,14 +32,18 @@ include(":core_domain")
 include(":database")
 include(":database_api")
 include(":navigation")
-include(":ui_theme")
-include(":components")
-include(":core_design")
 include(":core_dialogs")
 include(":core_presentation")
 include(":lint_rules")
 
+withDirectory("core") {
+    includeProject("core")
+    includeProject("ui_theme")
+    includeProject("design_system")
+}
+
 withDirectory("home") {
+    includeProject("home_api")
     includeProject("home_presentation")
     includeProject("home_domain")
 }
@@ -51,6 +55,7 @@ withDirectory("new_training") {
 }
 
 withDirectory("statistics") {
+    includeProject("statistics_api")
     includeProject("statistics_presentation")
 }
 

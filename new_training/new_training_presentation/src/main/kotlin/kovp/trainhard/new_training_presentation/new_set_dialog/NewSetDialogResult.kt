@@ -1,10 +1,9 @@
 package kovp.trainhard.new_training_presentation.new_set_dialog
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-sealed class NewSetDialogResult : Parcelable {
-    @Parcelize
+sealed class NewSetDialogResult {
+    @Serializable
     data class Success(
         val id: Long,
         val setId: Long,
@@ -14,11 +13,10 @@ sealed class NewSetDialogResult : Parcelable {
         val resultAction: DialogAction,
     ) : NewSetDialogResult()
 
-    @Parcelize
+    @Serializable
     data object Error : NewSetDialogResult()
 
-    @Parcelize
-    enum class DialogAction : Parcelable {
+    enum class DialogAction {
         ADD_NEW,
         EDIT_CURRENT,
     }

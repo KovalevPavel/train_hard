@@ -2,40 +2,37 @@ package kovp.trainhard.new_training_presentation.select_new_exercise_type
 
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import kovp.trainhard.core_domain.update
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.ExercisesApi
-import kovp.trainhard.new_training_api.NewSetDialogScreen
-import kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
+import kovp.trainhard.new_training_presentation.NewSetDialogScreen
+import trainhard.kovp.core.RequestAction
 
 class SelectNewExerciseTypeViewModel(
     private val exercisesApi: ExercisesApi,
-) : BaseViewModel<SelectExerciseScreenState, SelectExerciseEvent, SelectExerciseAction>(
+) : BaseViewModel<SelectExerciseScreenState, SelectExerciseAction, SelectExerciseEvent>(
     initialState = SelectExerciseScreenState.Loading,
 ) {
     init {
         viewModelScope.launch {
             exercisesApi.getExercises().collect { list ->
                 list.let(SelectExerciseScreenState::Data)
-                    .let(mutableStateFlow::update)
+                    .let(::updateState)
             }
         }
     }
 
-    override fun obtainEvent(event: SelectExerciseEvent?) {
+    override fun handleAction(action: SelectExerciseAction) {
         viewModelScope.launch {
-            when (event) {
-                is SelectExerciseEvent.OnExerciseClick -> {
+            when (action) {
+                is SelectExerciseAction.OnExerciseClick -> {
                     NewSetDialogScreen(
-                        exerciseTitle = event.data.title,
-                        requestAction = RequestAction.ADD,
+                        exerciseTitle = action.data.title,
+                        requestAction = RequestAction.Add,
                     )
-                        .let(SelectExerciseAction::NavigateToNewSetDialog)
+                        .let(SelectExerciseEvent::NavigateToNewSetDialog)
                 }
-
-                null -> SelectExerciseAction.Empty
             }
-                .let { mutableActionFlow.emit(it) }
+                .let { mutableEventFlow.emit(it) }
         }
     }
 }

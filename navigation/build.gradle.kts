@@ -4,5 +4,5 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.destinations.core)
+    implementation(libs.navigation)
 }

@@ -9,7 +9,9 @@ import kovp.trainhard.convention.utils.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.accessors.runtime.addDependencyTo
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
 @Suppress("unused")
@@ -35,6 +37,13 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     "logging-timber",
                 ),
             )
+
+            dependencies {
+                if (project.name != "core") {
+                    add("implementation", project(":core"))
+                }
+                add("implementation", project(":core_domain"))
+            }
 
             configureDetekt()
         }

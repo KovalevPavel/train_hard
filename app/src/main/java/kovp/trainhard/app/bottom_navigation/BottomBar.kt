@@ -1,52 +1,46 @@
 package kovp.trainhard.app.bottom_navigation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import com.ramcosta.composedestinations.navigation.navigate
-import kovp.trainhard.app.CurrentHostScreenFlowHolder
-import kovp.trainhard.app.navigation_graphs.RootNavigationGraphSpec
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
+import kovp.trainhard.home_api.HomeBaseRoute
+import kovp.trainhard.parameters_api.ParametersBaseRoute
+import kovp.trainhard.statistics_api.StatisticsBaseRoute
+import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
-import org.koin.compose.koinInject
 
 @Composable
-fun BottomBar(
-    navController: NavController,
-    modifier: Modifier = Modifier,
-) {
-    val currentScreenHolder = koinInject<CurrentHostScreenFlowHolder>()
-    val currentGraph by currentScreenHolder.currentGraphFlow.collectAsState()
-
+fun BottomBar(modifier: Modifier = Modifier, navController: NavController) {
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(themeColors.gray),
-        )
+        HorizontalDivider()
 
         NavigationBar(
-            modifier = modifier,
             containerColor = themeColors.black,
         ) {
-            BottomBarDestination.values().forEach {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+
+            BottomBarDestination.entries.forEach { topLevelRoute ->
                 NavigationBarItem(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = themeColors.white,
@@ -55,24 +49,60 @@ fun BottomBar(
                         unselectedIconColor = themeColors.gray,
                         disabledIconColor = themeColors.gray,
                     ),
-                    selected = currentGraph.route.equals(it.direction.route, ignoreCase = true),
+                    selected = currentDestination?.hierarchy?.any {
+                        it.hasRoute(topLevelRoute.baseRoute)
+                    } == true,
                     icon = {
-                        Icon(painter = painterResource(id = it.icon), contentDescription = null)
+                        Icon(
+                            painter = painterResource(id = topLevelRoute.icon),
+                            contentDescription = null
+                        )
                     },
-                    label = { Text(text = stringResource(id = it.label)) },
+                    label = { Text(text = stringResource(id = topLevelRoute.label)) },
                     alwaysShowLabel = false,
                     onClick = {
-                        navController.navigate(it.direction) {
-                            popUpTo(currentGraph.route) {
-                                saveState = true
-                                inclusive = true
+                        val options = navOptions {
+                            // NavGraph текущей вкладки
+                            navController.currentDestination?.parent
+                                // начальный экран
+                                ?.findStartDestination()
+                                ?.route
+                                ?.let { start ->
+                                    popUpTo(start) {
+                                        // сохраняем стейты
+                                        saveState = true
+                                        // дропаем в т.ч. саму вкладку
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                        }
+
+                        when (topLevelRoute) {
+                            BottomBarDestination.Home -> {
+                                HomeBaseRoute.navigateHome(navController, options)
                             }
-                            restoreState = true
-                            RootNavigationGraphSpec.updateSelectedGraph(newGraph = it.direction)
+
+                            BottomBarDestination.Statistics -> {
+                                StatisticsBaseRoute.navigateHome(navController, options)
+                            }
+
+                            BottomBarDestination.Parameters -> {
+                                ParametersBaseRoute.navigateHome(navController, options)
+                            }
                         }
                     },
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun BottomBarPreview() {
+    TrainHardTheme {
+        BottomBar(navController = rememberNavController())
     }
 }

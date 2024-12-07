@@ -5,7 +5,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kovp.trainhard.core_domain.update
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.training_calendar_domain.GetTrainingDataInteractor
 import java.time.Instant
@@ -15,29 +14,25 @@ import java.time.ZoneId
 class TrainingCalendarViewModel(
     private val getTrainingData: GetTrainingDataInteractor,
 ) :
-    BaseViewModel<TrainingCalendarState, TrainingCalendarEvent, TrainingCalendarAction>(
+    BaseViewModel<TrainingCalendarState, TrainingCalendarAction, TrainingCalendarEvent>(
         initialState = TrainingCalendarState.Loading,
     ) {
     init {
         subscribeOnCalendarData()
     }
 
-    override fun obtainEvent(event: TrainingCalendarEvent?) {
+    override fun handleAction(action: TrainingCalendarAction) {
         viewModelScope.launch {
-            when (event) {
-                is TrainingCalendarEvent.OnTrainingDayClick -> {
-                    event.day
+            when (action) {
+                is TrainingCalendarAction.OnTrainingDayClick -> {
+                    action.day
                         .atStartOfDay(ZoneId.systemDefault())
                         .toInstant()
                         .toEpochMilli()
-                        .let(TrainingCalendarAction::OpenNewTrainingScreen)
-                }
-
-                null -> {
-                    TrainingCalendarAction.Empty
+                        .let(TrainingCalendarEvent::OpenNewTrainingScreen)
                 }
             }
-                .let { mutableActionFlow.emit(it) }
+                .let { mutableEventFlow.emit(it) }
         }
     }
 
@@ -60,7 +55,7 @@ class TrainingCalendarViewModel(
                     LocalDate.ofInstant(instant, ZoneId.systemDefault())
                 }
                     .let(TrainingCalendarState::Data)
-                    .let(mutableStateFlow::update)
+                    .let (::updateState)
             }
             .launchIn(viewModelScope)
     }

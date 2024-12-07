@@ -2,7 +2,12 @@
 <resources>
     <string name="exercises_list">Список упражнений</string>
     <string name="new_exercise_screen_title">Новое упражнение</string>
+    <string name="edit_exercise_screen_title">Редактирование упражнения</string>
     <string name="enter_exercise_hint">Название упражнения</string>
+    <string name="select_muscle_groups">Выберите мышечные группы, работающие в упражнении</string>
+    <string name="enter_info">Введите название упражнение и выберете задействованные мышечные группы</string>
     <string name="exercise_already_exists">Упражнение %s уже существует.</string>
     <string name="exercise_delete_message">Вы уверены, что хотите удалить упражнение?\nСтатистика также будет удалена.</string>
+    <string name="exit_without_save"> Изменения не будут сохранены!</string>
+    <string name="exit">Выйти</string>
 </resources>

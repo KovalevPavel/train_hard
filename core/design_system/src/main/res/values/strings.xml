@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="muscle_groups">Мышечные группы: %s</string>
+    <string name="add_set">Добавить подход</string>
+    <string name="save">Сохранить</string>
+    <string name="add">Добавить</string>
+    <string name="weight_reps_template">%.2f кг на %d повторений</string>
+    <string name="gym_card_date_range_title">Выберите интервал действия абонемента</string>
+
+    <string name="group_chest">Грудные</string>
+    <string name="group_legs">Ноги</string>
+    <string name="group_back">Спина</string>
+    <string name="group_deltoids">Плечи</string>
+    <string name="group_arms">Руки</string>
+    <string name="group_abs">Пресс</string>
+
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Отмена</string>
+
+    <string name="legs_quad">квадрицепс</string>
+    <string name="legs_bic">бицепс бедра</string>
+    <string name="legs_calves">икры</string>
+    <string name="chest_upper">верх грудных</string>
+    <string name="chest_lower">низ грудных</string>
+    <string name="back_lats">широчайшие</string>
+    <string name="back_loin">поясница</string>
+    <string name="back_trapezius">трапеции</string>
+    <string name="deltas_ant">передние дельты</string>
+    <string name="deltas_mid">средние дельты</string>
+    <string name="deltas_post">задние дельты</string>
+    <string name="arms_bic">бицепс</string>
+    <string name="arms_tric">трицепс</string>
+    <string name="arms_fore">предплечия</string>
+    <string name="abs_">пресс</string>
+</resources>

@@ -1,19 +1,13 @@
 plugins {
     id("trainhard.android.library")
     id("trainhard.android.compose")
-    alias(libs.plugins.google.ksp)
-}
-
-android {
-    ksp {
-        arg("compose-destinations.mode", "destinations")
-    }
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 dependencies {
     implementation(project(":navigation"))
     implementation(project(":core_presentation"))
     implementation(project(":ui_theme"))
-    implementation(libs.destinations.core)
-    ksp(libs.destinations.ksp)
+    implementation(libs.navigation)
+    implementation(libs.kotlinx.serialization.json)
 }

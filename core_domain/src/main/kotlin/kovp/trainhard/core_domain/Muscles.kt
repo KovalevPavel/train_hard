@@ -99,6 +99,10 @@ object Muscles {
         it.muscleId.equals(muscleId, ignoreCase = true)
     }
 
+    fun getMuscleByFullId(fullId: String) = allMuscles.firstOrNull {
+        it.id.equals(fullId, ignoreCase = true)
+    }
+
     fun getMuscleGroup(id: String) = allMuscles.firstOrNull {
         it.id.equals(id, ignoreCase = true)
     }

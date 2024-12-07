@@ -33,6 +33,7 @@ private const val HARDCODED_MONTHS = 24L
 
 @Composable
 fun CalendarData(
+    modifier: Modifier,
     muscleGroups: Map<LocalDate, List<MuscleGroup>>,
     onDayClick: (LocalDate) -> Unit,
 ) {
@@ -47,8 +48,9 @@ fun CalendarData(
         firstVisibleMonth = currentMonth,
         firstDayOfWeek = daysOfWeek.first(),
     )
+
     VerticalCalendar(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         state = state,
         dayContent = { day ->
             if (day.position != MonthDate) return@VerticalCalendar
@@ -56,6 +58,7 @@ fun CalendarData(
             Day(groups = trainings, day = day, onClick = onDayClick)
         },
         monthContainer = { calendarMonth, container ->
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = calendarMonth.yearMonth
@@ -82,7 +85,7 @@ fun CalendarData(
                 }
             }
             container()
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
         },
     )
 }

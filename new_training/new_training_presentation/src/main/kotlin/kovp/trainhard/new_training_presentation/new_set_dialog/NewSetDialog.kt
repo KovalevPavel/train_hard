@@ -16,20 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.result.ResultBackNavigator
-import com.ramcosta.composedestinations.spec.DestinationStyle
 import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.components.counter.CounterValue
 import kovp.trainhard.components.counter.TrainCounter
-import kovp.trainhard.new_training_api.NewSetDialogScreen.RequestAction
+import trainhard.kovp.core.RequestAction
 import kovp.trainhard.new_training_presentation.R
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
 private const val DEFAULT_COUNTER_WEIGHT_INCREMENT = 2.5f
 
-@Destination(style = DestinationStyle.Dialog::class)
 @Composable
 fun NewSetDialog(
     setId: Long,
@@ -38,7 +34,6 @@ fun NewSetDialog(
     initWeight: Float,
     initReps: Int,
     requestAction: RequestAction,
-    resultNavigator: ResultBackNavigator<NewSetDialogResult>,
 ) {
     var selectedWeight: CounterValue by remember {
         mutableStateOf(CounterValue.Float(initWeight))
@@ -77,21 +72,21 @@ fun NewSetDialog(
 
         TrainButton(
             modifier = Modifier.align(Alignment.End),
-            label = stringResource(id = kovp.trainhard.components.R.string.save),
+            label = stringResource(id = kovp.trainhard.design_system.R.string.save),
         ) {
-            resultNavigator.navigateBack(
-                result = NewSetDialogResult.Success(
-                    id = setId,
-                    setId = repsId,
-                    exerciseTitle = exerciseTitle,
-                    weight = selectedWeight.value.toFloat(),
-                    reps = selectedReps.value.toInt(),
-                    resultAction = when (requestAction) {
-                        RequestAction.ADD -> NewSetDialogResult.DialogAction.ADD_NEW
-                        RequestAction.EDIT -> NewSetDialogResult.DialogAction.EDIT_CURRENT
-                    },
-                )
-            )
+//            resultNavigator.navigateBack(
+//                result = NewSetDialogResult.Success(
+//                    id = setId,
+//                    setId = repsId,
+//                    exerciseTitle = exerciseTitle,
+//                    weight = selectedWeight.value.toFloat(),
+//                    reps = selectedReps.value.toInt(),
+//                    resultAction = when (requestAction) {
+//                        RequestAction.ADD -> NewSetDialogResult.DialogAction.ADD_NEW
+//                        RequestAction.EDIT -> NewSetDialogResult.DialogAction.EDIT_CURRENT
+//                    },
+//                )
+//            )
         }
     }
 }
