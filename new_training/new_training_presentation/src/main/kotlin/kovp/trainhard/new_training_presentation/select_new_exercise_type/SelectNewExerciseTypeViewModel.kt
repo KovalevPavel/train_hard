@@ -1,28 +1,28 @@
 package kovp.trainhard.new_training_presentation.select_new_exercise_type
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.new_training_presentation.NewSetDialogScreen
 import trainhard.kovp.core.RequestAction
 
 class SelectNewExerciseTypeViewModel(
-    private val exercisesApi: ExercisesApi,
+    exercisesApi: ExercisesApi,
 ) : BaseViewModel<SelectExerciseScreenState, SelectExerciseAction, SelectExerciseEvent>(
     initialState = SelectExerciseScreenState.Loading,
 ) {
     init {
-        viewModelScope.launch {
-            exercisesApi.getExercises().collect { list ->
-                list.let(SelectExerciseScreenState::Data)
-                    .let(::updateState)
+        exercisesApi.getExercises()
+            .onEach { list ->
+                list.let(SelectExerciseScreenState::Data).let(::updateState)
             }
-        }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: SelectExerciseAction) {
-        viewModelScope.launch {
+        launch {
             when (action) {
                 is SelectExerciseAction.OnExerciseClick -> {
                     NewSetDialogScreen(

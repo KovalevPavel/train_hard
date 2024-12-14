@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.training_calendar_domain.GetTrainingDataInteractor
 import java.time.Instant
@@ -22,7 +21,7 @@ class TrainingCalendarViewModel(
     }
 
     override fun handleAction(action: TrainingCalendarAction) {
-        viewModelScope.launch {
+        launch {
             when (action) {
                 is TrainingCalendarAction.OnTrainingDayClick -> {
                     action.day

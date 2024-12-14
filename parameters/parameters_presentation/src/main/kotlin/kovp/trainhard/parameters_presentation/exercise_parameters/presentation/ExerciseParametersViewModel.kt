@@ -1,8 +1,6 @@
 package kovp.trainhard.parameters_presentation.exercise_parameters.presentation
 
-import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.launch
 import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
 import kovp.trainhard.core_domain.Muscle
@@ -136,7 +134,7 @@ class ExerciseParametersViewModel(
 
     private fun handleError(e: Throwable) {
         Timber.e(e)
-        viewModelScope.launch {
+        launch {
             when (e) {
                 is EntityExistsException -> {
                     ExerciseParametersEvent.ShowMessageDialog(

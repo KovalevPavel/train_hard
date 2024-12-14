@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kovp.trainhard.components.exercise_type.ExerciseCardVs
 import kovp.trainhard.components.exercise_type.ExerciseCardVs.MuscleVs
 import kovp.trainhard.core_dialogs.DialogState
@@ -68,7 +67,7 @@ class ParametersViewModel(
     }
 
     private fun openParametersScreen(exercise: ExerciseCardVs?) {
-        viewModelScope.launch {
+        launch {
             mutableEventFlow.emit(
                 ParametersEvent.NavigateToExerciseParams(
                     arg = ExerciseParametersArg(
@@ -146,7 +145,7 @@ class ParametersViewModel(
 
     private fun handleError(e: Throwable) {
         Timber.e(e)
-        viewModelScope.launch {
+        launch {
             ParametersEvent.ShowBottomSheetDialog(
                 dialogState = MessageDialogState(
                     dialogId = UUID.randomUUID().toString(),
