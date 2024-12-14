@@ -34,36 +34,34 @@ class TrainingViewModel(
     }
 
     override fun handleAction(action: TrainingAction) {
-        launch(
-            action = {
-                when (action) {
-                    is TrainingAction.OnAddExerciseClick -> {
-                        TrainingEvent.NavigateToSelectExerciseType
-                            .let { mutableEventFlow.emit(it) }
-                    }
-
-                    is TrainingAction.NavigateToSetDialog -> {
-                        TrainingEvent.NavigateToEditSetDialog(data = action.dialog)
-                            .let { mutableEventFlow.emit(it) }
-                    }
-
-                    is TrainingAction.AddOrEditSet -> {
-                        addOrEditSet(dialogResult = action.data)
-                    }
-
-                    is TrainingAction.AddNewCompletedExercise -> {
-                        addNewCompletedExercise(dialogResult = action.data)
-                    }
-
-                    is TrainingAction.OnRemoveSetClick -> {
-                        removeSet(
-                            setDto = action.setDto,
-                            setIndex = action.setIndex,
-                        )
-                    }
+        launch {
+            when (action) {
+                is TrainingAction.OnAddExerciseClick -> {
+                    TrainingEvent.NavigateToSelectExerciseType
+                        .let { mutableEventFlow.emit(it) }
                 }
-            },
-        )
+
+                is TrainingAction.NavigateToSetDialog -> {
+                    TrainingEvent.NavigateToEditSetDialog(data = action.dialog)
+                        .let { mutableEventFlow.emit(it) }
+                }
+
+                is TrainingAction.AddOrEditSet -> {
+                    addOrEditSet(dialogResult = action.data)
+                }
+
+                is TrainingAction.AddNewCompletedExercise -> {
+                    addNewCompletedExercise(dialogResult = action.data)
+                }
+
+                is TrainingAction.OnRemoveSetClick -> {
+                    removeSet(
+                        setDto = action.setDto,
+                        setIndex = action.setIndex,
+                    )
+                }
+            }
+        }
     }
 
     private fun subscribeOnSetsList() {

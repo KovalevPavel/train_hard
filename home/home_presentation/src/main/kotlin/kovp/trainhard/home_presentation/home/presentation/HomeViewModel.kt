@@ -1,8 +1,6 @@
 package kovp.trainhard.home_presentation.home.presentation
 
-import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.home_domain.EditGymCardHealthInteractor
 import kovp.trainhard.home_domain.GetCurrentDateInteractor
@@ -64,19 +62,17 @@ class HomeViewModel(
     private var endDate: Long? = null
 
     init {
-        launch(
-            action = {
-                getGymCardHealth()?.let { (start, end) ->
-                    startDate = start
-                    endDate = end
-                }
-                updateUi()
+        launch {
+            getGymCardHealth()?.let { (start, end) ->
+                startDate = start
+                endDate = end
             }
-        )
+            updateUi()
+        }
     }
 
     override fun handleAction(action: HomeAction) {
-        viewModelScope.launch {
+        launch {
             when (action) {
                 is HomeAction.OnStartTrainingClick -> {
                     HomeEvent.OpenNewTrainingScreen.let { mutableEventFlow.emit(it) }

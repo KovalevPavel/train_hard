@@ -155,28 +155,26 @@ class ExerciseParametersViewModel(
     }
 
     private fun tryNavigateBack() {
-        launch(
-            action = {
-                if (currentExercise == initExercise) {
-                    navigateBack()
-                } else {
-                    MessageDialogState(
-                        dialogId = EXIT_DIALOG_ID,
-                        title = resourceProvider.getString(R.string.exit_without_save),
-                        positiveAction = DialogState.Action(
-                            action = resourceProvider.getString(R.string.exit)
+        launch {
+            if (currentExercise == initExercise) {
+                navigateBack()
+            } else {
+                MessageDialogState(
+                    dialogId = EXIT_DIALOG_ID,
+                    title = resourceProvider.getString(R.string.exit_without_save),
+                    positiveAction = DialogState.Action(
+                        action = resourceProvider.getString(R.string.exit)
+                    ),
+                    negativeAction = DialogState.Action(
+                        action = resourceProvider.getString(
+                            resId = kovp.trainhard.design_system.R.string.action_cancel,
                         ),
-                        negativeAction = DialogState.Action(
-                            action = resourceProvider.getString(
-                                resId = kovp.trainhard.design_system.R.string.action_cancel,
-                            ),
-                        ),
-                    )
-                        .let(ExerciseParametersEvent::ShowMessageDialog)
-                        .let { mutableEventFlow.emit(it) }
-                }
+                    ),
+                )
+                    .let(ExerciseParametersEvent::ShowMessageDialog)
+                    .let { mutableEventFlow.emit(it) }
             }
-        )
+        }
     }
 
     private suspend fun navigateBack() {
@@ -184,13 +182,11 @@ class ExerciseParametersViewModel(
     }
 
     private fun handleDialogPositiveAction(dialogId: String) {
-        launch(
-            action = {
-                when(dialogId) {
-                    EXIT_DIALOG_ID -> mutableEventFlow.emit(ExerciseParametersEvent.NavigateBack)
-                }
-            },
-        )
+        launch {
+            when (dialogId) {
+                EXIT_DIALOG_ID -> mutableEventFlow.emit(ExerciseParametersEvent.NavigateBack)
+            }
+        }
     }
 
     companion object {
