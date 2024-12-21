@@ -6,4 +6,7 @@ sealed interface SelectExerciseEvent {
     data class NavigateToNewSetDialog(
         val data: NewSetDialogScreen,
     ) : SelectExerciseEvent
+
+
+    data object NavigateBack : SelectExerciseEvent
 }

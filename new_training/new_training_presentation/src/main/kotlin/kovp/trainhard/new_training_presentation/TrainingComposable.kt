@@ -1,5 +1,9 @@
 package kovp.trainhard.new_training_presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,14 +65,33 @@ fun TrainingComposable(
 //        TrainingEvent.AddNewCompletedExercise(result).let(vm::obtainEvent)
 //    }
 
-    StateContainer(state = state) {
-        when (it) {
-            is TrainingScreenState.Loading -> {
-                FullscreenLoader()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = themeColors.black,
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = state is TrainingScreenState.Data,
+                enter = scaleIn(tween(500)),
+                exit = scaleOut(tween(500)),
+            ) {
+                TrainFab(icon = Icons.Default.Add) {
+                    TrainingAction.OnAddExerciseClick.let(vm::handleAction)
+                }
             }
+        },
+    ) { paddings ->
+        StateContainer(
+            modifier = Modifier.padding(top = paddings.calculateTopPadding()),
+            state = state
+        ) {
+            when (it) {
+                is TrainingScreenState.Loading -> {
+                    FullscreenLoader()
+                }
 
-            is TrainingScreenState.Data -> {
-                DataContent(state = it, onAction = vm::handleAction)
+                is TrainingScreenState.Data -> {
+                    DataContent(state = it, onAction = vm::handleAction)
+                }
             }
         }
     }
@@ -79,59 +102,48 @@ private fun DataContent(
     state: TrainingScreenState.Data,
     onAction: (TrainingAction) -> Unit,
 ) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        containerColor = themeColors.black,
-        floatingActionButton = {
-            TrainFab(icon = Icons.Default.Add) {
-                onAction(TrainingAction.OnAddExerciseClick)
-            }
-        },
-    ) { paddings ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(top = paddings.calculateTopPadding())
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(state.items) {
-                val (initWeight, initReps) = it.sets
-                    .lastOrNull()
-                    ?: (0f to 0)
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(state.items) {
+            val (initWeight, initReps) = it.sets
+                .lastOrNull()
+                ?: (0f to 0)
 
-                val newSetDialog = NewSetDialogScreen(
-                    id = it.setId,
-                    exerciseTitle = it.exerciseTitle,
-                    initWeight = initWeight,
-                    initReps = initReps,
-                    requestAction = RequestAction.Add,
-                )
-                    .let(TrainingAction::NavigateToSetDialog)
+            val newSetDialog = NewSetDialogScreen(
+                id = it.setId,
+                exerciseTitle = it.exerciseTitle,
+                initWeight = initWeight,
+                initReps = initReps,
+                requestAction = RequestAction.Add,
+            )
+                .let(TrainingAction::NavigateToSetDialog)
 
-                CompletedExerciseCard(
-                    card = it,
-                    onAddSetClick = {
-                        onAction(newSetDialog)
-                    },
-                    onRemoveSetClick = { id ->
-                        onAction(OnRemoveSetClick(setDto = it, setIndex = id))
-                    },
-                    onEditSetClick = { id ->
-                        NewSetDialogScreen(
-                            id = it.setId,
-                            setId = id.toLong(),
-                            exerciseTitle = it.exerciseTitle,
-                            initWeight = initWeight,
-                            initReps = initReps,
-                            requestAction = RequestAction.Edit,
-                        )
-                            .let(TrainingAction::NavigateToSetDialog)
-                            .let { onAction(it) }
-                    }
-                )
-            }
+            CompletedExerciseCard(
+                card = it,
+                onAddSetClick = {
+                    onAction(newSetDialog)
+                },
+                onRemoveSetClick = { id ->
+                    onAction(OnRemoveSetClick(setDto = it, setIndex = id))
+                },
+                onEditSetClick = { id ->
+                    NewSetDialogScreen(
+                        id = it.setId,
+                        setId = id.toLong(),
+                        exerciseTitle = it.exerciseTitle,
+                        initWeight = initWeight,
+                        initReps = initReps,
+                        requestAction = RequestAction.Edit,
+                    )
+                        .let(TrainingAction::NavigateToSetDialog)
+                        .let { a -> onAction(a) }
+                }
+            )
         }
     }
 }

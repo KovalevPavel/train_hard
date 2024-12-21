@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import kovp.trainhard.navigation.ComposableScreen
-import kovp.trainhard.new_training_presentation.select_new_exercise_type.SelectNewExerciseTypeComposable
+import kovp.trainhard.new_training_presentation.select_new_exercise_type.ui.SelectNewExerciseTypeComposable
 
 @Serializable
 object SelectExerciseTypeScreen: ComposableScreen {
