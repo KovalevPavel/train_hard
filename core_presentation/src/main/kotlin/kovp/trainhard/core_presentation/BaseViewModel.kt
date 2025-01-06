@@ -3,10 +3,11 @@ package kovp.trainhard.core_presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import trainhard.kovp.core.coroutines.Dispatcher
 import trainhard.kovp.core.coroutines.Scope
@@ -18,17 +19,21 @@ abstract class BaseViewModel<State : Any, Action : Any, Event : Any>(
     val state: StateFlow<State> get() = _state
     private val _state = MutableStateFlow(initialState)
 
-    val eventFlow: Flow<Event> by lazy { mutableEventFlow }
+    val eventFlow: Flow<Event> by lazy { _channel.receiveAsFlow() }
 
-    protected val mutableEventFlow = MutableSharedFlow<Event>()
+    private val _channel = Channel<Event>()
 
     abstract fun handleAction(action: Action)
 
-    fun updateState(newState: State) {
+    protected fun updateState(newState: State) {
         _state.value = newState
     }
 
-    fun launch(
+    protected suspend fun emitEvent(event: Event) {
+        _channel.send(event)
+    }
+
+    protected fun launch(
         dispatcher: Dispatcher = Dispatcher.Default,
         error: (Throwable) -> Unit = {},
         action: suspend Scope.() -> Unit,

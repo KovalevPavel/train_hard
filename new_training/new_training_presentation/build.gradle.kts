@@ -1,6 +1,7 @@
 plugins {
     id("trainhard.android.library")
     id("trainhard.android.compose")
+    id("kotlin-parcelize")
     alias(libs.plugins.kotlinx.serialization)
 }
 

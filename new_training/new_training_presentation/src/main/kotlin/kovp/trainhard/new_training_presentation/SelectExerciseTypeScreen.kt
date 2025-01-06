@@ -10,6 +10,8 @@ import kovp.trainhard.new_training_presentation.select_new_exercise_type.ui.Sele
 
 @Serializable
 object SelectExerciseTypeScreen: ComposableScreen {
+    const val EXERCISE_TITLE_ID = "EXERCISE_TITLE_ID"
+
     override fun createScreen(navGraphBuilder: NavGraphBuilder, navController: NavController) {
         navGraphBuilder.composable<SelectExerciseTypeScreen>(
             enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start) },

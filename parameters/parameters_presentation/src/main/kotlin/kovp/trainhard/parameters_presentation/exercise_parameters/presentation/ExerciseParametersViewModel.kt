@@ -113,7 +113,7 @@ class ExerciseParametersViewModel(
                             .let(DialogState::Action),
                     )
                         .let(ExerciseParametersEvent::ShowMessageDialog)
-                        .let { mutableEventFlow.emit(it) }
+                        .let { emitEvent(it) }
 
                     return@launch
                 }
@@ -146,7 +146,7 @@ class ExerciseParametersViewModel(
                             ),
                         ),
                     )
-                        .let { mutableEventFlow.emit(it) }
+                        .let { emitEvent(it) }
                 }
             }
         }
@@ -170,19 +170,19 @@ class ExerciseParametersViewModel(
                     ),
                 )
                     .let(ExerciseParametersEvent::ShowMessageDialog)
-                    .let { mutableEventFlow.emit(it) }
+                    .let { emitEvent(it) }
             }
         }
     }
 
     private suspend fun navigateBack() {
-        mutableEventFlow.emit(ExerciseParametersEvent.NavigateBack)
+        emitEvent(event = ExerciseParametersEvent.NavigateBack)
     }
 
     private fun handleDialogPositiveAction(dialogId: String) {
         launch {
             when (dialogId) {
-                EXIT_DIALOG_ID -> mutableEventFlow.emit(ExerciseParametersEvent.NavigateBack)
+                EXIT_DIALOG_ID -> emitEvent(event = ExerciseParametersEvent.NavigateBack)
             }
         }
     }

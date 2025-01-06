@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.ExercisesApi
-import kovp.trainhard.new_training_presentation.NewSetDialogScreen
-import trainhard.kovp.core.RequestAction
 
 class SelectNewExerciseTypeViewModel(
     exercisesApi: ExercisesApi,
@@ -33,14 +31,11 @@ class SelectNewExerciseTypeViewModel(
         launch {
             when (action) {
                 is SelectExerciseAction.OnExerciseClick -> {
-                    NewSetDialogScreen(
-                        exerciseTitle = action.data.title,
-                        requestAction = RequestAction.Add,
-                    )
-                        .let(SelectExerciseEvent::NavigateToNewSetDialog)
+                    action.data.title
+                        .let(SelectExerciseEvent::NavigateBack)
                 }
             }
-                .let { mutableEventFlow.emit(it) }
+                .let { emitEvent(it) }
         }
     }
 }

@@ -31,7 +31,7 @@ class TrainingCalendarViewModel(
                         .let(TrainingCalendarEvent::OpenNewTrainingScreen)
                 }
             }
-                .let { mutableEventFlow.emit(it) }
+                .let { emitEvent(it) }
         }
     }
 

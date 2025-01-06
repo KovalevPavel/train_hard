@@ -14,8 +14,8 @@ import kovp.trainhard.new_trainig_domain.GetAllCompletedExercisesInteractor
 import kovp.trainhard.new_trainig_domain.GetExerciseByIdInteractor
 import kovp.trainhard.new_trainig_domain.RemoveCompletedExerciseInteractor
 import kovp.trainhard.new_trainig_domain.UpdateCompletedExerciseInteractor
-import kovp.trainhard.new_training_presentation.new_set_dialog.NewSetDialogResult
-import kovp.trainhard.new_training_presentation.new_set_dialog.NewSetDialogResult.DialogAction
+import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogResult
+import trainhard.kovp.core.RequestAction
 
 class TrainingViewModel(
     private val currentTimestamp: Long,
@@ -37,17 +37,15 @@ class TrainingViewModel(
         launch {
             when (action) {
                 is TrainingAction.OnAddExerciseClick -> {
-                    TrainingEvent.NavigateToSelectExerciseType
-                        .let { mutableEventFlow.emit(it) }
+                    emitEvent(event = TrainingEvent.NavigateToSelectExerciseType)
                 }
 
                 is TrainingAction.NavigateToSetDialog -> {
-                    TrainingEvent.NavigateToEditSetDialog(data = action.dialog)
-                        .let { mutableEventFlow.emit(it) }
+                    emitEvent(event = TrainingEvent.NavigateToEditSetDialog(data = action.dialog))
                 }
 
                 is TrainingAction.AddOrEditSet -> {
-                    addOrEditSet(dialogResult = action.data)
+                    addOrEditSet(dialogResult = action.data, action = action.action)
                 }
 
                 is TrainingAction.AddNewCompletedExercise -> {
@@ -77,7 +75,7 @@ class TrainingViewModel(
             .launchIn(viewModelScope)
     }
 
-    private suspend fun addNewCompletedExercise(dialogResult: NewSetDialogResult.Success) {
+    private suspend fun addNewCompletedExercise(dialogResult: EditSetDialogResult.Success) {
         getExerciseById(id = dialogResult.exerciseTitle)?.let {
             addNewCompletedSet(
                 timestamp = currentTimestamp,
@@ -89,18 +87,18 @@ class TrainingViewModel(
         }
     }
 
-    private suspend fun addOrEditSet(dialogResult: NewSetDialogResult.Success) {
+    private suspend fun addOrEditSet(dialogResult: EditSetDialogResult.Success, action: RequestAction) {
         val completedExercise = completedExercises.firstOrNull {
             it.id == dialogResult.id && it.exercise.title == dialogResult.exerciseTitle
         }
             ?: return
 
-        val updatedExercise = when (dialogResult.resultAction) {
-            DialogAction.ADD_NEW -> {
+        val updatedExercise = when (action) {
+            RequestAction.Add -> {
                 completedExercise + listOf(dialogResult.weight to dialogResult.reps)
             }
 
-            DialogAction.EDIT_CURRENT -> {
+            RequestAction.Edit -> {
                 val modifiedReps = completedExercise.sets
                     .mapIndexed { i, p ->
                         if (i.toLong() == dialogResult.setId) {

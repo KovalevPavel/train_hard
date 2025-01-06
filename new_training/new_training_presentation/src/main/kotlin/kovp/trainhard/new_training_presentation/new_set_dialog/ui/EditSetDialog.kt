@@ -1,4 +1,4 @@
-package kovp.trainhard.new_training_presentation.new_set_dialog
+package kovp.trainhard.new_training_presentation.new_set_dialog.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,21 +19,21 @@ import androidx.compose.ui.unit.dp
 import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.components.counter.CounterValue
 import kovp.trainhard.components.counter.TrainCounter
-import trainhard.kovp.core.RequestAction
 import kovp.trainhard.new_training_presentation.R
+import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogResult
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
 private const val DEFAULT_COUNTER_WEIGHT_INCREMENT = 2.5f
 
 @Composable
-fun NewSetDialog(
+fun EditSetDialog(
     setId: Long,
     repsId: Long,
     exerciseTitle: String,
     initWeight: Float,
     initReps: Int,
-    requestAction: RequestAction,
+    onApplyClick: (EditSetDialogResult.Success) -> Unit,
 ) {
     var selectedWeight: CounterValue by remember {
         mutableStateOf(CounterValue.Float(initWeight))
@@ -73,20 +73,17 @@ fun NewSetDialog(
         TrainButton(
             modifier = Modifier.align(Alignment.End),
             label = stringResource(id = kovp.trainhard.design_system.R.string.save),
-        ) {
-//            resultNavigator.navigateBack(
-//                result = NewSetDialogResult.Success(
-//                    id = setId,
-//                    setId = repsId,
-//                    exerciseTitle = exerciseTitle,
-//                    weight = selectedWeight.value.toFloat(),
-//                    reps = selectedReps.value.toInt(),
-//                    resultAction = when (requestAction) {
-//                        RequestAction.ADD -> NewSetDialogResult.DialogAction.ADD_NEW
-//                        RequestAction.EDIT -> NewSetDialogResult.DialogAction.EDIT_CURRENT
-//                    },
-//                )
-//            )
-        }
+            onClick = {
+                onApplyClick(
+                    EditSetDialogResult.Success(
+                        id = setId,
+                        setId = repsId,
+                        exerciseTitle = exerciseTitle,
+                        weight = selectedWeight.value.toFloat(),
+                        reps = selectedReps.value.toInt(),
+                    )
+                )
+            }
+        )
     }
 }

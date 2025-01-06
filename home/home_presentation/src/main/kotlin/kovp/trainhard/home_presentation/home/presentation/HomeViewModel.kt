@@ -75,12 +75,16 @@ class HomeViewModel(
         launch {
             when (action) {
                 is HomeAction.OnStartTrainingClick -> {
-                    HomeEvent.OpenNewTrainingScreen.let { mutableEventFlow.emit(it) }
+                    emitEvent(event = HomeEvent.OpenNewTrainingScreen)
                 }
 
                 is HomeAction.OnGymCardPlateClick -> {
-                    HomeEvent.OpenDatePickerDialog(startDate = startDate, endDate = endDate)
-                        .let { mutableEventFlow.emit(it) }
+                    emitEvent(
+                        event = HomeEvent.OpenDatePickerDialog(
+                            startDate = startDate,
+                            endDate = endDate,
+                        ),
+                    )
                 }
 
                 is HomeAction.EditGymCardDates -> {
@@ -90,7 +94,7 @@ class HomeViewModel(
                 }
 
                 is HomeAction.OnCalendarClick -> {
-                    HomeEvent.OpenTrainingCalendar.let { mutableEventFlow.emit(it) }
+                    emitEvent(event = HomeEvent.OpenTrainingCalendar)
                 }
             }
         }

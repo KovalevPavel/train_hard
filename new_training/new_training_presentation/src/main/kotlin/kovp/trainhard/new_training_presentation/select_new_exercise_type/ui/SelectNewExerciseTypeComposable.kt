@@ -32,6 +32,7 @@ import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.text_field.TrainTextField
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_presentation.R
+import kovp.trainhard.new_training_presentation.SelectExerciseTypeScreen
 import kovp.trainhard.new_training_presentation.di.selectExerciseModule
 import kovp.trainhard.new_training_presentation.select_new_exercise_type.ExerciseVs
 import kovp.trainhard.new_training_presentation.select_new_exercise_type.SelectExerciseAction
@@ -55,7 +56,7 @@ fun SelectNewExerciseTypeComposable(navController: NavController) {
     val onBackClick = remember {
         {
             handleEvent(
-                event = SelectExerciseEvent.NavigateBack,
+                event = SelectExerciseEvent.NavigateBack(),
                 navController = navController,
             )
         }
@@ -147,11 +148,11 @@ private fun DataContent(
 
 private fun handleEvent(event: SelectExerciseEvent, navController: NavController) {
     when (event) {
-        is SelectExerciseEvent.NavigateToNewSetDialog -> {
-
-        }
-
         is SelectExerciseEvent.NavigateBack -> {
+            event.exerciseTitle?.let {
+                navController.previousBackStackEntry?.savedStateHandle
+                    ?.set(SelectExerciseTypeScreen.EXERCISE_TITLE_ID, it)
+            }
             navController.navigateUp()
         }
     }

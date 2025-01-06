@@ -1,10 +1,8 @@
-package kovp.trainhard.new_training_presentation
+package kovp.trainhard.new_training_presentation.new_set_dialog
 
-import kotlinx.serialization.Serializable
 import trainhard.kovp.core.RequestAction
 
-@Serializable
-data class NewSetDialogScreen(
+data class EditSetDialogVs(
     val id: Long = 0,
     val setId: Long = 0,
     val exerciseTitle: String,

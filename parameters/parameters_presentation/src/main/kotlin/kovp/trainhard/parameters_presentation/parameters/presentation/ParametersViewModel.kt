@@ -56,8 +56,8 @@ class ParametersViewModel(
     private fun tryToDeleteExercise(exercise: ExerciseCardVs) {
         launch(
             action = {
-                mutableEventFlow.emit(
-                    ParametersEvent.ShowBottomSheetDialog(
+                emitEvent(
+                    event = ParametersEvent.ShowBottomSheetDialog(
                         dialogState = getRemoveExerciseAlert(exercise = exercise),
                     ),
                 )
@@ -68,8 +68,8 @@ class ParametersViewModel(
 
     private fun openParametersScreen(exercise: ExerciseCardVs?) {
         launch {
-            mutableEventFlow.emit(
-                ParametersEvent.NavigateToExerciseParams(
+            emitEvent(
+                event = ParametersEvent.NavigateToExerciseParams(
                     arg = ExerciseParametersArg(
                         title = exercise?.title.orEmpty(),
                         muscleIds = exercise?.muscles?.map(MuscleVs::id).orEmpty(),
@@ -155,7 +155,7 @@ class ParametersViewModel(
                     ),
                 )
             )
-                .let { mutableEventFlow.emit(it) }
+                .let { emitEvent(it) }
         }
     }
 
