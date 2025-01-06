@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.selectors.DateRangeSelectorState
+import kovp.trainhard.core_presentation.subscribeForResult
 import kovp.trainhard.home_presentation.di.homeModule
 import kovp.trainhard.home_presentation.home.presentation.HomeAction
 import kovp.trainhard.home_presentation.home.presentation.HomeEvent
@@ -123,16 +124,19 @@ private fun checkCardHealthUpdates(
     navController: NavController,
     onAction: (HomeAction.EditGymCardDates) -> Unit,
 ) {
-    navController.currentBackStackEntry?.savedStateHandle
-        ?.get<DateRangeSelectorState>(SelectGymDatesScreen.DATE_RANGE_KEY)
-        ?.let { (start, end) ->
-            val (currentStart, currentEnd) = currentCardHealth
-            if (start != currentStart || end != currentEnd) {
-                onAction(
-                    HomeAction.EditGymCardDates(start ?: return@let, end ?: return@let)
+    navController.subscribeForResult<DateRangeSelectorState>(
+        key = SelectGymDatesScreen.DATE_RANGE_KEY,
+    ) { (start, end) ->
+        val (currentStart, currentEnd) = currentCardHealth
+        if (start != currentStart || end != currentEnd) {
+            onAction(
+                HomeAction.EditGymCardDates(
+                    start ?: return@subscribeForResult,
+                    end ?: return@subscribeForResult,
                 )
-            }
+            )
         }
+    }
 }
 
 private fun handleEvent(event: HomeEvent, navController: NavController) {

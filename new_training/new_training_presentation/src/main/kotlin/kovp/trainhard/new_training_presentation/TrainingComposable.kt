@@ -28,6 +28,7 @@ import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.fab.TrainFab
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.train_card.CompletedExerciseCard
+import kovp.trainhard.core_presentation.subscribeForResult
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_presentation.TrainingAction.OnRemoveSetClick
 import kovp.trainhard.new_training_presentation.di.newTrainingModule
@@ -70,19 +71,14 @@ fun TrainingComposable(
         editSetDialogState = null
     }
 
-    navController.currentBackStackEntry
-        ?.savedStateHandle
-        ?.get<String>(SelectExerciseTypeScreen.EXERCISE_TITLE_ID)
-        ?.let {
-            navController.currentBackStackEntry?.savedStateHandle
-                ?.remove<String>(SelectExerciseTypeScreen.EXERCISE_TITLE_ID)
-            EditSetDialogVs(
-                exerciseTitle = it,
-                requestAction = RequestAction.Add,
-            )
-                .let(TrainingAction::NavigateToSetDialog)
-        }
-        ?.let(vm::handleAction)
+    navController.subscribeForResult<String>(SelectExerciseTypeScreen.EXERCISE_TITLE_ID) {
+        EditSetDialogVs(
+            exerciseTitle = it,
+            requestAction = RequestAction.Add,
+        )
+            .let(TrainingAction::NavigateToSetDialog)
+            .let(vm::handleAction)
+    }
 
 //    editSetResRecipient.onNavResult {
 //        val result = it.getOr { NewSetDialogResult.Error } as? NewSetDialogResult.Success
