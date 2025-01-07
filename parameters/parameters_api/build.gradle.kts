@@ -9,4 +9,5 @@ dependencies {
     implementation(libs.navigation)
     implementation(project(":parameters_presentation"))
     implementation(libs.kotlinx.serialization.json)
+    api(project(":parameters_core"))
 }

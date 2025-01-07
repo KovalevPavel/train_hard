@@ -11,7 +11,7 @@ import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
 import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.models.ExerciseVo
-import kovp.trainhard.parameters_domain.GetAllExercisesInteractor
+import kovp.trainhard.parameters_core.GetAllExercisesInteractor
 import kovp.trainhard.parameters_domain.RemoveExerciseInteractor
 import kovp.trainhard.parameters_presentation.R
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg

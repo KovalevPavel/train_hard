@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -32,17 +34,18 @@ class MainActivity : ComponentActivity() {
         override val viewModelStore: ViewModelStore = ViewModelStore()
     }
 
+    private val splash: SplashScreen by lazy { installSplashScreen() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
+        splash
         super.onCreate(savedInstanceState)
 
         setContent {
             val viewModel: MainActivityViewModel = koinViewModel()
-
-            //TODO: добавить скрытие сплеш-скрина после инициализации БД
+            splash.setKeepOnScreenCondition { !viewModel.dbIsInitialized }
 
             val systemUiController = rememberSystemUiController()
-
             val navController = rememberNavController()
 
             CompositionLocalProvider(
@@ -69,9 +72,18 @@ class MainActivity : ComponentActivity() {
                             enterTransition = { scaleIn(initialScale = 1f) },
                             exitTransition = { scaleOut(targetScale = 1f) },
                         ) {
-                            HomeBaseRoute.createScreen(navGraphBuilder = this, navController = navController)
-                            StatisticsBaseRoute.createScreen(navGraphBuilder = this, navController = navController)
-                            ParametersBaseRoute.createScreen(navGraphBuilder = this, navController = navController)
+                            HomeBaseRoute.createScreen(
+                                navGraphBuilder = this,
+                                navController = navController,
+                            )
+                            StatisticsBaseRoute.createScreen(
+                                navGraphBuilder = this,
+                                navController = navController,
+                            )
+                            ParametersBaseRoute.createScreen(
+                                navGraphBuilder = this,
+                                navController = navController,
+                            )
                         }
                         BottomBar(navController = navController)
                     }

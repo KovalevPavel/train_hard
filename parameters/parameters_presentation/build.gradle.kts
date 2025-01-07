@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":ui_theme"))
     implementation(project(":parameters_domain"))
+    implementation(project(":parameters_core"))
 
     implementation(libs.koin.compose)
     implementation(libs.navigation)

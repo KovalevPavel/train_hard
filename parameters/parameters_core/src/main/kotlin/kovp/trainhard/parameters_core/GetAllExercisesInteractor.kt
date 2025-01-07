@@ -1,4 +1,4 @@
-package kovp.trainhard.parameters_domain
+package kovp.trainhard.parameters_core
 
 import kotlinx.coroutines.flow.Flow
 import kovp.trainhard.database_api.ExercisesApi
