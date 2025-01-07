@@ -1,14 +1,12 @@
-package kovp.trainhard.new_training_presentation
+package kovp.trainhard.new_training_presentation.screen
 
 import kovp.trainhard.components.train_card.CompletedExerciseCardDto
-import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogResult
-import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogVs
-import trainhard.kovp.core.RequestAction
+import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogResult
+import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogVs
 
 sealed interface TrainingAction {
     data class AddOrEditSet(
         val data: EditSetDialogResult.Success,
-        val action: RequestAction,
     ) : TrainingAction
 
     data class AddNewCompletedExercise(

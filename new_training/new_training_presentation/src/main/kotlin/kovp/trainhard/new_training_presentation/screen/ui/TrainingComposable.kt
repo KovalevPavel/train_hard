@@ -1,4 +1,4 @@
-package kovp.trainhard.new_training_presentation
+package kovp.trainhard.new_training_presentation.screen.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -30,10 +30,16 @@ import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.train_card.CompletedExerciseCard
 import kovp.trainhard.core_presentation.subscribeForResult
 import kovp.trainhard.navigation.SubscribeOnEvents
-import kovp.trainhard.new_training_presentation.TrainingAction.OnRemoveSetClick
+import kovp.trainhard.new_training_presentation.SelectExerciseTypeScreen
+import kovp.trainhard.new_training_presentation.screen.TrainingAction.OnRemoveSetClick
 import kovp.trainhard.new_training_presentation.di.newTrainingModule
-import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogResult
-import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogVs
+import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogResult
+import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogVs
+import kovp.trainhard.new_training_presentation.edit_set_dialog.ui.EditSetDialogComposable
+import kovp.trainhard.new_training_presentation.screen.TrainingAction
+import kovp.trainhard.new_training_presentation.screen.TrainingEvent
+import kovp.trainhard.new_training_presentation.screen.TrainingScreenState
+import kovp.trainhard.new_training_presentation.screen.TrainingViewModel
 import kovp.trainhard.ui_theme.providers.themeColors
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.module.rememberKoinModules
@@ -57,9 +63,7 @@ fun TrainingComposable(
             handleEvent(
                 event = it,
                 navController = navController,
-                onNewEditSetDialogState = { st ->
-                    editSetDialogState = st
-                },
+                onNewEditSetDialogState = { st -> editSetDialogState = st },
             )
         },
     )
@@ -67,8 +71,17 @@ fun TrainingComposable(
     EditSetDialog(
         state = editSetDialogState,
         onDismiss = { editSetDialogState = null },
-    ) {
+    ) { result, action ->
         editSetDialogState = null
+        if (result !is EditSetDialogResult.Success) {
+            return@EditSetDialog
+        }
+
+        when (action) {
+            RequestAction.Add -> TrainingAction.AddNewCompletedExercise(data = result)
+            RequestAction.Edit -> TrainingAction.AddOrEditSet(data = result)
+        }
+            .let(vm::handleAction)
     }
 
     navController.subscribeForResult<String>(SelectExerciseTypeScreen.EXERCISE_TITLE_ID) {
@@ -79,24 +92,6 @@ fun TrainingComposable(
             .let(TrainingAction::NavigateToSetDialog)
             .let(vm::handleAction)
     }
-
-//    editSetResRecipient.onNavResult {
-//        val result = it.getOr { NewSetDialogResult.Error } as? NewSetDialogResult.Success
-//            ?: run {
-//                vm.obtainEvent(null)
-//                return@onNavResult
-//            }
-//        TrainingEvent.AddOrEditSet(result).let(vm::obtainEvent)
-//    }
-
-//    newSetResRecipient.onNavResult {
-//        val result = it.getOr { NewSetDialogResult.Error } as? NewSetDialogResult.Success
-//            ?: run {
-//                vm.obtainEvent(null)
-//                return@onNavResult
-//            }
-//        TrainingEvent.AddNewCompletedExercise(result).let(vm::obtainEvent)
-//    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -147,19 +142,19 @@ private fun DataContent(
                 .lastOrNull()
                 ?: (0f to 0)
 
-            val newSetDialog = EditSetDialogVs(
+            val newSetDialogAction = EditSetDialogVs(
                 id = it.setId,
                 exerciseTitle = it.exerciseTitle,
                 initWeight = initWeight,
                 initReps = initReps,
-                requestAction = RequestAction.Add,
+                requestAction = RequestAction.Edit,
             )
                 .let(TrainingAction::NavigateToSetDialog)
 
             CompletedExerciseCard(
                 card = it,
                 onAddSetClick = {
-                    onAction(newSetDialog)
+                    onAction(newSetDialogAction)
                 },
                 onRemoveSetClick = { id ->
                     onAction(OnRemoveSetClick(setDto = it, setIndex = id))
@@ -203,19 +198,19 @@ private fun handleEvent(
 private fun EditSetDialog(
     state: EditSetDialogVs?,
     onDismiss: () -> Unit,
-    onApplyClick: (EditSetDialogResult.Success) -> Unit,
+    onApplyClick: (EditSetDialogResult, RequestAction) -> Unit,
 ) {
     if (state != null) {
         BasicAlertDialog(
             onDismissRequest = onDismiss,
         ) {
-            kovp.trainhard.new_training_presentation.new_set_dialog.ui.EditSetDialog(
-                setId = state.id,
-                repsId = state.id,
+            EditSetDialogComposable(
+                exerciseId = state.id,
+                setId = state.setId,
                 exerciseTitle = state.exerciseTitle,
                 initWeight = state.initWeight,
                 initReps = state.initReps,
-                onApplyClick = onApplyClick,
+                onApplyClick = { onApplyClick(it, state.requestAction) },
             )
         }
     }

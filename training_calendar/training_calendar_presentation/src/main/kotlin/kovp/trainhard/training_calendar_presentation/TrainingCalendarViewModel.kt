@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kovp.trainhard.core_domain.toStartOfDay
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.training_calendar_domain.GetTrainingDataInteractor
 import java.time.Instant
@@ -25,9 +26,7 @@ class TrainingCalendarViewModel(
             when (action) {
                 is TrainingCalendarAction.OnTrainingDayClick -> {
                     action.day
-                        .atStartOfDay(ZoneId.systemDefault())
-                        .toInstant()
-                        .toEpochMilli()
+                        .toStartOfDay()
                         .let(TrainingCalendarEvent::OpenNewTrainingScreen)
                 }
             }
@@ -37,14 +36,8 @@ class TrainingCalendarViewModel(
 
     private fun subscribeOnCalendarData() {
         //TODO: добавить пагинацию и убрать хардкод
-        val startDate = LocalDate.of(HARDCODED_START_YEAR, 1, 1)
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
-        val currentDate = LocalDate.now()
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
+        val startDate = LocalDate.of(HARDCODED_START_YEAR, 1, 1).toStartOfDay()
+        val currentDate = LocalDate.now().toStartOfDay()
 
         getTrainingData(startDate, currentDate)
             .onEach {

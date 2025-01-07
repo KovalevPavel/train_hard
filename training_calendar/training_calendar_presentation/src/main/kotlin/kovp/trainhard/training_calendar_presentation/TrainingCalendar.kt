@@ -21,6 +21,7 @@ import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.navigation.SubscribeOnEvents
+import kovp.trainhard.new_training_api.TrainingScreen
 import kovp.trainhard.training_calendar_presentation.di.trainingCalendarModule
 import kovp.trainhard.training_calendar_presentation.legend.Legend
 import kovp.trainhard.ui_theme.providers.themeColors
@@ -99,9 +100,7 @@ private fun Data(
 private fun handleEvent(event: TrainingCalendarEvent, navController: NavController) {
     when (event) {
         is TrainingCalendarEvent.OpenNewTrainingScreen -> {
-//            TrainingScreen(timestamp = ac.timestamp)
-//                .let(screenMapper::invoke)
-//                .let(navigator::navigate)
+            navController.navigate(TrainingScreen(timestamp = event.timestamp))
         }
     }
 }

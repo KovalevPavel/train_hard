@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.selectors.DateRangeSelectorState
+import kovp.trainhard.core_domain.toStartOfDay
 import kovp.trainhard.core_presentation.subscribeForResult
 import kovp.trainhard.home_presentation.di.homeModule
 import kovp.trainhard.home_presentation.home.presentation.HomeAction
@@ -33,6 +34,7 @@ import kovp.trainhard.ui_theme.providers.themeColors
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.module.rememberKoinModules
 import org.koin.core.annotation.KoinExperimentalAPI
+import java.time.LocalDate
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -151,7 +153,9 @@ private fun handleEvent(event: HomeEvent, navController: NavController) {
         }
 
         is HomeEvent.OpenNewTrainingScreen -> {
-            navController.navigate(TrainingScreen(timestamp = System.currentTimeMillis()))
+            val timeStamp = LocalDate.now().toStartOfDay()
+
+            navController.navigate(TrainingScreen(timestamp = timeStamp))
         }
 
         is HomeEvent.OpenTrainingCalendar -> {

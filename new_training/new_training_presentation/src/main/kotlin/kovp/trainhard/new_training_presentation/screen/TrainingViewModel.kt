@@ -1,6 +1,7 @@
-package kovp.trainhard.new_training_presentation
+package kovp.trainhard.new_training_presentation.screen
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kovp.trainhard.components.train_card.CompletedExerciseCardDto
@@ -14,8 +15,7 @@ import kovp.trainhard.new_trainig_domain.GetAllCompletedExercisesInteractor
 import kovp.trainhard.new_trainig_domain.GetExerciseByIdInteractor
 import kovp.trainhard.new_trainig_domain.RemoveCompletedExerciseInteractor
 import kovp.trainhard.new_trainig_domain.UpdateCompletedExerciseInteractor
-import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogResult
-import trainhard.kovp.core.RequestAction
+import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogResult
 
 class TrainingViewModel(
     private val currentTimestamp: Long,
@@ -45,7 +45,7 @@ class TrainingViewModel(
                 }
 
                 is TrainingAction.AddOrEditSet -> {
-                    addOrEditSet(dialogResult = action.data, action = action.action)
+                    addOrEditSet(dialogResult = action.data)
                 }
 
                 is TrainingAction.AddNewCompletedExercise -> {
@@ -69,6 +69,7 @@ class TrainingViewModel(
             completedExercises.clear()
             list.let(completedExercises::addAll)
             list.map(::mapToCardDto)
+                .toImmutableList()
                 .let(TrainingScreenState::Data)
                 .let(::updateState)
         }
@@ -87,18 +88,18 @@ class TrainingViewModel(
         }
     }
 
-    private suspend fun addOrEditSet(dialogResult: EditSetDialogResult.Success, action: RequestAction) {
+    private suspend fun addOrEditSet(dialogResult: EditSetDialogResult.Success) {
         val completedExercise = completedExercises.firstOrNull {
             it.id == dialogResult.id && it.exercise.title == dialogResult.exerciseTitle
         }
             ?: return
 
-        val updatedExercise = when (action) {
-            RequestAction.Add -> {
+        val updatedExercise = when (dialogResult.setId) {
+            null -> {
                 completedExercise + listOf(dialogResult.weight to dialogResult.reps)
             }
 
-            RequestAction.Edit -> {
+            else -> {
                 val modifiedReps = completedExercise.sets
                     .mapIndexed { i, p ->
                         if (i.toLong() == dialogResult.setId) {

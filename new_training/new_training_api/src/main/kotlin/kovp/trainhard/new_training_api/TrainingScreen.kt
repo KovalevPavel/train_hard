@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import kovp.trainhard.navigation.ComposableScreen
-import kovp.trainhard.new_training_presentation.TrainingComposable
+import kovp.trainhard.new_training_presentation.screen.ui.TrainingComposable
 
 @Serializable
 data class TrainingScreen(private val timestamp: Long) {

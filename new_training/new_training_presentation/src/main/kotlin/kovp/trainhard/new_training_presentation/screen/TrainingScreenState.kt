@@ -1,12 +1,11 @@
-package kovp.trainhard.new_training_presentation
+package kovp.trainhard.new_training_presentation.screen
 
-import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
 import kovp.trainhard.components.train_card.CompletedExerciseCardDto
 
-@Immutable
 sealed interface TrainingScreenState {
     data class Data(
-        val items: List<CompletedExerciseCardDto>,
+        val items: ImmutableList<CompletedExerciseCardDto>,
     ) : TrainingScreenState
 
     data object Loading : TrainingScreenState

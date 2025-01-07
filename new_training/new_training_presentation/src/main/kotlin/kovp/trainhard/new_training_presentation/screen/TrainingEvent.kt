@@ -1,6 +1,6 @@
-package kovp.trainhard.new_training_presentation
+package kovp.trainhard.new_training_presentation.screen
 
-import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogVs
+import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogVs
 
 sealed interface TrainingEvent {
     data object NavigateToSelectExerciseType : TrainingEvent

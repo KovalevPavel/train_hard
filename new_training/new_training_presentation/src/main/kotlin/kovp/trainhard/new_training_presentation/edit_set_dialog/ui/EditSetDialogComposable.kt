@@ -1,4 +1,4 @@
-package kovp.trainhard.new_training_presentation.new_set_dialog.ui
+package kovp.trainhard.new_training_presentation.edit_set_dialog.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,20 +20,20 @@ import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.components.counter.CounterValue
 import kovp.trainhard.components.counter.TrainCounter
 import kovp.trainhard.new_training_presentation.R
-import kovp.trainhard.new_training_presentation.new_set_dialog.EditSetDialogResult
+import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogResult
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
 private const val DEFAULT_COUNTER_WEIGHT_INCREMENT = 2.5f
 
 @Composable
-fun EditSetDialog(
-    setId: Long,
-    repsId: Long,
+fun EditSetDialogComposable(
+    exerciseId: Long,
+    setId: Long?,
     exerciseTitle: String,
     initWeight: Float,
     initReps: Int,
-    onApplyClick: (EditSetDialogResult.Success) -> Unit,
+    onApplyClick: (EditSetDialogResult) -> Unit,
 ) {
     var selectedWeight: CounterValue by remember {
         mutableStateOf(CounterValue.Float(initWeight))
@@ -76,8 +76,8 @@ fun EditSetDialog(
             onClick = {
                 onApplyClick(
                     EditSetDialogResult.Success(
-                        id = setId,
-                        setId = repsId,
+                        id = exerciseId,
+                        setId = setId,
                         exerciseTitle = exerciseTitle,
                         weight = selectedWeight.value.toFloat(),
                         reps = selectedReps.value.toInt(),
