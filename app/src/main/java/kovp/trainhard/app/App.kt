@@ -1,6 +1,7 @@
 package kovp.trainhard.app
 
 import android.app.Application
+import kovp.trainhard.app.di.configsModule
 import kovp.trainhard.app.di.coreModule
 import kovp.trainhard.app.di.initializationModule
 import kovp.trainhard.core_storage.di.storageModule
@@ -21,6 +22,7 @@ class App : Application() {
             androidContext(this@App)
             modules(
                 coreModule,
+                configsModule,
                 dbModule,
                 initializationModule,
                 storageModule(context = this@App),

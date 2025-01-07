@@ -9,6 +9,7 @@ import java.time.ZoneId
 fun Int?.orZero() = this ?: 0
 fun Float?.orZero() = this ?: 0
 fun Boolean?.orFalse() = this ?: false
+fun Boolean?.orTrue() = this ?: true
 fun Long?.orZero(): Long = this ?: 0
 
 fun <T : Any> MutableStateFlow<T>.update(newState: T) =

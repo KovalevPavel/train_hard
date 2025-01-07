@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kovp.trainhard.core_domain.orFalse
+import kovp.trainhard.core_domain.orTrue
 import kovp.trainhard.parameters_core.GetAllExercisesInteractor
 
 class MainActivityViewModel(
@@ -17,7 +17,7 @@ class MainActivityViewModel(
 
     init {
         viewModelScope.launch {
-            val exercisesAreEmpty = getAllExercises().firstOrNull()?.isNotEmpty().orFalse()
+            val exercisesAreEmpty = getAllExercises().firstOrNull()?.isEmpty().orTrue()
             delay(MIN_DELAY_MS)
 
             if (exercisesAreEmpty) {

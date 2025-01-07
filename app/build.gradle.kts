@@ -1,6 +1,7 @@
 plugins {
     id("trainhard.android.application")
     id("trainhard.android.compose")
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -42,6 +43,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material)
     implementation(libs.navigation)
+    implementation(libs.kotlinx.serialization.json)
     implementation(project(":home_api"))
     implementation(project(":statistics_api"))
     implementation(project(":design_system"))

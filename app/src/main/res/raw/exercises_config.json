@@ -1,0 +1,33 @@
+{
+  "defaultExercises": [
+    {
+      "title": "Приседания",
+      "muscles": [
+        "quadriceps"
+      ]
+    },
+    {
+      "title": "Становая тяга",
+      "muscles": [
+        "quadriceps",
+        "hamstrings",
+        "calves",
+        "lats",
+        "loin",
+        "trapezius",
+        "forearms",
+        "abs"
+      ]
+    },
+    {
+      "title": "Жим лежа",
+      "muscles": [
+        "upper",
+        "lower",
+        "middle",
+        "anterior",
+        "triceps"
+      ]
+    }
+  ]
+}

@@ -11,4 +11,8 @@ class ResourceProviderImpl(
     override fun getString(resId: Int): String {
         return resources.getString(resId)
     }
+
+    override fun getConfig(resId: Int): String {
+        return resources.openRawResource(resId).bufferedReader().use { it.readText() }
+    }
 }
