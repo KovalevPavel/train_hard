@@ -1,13 +1,11 @@
 package kovp.trainhard.training_calendar_presentation
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import kovp.trainhard.components.dropShadow
 import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.core_domain.MuscleGroup.ABS
 import kovp.trainhard.core_domain.MuscleGroup.ARMS
@@ -30,19 +28,8 @@ fun MuscleDot(
         DELTOIDS -> themeColors.orange
         ABS -> themeColors.white
     }
-        .toArgb()
 
-    Box(
-        modifier = modifier,
-    ) {
-        Canvas(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            drawRoundRect(
-                color = Color(argbColor),
-                size = size,
-                cornerRadius = CornerRadius(size.height / 2, size.width / 2),
-            )
-        }
+    Canvas(modifier = modifier) {
+        drawCircle(color = argbColor)
     }
 }

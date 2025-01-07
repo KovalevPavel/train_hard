@@ -1,14 +1,19 @@
-
 plugins {
     id("trainhard.android.application")
     id("trainhard.android.compose")
 }
 
 android {
+    val majorVersion = 1
+    val minorVersion = 0
+    val patchVersion = 0
 
     buildFeatures {
         buildConfig = true
     }
+
+    version = "$majorVersion.$minorVersion.$patchVersion"
+    project.setProperty("archivesBaseName", "TrainHard-$version")
 
     buildTypes {
         debug {

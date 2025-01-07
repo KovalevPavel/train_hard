@@ -38,7 +38,6 @@ import kovp.trainhard.ui_theme.providers.themeTypography
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.module.rememberKoinModules
 import org.koin.core.annotation.KoinExperimentalAPI
-import timber.log.Timber
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -48,7 +47,6 @@ fun ParametersComposable(
     rememberKoinModules(unloadOnForgotten = false) { listOf(parametersModule) }
 
     val vm = koinViewModel<ParametersViewModel>()
-    Timber.e("${vm.hashCode()}")
     val state by vm.state.collectAsState()
 
     var isVisible by remember { mutableStateOf(false) }

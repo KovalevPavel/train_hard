@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,15 +26,16 @@ internal fun Legend(
         horizontalArrangement = Arrangement.spacedBy(32.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        MuscleGroup.values().forEach { MuscleGroupLegendElement(it) }
+        MuscleGroup.entries.forEach { MuscleGroupLegendElement(it) }
     }
 }
 
 @Composable
-private fun MuscleGroupLegendElement(muscleGroup: MuscleGroup) {
+private fun RowScope.MuscleGroupLegendElement(muscleGroup: MuscleGroup) {
     val title = muscleGroup.getMuscleGroupTitle()
 
     Row(
+        modifier = Modifier.weight(1f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -43,6 +45,7 @@ private fun MuscleGroupLegendElement(muscleGroup: MuscleGroup) {
         )
 
         Text(
+            modifier = Modifier.weight(1f),
             text = title,
             style = themeTypography.body3,
         )
