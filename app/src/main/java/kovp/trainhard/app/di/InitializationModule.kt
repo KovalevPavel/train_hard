@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val initializationModule = module {
     single { GetAllExercisesInteractor(exercisesApi = get()) }
-    single { InitBaseExercisesInteractor(exercisesApi = get(), configRepository = get()) }
+    single { InitBaseExercisesInteractor(exercisesApi = get(), configHolder = get()) }
 
     viewModel {
         MainActivityViewModel(

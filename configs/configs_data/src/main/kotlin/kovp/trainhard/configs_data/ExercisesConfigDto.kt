@@ -1,4 +1,4 @@
-package kovp.trainhard.app.data
+package kovp.trainhard.configs_data
 
 import kotlinx.serialization.Serializable
 

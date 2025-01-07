@@ -52,6 +52,7 @@ dependencies {
     implementation(project(":core_domain"))
     implementation(project(":core_dialogs"))
     implementation(project(":core_storage"))
+    implementation(project(":configs_api"))
     implementation(project(":ui_theme"))
     implementation(project(":database"))
     implementation(project(":database_api"))

@@ -36,10 +36,16 @@ include(":core_dialogs")
 include(":core_presentation")
 include(":lint_rules")
 
-withDirectory("core") {
+withDirectory("core_modules") {
     includeProject("core")
     includeProject("ui_theme")
     includeProject("design_system")
+}
+
+withDirectory("configs") {
+    includeProject("configs_api")
+    includeProject("configs_data")
+    includeProject("configs_core")
 }
 
 withDirectory("home") {
