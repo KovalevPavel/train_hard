@@ -3,30 +3,108 @@
     {
       "title": "Приседания",
       "muscles": [
-        "quadriceps"
+        "legs_quadriceps"
       ]
     },
     {
-      "title": "Становая тяга",
+      "title": "Булава с приседаниями",
       "muscles": [
-        "quadriceps",
-        "hamstrings",
-        "calves",
-        "lats",
-        "loin",
-        "trapezius",
-        "forearms",
-        "abs"
+        "legs_quadriceps",
+        "back_trapezius"
+      ]
+    },
+    {
+      "title": "Гребля с булавой",
+      "muscles": [
+        "back_trapezius",
+        "deltoids_anterior",
+        "deltoids_middle"
+      ]
+    },
+    {
+      "title": "Булава",
+      "muscles": [
+        "back_trapezius"
+      ]
+    },
+    {
+      "title": "Махи в стороны",
+      "muscles": [
+        "deltoids_middle",
+        "deltoids_anterior"
+      ]
+    },
+    {
+      "title": "Махи перед собой",
+      "muscles": [
+        "deltoids_anterior"
       ]
     },
     {
       "title": "Жим лежа",
       "muscles": [
-        "upper",
-        "lower",
-        "middle",
-        "anterior",
-        "triceps"
+        "chest_middle",
+        "deltoids_middle",
+        "deltoids_anterior",
+        "arms_triceps"
+      ]
+    },
+    {
+      "title": "Отжимания на брусьях",
+      "muscles": [
+        "chest_middle",
+        "chest_lower",
+        "deltoids_middle",
+        "deltoids_anterior",
+        "arms_triceps"
+      ]
+    },
+    {
+      "title": "Подъем штанги на бицепс",
+      "muscles": [
+        "arms_biceps"
+      ]
+    },
+    {
+      "title": "Трицепс в тренажере",
+      "muscles": [
+        "arms_triceps"
+      ]
+    },
+    {
+      "title": "Сведения рук в тренажере",
+      "muscles": [
+        "chest_middle"
+      ]
+    },
+    {
+      "title": "Сведения рук в кроссовере",
+      "muscles": [
+        "chest_middle",
+        "chest_lower"
+      ]
+    },
+    {
+      "title": "Подтягивания",
+      "muscles": [
+        "back_teres",
+        "back_lats"
+      ]
+    },
+    {
+      "title": "Тяга Т-грифа",
+      "muscles": [
+        "back_teres",
+        "back_lats",
+        "back_trapezius",
+        "deltoids_posterior"
+      ]
+    },
+    {
+      "title": "Жим узким хватом",
+      "muscles": [
+        "arms_triceps",
+        "deltoids_anterior"
       ]
     }
   ]

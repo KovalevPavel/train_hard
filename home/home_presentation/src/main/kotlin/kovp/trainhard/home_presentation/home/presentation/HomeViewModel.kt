@@ -52,6 +52,7 @@ class HomeViewModel(
         ),
     )
 
+    @Suppress("unused")
     private val mockPlans = listOf(
         RestDay,
         NoProgramSelected,
@@ -104,7 +105,7 @@ class HomeViewModel(
         HomeScreenState.Data(
             dateString = currentDate(),
             gymHealth = GymCardDates(startDate, endDate),
-            todayPlan = mockPlans.random(),
+            todayPlan = NoProgramSelected,
         )
             .let(::updateState)
     }

@@ -1,11 +1,35 @@
 package kovp.trainhard.core_domain
 
+/**
+ * Мышцы
+ * @property upperChest верх грудных
+ * @property midChest середина грудных
+ * @property lowerChest низ грудных
+ * @property quadriceps квадрицепс
+ * @property hamstrings бицепс бедра
+ * @property calves икры
+ * @property trapezius трапеции
+ * @property teres круглая мышца спины
+ * @property lats широчайшая мышца спины
+ * @property loin поясница
+ * @property deltoidsAnt передний пучок дельт
+ * @property deltoidsMid средний пучок дельт
+ * @property deltoidsPost задний пучок дельт
+ * @property armsBiceps бицепс
+ * @property armsTriceps трицепс
+ * @property armsForearms предплечия
+ * @property abs пресс
+ */
 object Muscles {
 
     // Грудные
     val upperChest = object : Muscle() {
         override val muscleGroup: MuscleGroup = MuscleGroup.CHEST
         override val muscleId: String = "upper"
+    }
+    val midChest = object : Muscle() {
+        override val muscleGroup: MuscleGroup = MuscleGroup.CHEST
+        override val muscleId: String = "middle"
     }
     val lowerChest = object : Muscle() {
         override val muscleGroup: MuscleGroup = MuscleGroup.CHEST
@@ -31,6 +55,7 @@ object Muscles {
         override val muscleGroup: MuscleGroup = MuscleGroup.BACK
         override val muscleId: String = "lats"
     }
+    // поясница
     val loin = object : Muscle() {
         override val muscleGroup: MuscleGroup = MuscleGroup.BACK
         override val muscleId: String = "loin"
@@ -38,6 +63,10 @@ object Muscles {
     val trapezius = object : Muscle() {
         override val muscleGroup: MuscleGroup = MuscleGroup.BACK
         override val muscleId: String = "trapezius"
+    }
+    val teres = object : Muscle() {
+        override val muscleGroup: MuscleGroup = MuscleGroup.BACK
+        override val muscleId: String = "teres"
     }
 
     // Плечи
@@ -75,29 +104,33 @@ object Muscles {
     }
 
     val allMuscles = listOf(
+        // грудные
         upperChest,
+        midChest,
         lowerChest,
+        // ноги
         quadriceps,
         hamstrings,
         calves,
+        // спина
         lats,
         loin,
+        teres,
         trapezius,
+        // плечи
         deltoidsAnt,
         deltoidsMid,
         deltoidsPost,
+        // руки
         armsBiceps,
         armsTriceps,
         armsForearms,
+        // пресс
         abs,
     )
 
     fun getMusclesByGroup(group: MuscleGroup): List<Muscle> = allMuscles
         .filter { it.muscleGroup == group }
-
-    fun getMuscleById(muscleId: String) = allMuscles.firstOrNull {
-        it.muscleId.equals(muscleId, ignoreCase = true)
-    }
 
     fun getMuscleByFullId(fullId: String) = allMuscles.firstOrNull {
         it.id.equals(fullId, ignoreCase = true)

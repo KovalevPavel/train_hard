@@ -13,9 +13,8 @@ android {
 
     val applicationConfig = rootProject.extra["applicationConfig"] as Map<String, Any>
 
-
     defaultConfig {
-        version = applicationConfig["versionName"].toString()
+        versionName = applicationConfig["versionName"].toString()
         versionCode = applicationConfig["versionCode"] as Int
 
         project.setProperty("archivesBaseName", "TrainHard-$version($versionCode)")

@@ -10,7 +10,7 @@ class ExercisesConfigMapper {
             defaultExercises = dto.defaultExercises.map {
                 ExercisesConfig.DefaultExercise(
                     title = it.title,
-                    muscles = it.muscles.mapNotNull(Muscles::getMuscleById),
+                    muscles = it.muscles.mapNotNull(Muscles::getMuscleByFullId),
                 )
             }
         )

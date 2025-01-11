@@ -12,12 +12,14 @@ fun mapMuscleTitle(muscleId: String): String {
         Muscles.hamstrings.id -> R.string.legs_bic
         Muscles.calves.id -> R.string.legs_calves
         Muscles.upperChest.id -> R.string.chest_upper
+        Muscles.midChest.id -> R.string.chest_mid
         Muscles.lowerChest.id -> R.string.chest_lower
         Muscles.deltoidsAnt.id -> R.string.deltas_ant
         Muscles.deltoidsMid.id -> R.string.deltas_mid
         Muscles.deltoidsPost.id -> R.string.deltas_post
         Muscles.lats.id -> R.string.back_lats
         Muscles.loin.id -> R.string.back_loin
+        Muscles.teres.id -> R.string.back_teres
         Muscles.trapezius.id -> R.string.back_trapezius
         Muscles.armsBiceps.id -> R.string.arms_bic
         Muscles.armsTriceps.id -> R.string.arms_tric

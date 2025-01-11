@@ -104,7 +104,7 @@ class ParametersViewModel(
                 ExerciseVo(
                     title = exercise.title,
                     muscles = exercise.muscles.mapNotNull {
-                        Muscles.getMuscleById(it.id)
+                        Muscles.getMuscleByFullId(it.id)
                     },
                 )
                     .let { removeExistingExercise(it) }

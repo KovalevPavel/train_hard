@@ -21,10 +21,12 @@
     <string name="legs_bic">бицепс бедра</string>
     <string name="legs_calves">икры</string>
     <string name="chest_upper">верх грудных</string>
+    <string name="chest_mid">середина грудных</string>
     <string name="chest_lower">низ грудных</string>
     <string name="back_lats">широчайшие</string>
     <string name="back_loin">поясница</string>
     <string name="back_trapezius">трапеции</string>
+    <string name="back_teres">круглая мышца</string>
     <string name="deltas_ant">передние дельты</string>
     <string name="deltas_mid">средние дельты</string>
     <string name="deltas_post">задние дельты</string>
