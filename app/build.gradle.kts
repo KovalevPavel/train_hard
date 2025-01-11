@@ -1,3 +1,5 @@
+@file:Suppress("unchecked_cast")
+
 plugins {
     id("trainhard.android.application")
     id("trainhard.android.compose")
@@ -5,16 +7,19 @@ plugins {
 }
 
 android {
-    val majorVersion = 1
-    val minorVersion = 0
-    val patchVersion = 0
-
     buildFeatures {
         buildConfig = true
     }
 
-    version = "$majorVersion.$minorVersion.$patchVersion"
-    project.setProperty("archivesBaseName", "TrainHard-$version")
+    val applicationConfig = rootProject.extra["applicationConfig"] as Map<String, Any>
+
+
+    defaultConfig {
+        version = applicationConfig["versionName"].toString()
+        versionCode = applicationConfig["versionCode"] as Int
+
+        project.setProperty("archivesBaseName", "TrainHard-$version($versionCode)")
+    }
 
     buildTypes {
         debug {

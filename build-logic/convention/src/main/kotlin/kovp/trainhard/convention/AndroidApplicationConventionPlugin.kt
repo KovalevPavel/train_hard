@@ -32,8 +32,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     applicationId = props["applicationId"].toString().filterNot { it == '\"' }
                     versionCode = 1
                     versionName = "1.0"
-
-                    setProperty("archivesBaseName", "TrainHard($versionCode)_$versionName")
                 }
 
                 this@with.configureKotlinAndroid(this)

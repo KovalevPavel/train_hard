@@ -7,3 +7,5 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlinx.serialization) apply false
 }
+
+apply(from = "$rootDir/buildConfig.gradle.kts")
