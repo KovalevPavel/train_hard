@@ -17,7 +17,7 @@ android {
         versionName = applicationConfig["versionName"].toString()
         versionCode = applicationConfig["versionCode"] as Int
 
-        project.setProperty("archivesBaseName", "TrainHard-$version($versionCode)")
+        project.setProperty("archivesBaseName", "TrainHard-$versionName($versionCode)")
     }
 
     buildTypes {

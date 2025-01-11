@@ -9,7 +9,7 @@ buildscript {
             "applicationConfig",
             mapOf(
                 "versionCode" to build,
-                "versionName" to "$major.$minor.$patch build $build",
+                "versionName" to "$major.$minor.$patch",
             ),
         )
     }
