@@ -16,13 +16,13 @@ import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.DayPosition.MonthDate
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import kovp.trainhard.core_domain.DATE_FORMAT_LLLL_YYYY
 import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.core_domain.formatToDateString
 import kovp.trainhard.training_calendar_presentation.day.Day
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle.SHORT
@@ -38,7 +38,7 @@ fun CalendarData(
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(firstMonthOffset) }
     val endMonth = remember { currentMonth }
-    val daysOfWeek = remember { daysOfWeek(firstDayOfWeek = firstDayOfWeekFromLocale()) }
+    val daysOfWeek = remember { daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY) }
 
     val state = rememberCalendarState(
         startMonth = startMonth,
