@@ -1,14 +1,18 @@
 package kovp.trainhard.configs_data
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ExercisesConfigDto(
+    @SerialName("defaultExercises")
     val defaultExercises: List<DefaultExerciseDto>
 ) {
     @Serializable
     data class DefaultExerciseDto(
-        val title: String,
-        val muscles: List<String>,
+        @SerialName("title")
+        val title: String?,
+        @SerialName("muscles")
+        val muscles: List<String>?,
     )
 }

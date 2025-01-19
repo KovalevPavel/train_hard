@@ -14,6 +14,7 @@ val trainingCalendarModule = module {
     viewModel {
         TrainingCalendarViewModel(
             getTrainingData = get(),
+            configHolder = get(),
         )
     }
 }

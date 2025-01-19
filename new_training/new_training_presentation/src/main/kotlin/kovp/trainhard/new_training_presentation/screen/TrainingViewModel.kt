@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kovp.trainhard.components.train_card.CompletedExerciseCardDto
+import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.core_domain.Muscle
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.models.CompletedExercise
@@ -24,10 +25,12 @@ class TrainingViewModel(
     private val updateCompletedExercise: UpdateCompletedExerciseInteractor,
     private val getExerciseById: GetExerciseByIdInteractor,
     private val removeCompletedExercise: RemoveCompletedExerciseInteractor,
+    configHolder: ConfigHolder,
 ) : BaseViewModel<TrainingScreenState, TrainingAction, TrainingEvent>(
     initialState = TrainingScreenState.Loading,
 ) {
     private val completedExercises: MutableList<CompletedExercise> = mutableListOf()
+    val weightIncrement = configHolder.trainingConfig.weightIncrement
 
     init {
         subscribeOnSetsList()

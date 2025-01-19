@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.core_domain.toStartOfDay
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.training_calendar_domain.GetTrainingDataInteractor
@@ -13,10 +14,13 @@ import java.time.ZoneId
 
 class TrainingCalendarViewModel(
     private val getTrainingData: GetTrainingDataInteractor,
+    private val configHolder: ConfigHolder,
 ) :
     BaseViewModel<TrainingCalendarState, TrainingCalendarAction, TrainingCalendarEvent>(
         initialState = TrainingCalendarState.Loading,
     ) {
+    val firstMonthsOffset = configHolder.trainingConfig.firstMonthOffset.toLong()
+
     init {
         subscribeOnCalendarData()
     }
@@ -35,8 +39,9 @@ class TrainingCalendarViewModel(
     }
 
     private fun subscribeOnCalendarData() {
-        //TODO: добавить пагинацию и убрать хардкод
-        val startDate = LocalDate.of(HARDCODED_START_YEAR, 1, 1).toStartOfDay()
+        //TODO: добавить пагинацию
+        val startDate = LocalDate.of(configHolder.trainingConfig.startYear, 1, 1)
+            .toStartOfDay()
         val currentDate = LocalDate.now().toStartOfDay()
 
         getTrainingData(startDate, currentDate)
@@ -47,7 +52,7 @@ class TrainingCalendarViewModel(
                     LocalDate.ofInstant(instant, ZoneId.systemDefault())
                 }
                     .let(TrainingCalendarState::Data)
-                    .let (::updateState)
+                    .let(::updateState)
             }
             .launchIn(viewModelScope)
     }
@@ -57,6 +62,5 @@ class TrainingCalendarViewModel(
          * Устраняет микрофриз перед показом календаря
          */
         private const val STATE_UPDATE_DELAY_MS = 500L
-        private const val HARDCODED_START_YEAR = 2022
     }
 }

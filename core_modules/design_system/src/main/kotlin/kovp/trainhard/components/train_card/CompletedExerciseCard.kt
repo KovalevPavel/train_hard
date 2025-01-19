@@ -14,11 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.design_system.R
 import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.components.joinToStringComposable
 import kovp.trainhard.components.mapMuscleTitle
+import kovp.trainhard.core_domain.Muscle
+import kovp.trainhard.core_domain.Muscles
+import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
@@ -78,4 +84,63 @@ fun CompletedExerciseCard(
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun CompletedExerciseCardPreview(
+    @PreviewParameter(CompletedExerciseCardDtoProvider::class) item: CompletedExerciseCardDto,
+) {
+    TrainHardTheme {
+        CompletedExerciseCard(
+            card = item,
+            onAddSetClick = {},
+            onEditSetClick = {},
+            onRemoveSetClick = {},
+        )
+    }
+}
+
+private class CompletedExerciseCardDtoProvider :
+    PreviewParameterProvider<CompletedExerciseCardDto> {
+    override val values: Sequence<CompletedExerciseCardDto>
+        get() = sequenceOf(
+            CompletedExerciseCardDto(
+                setId = 0,
+                timestamp = 0,
+                exerciseTitle = "Подъемы ног",
+                sets = listOf(),
+                muscles = listOf(),
+            ),
+            CompletedExerciseCardDto(
+                setId = 0,
+                timestamp = 0,
+                exerciseTitle = "Подъемы ног",
+                sets = listOf(
+                    0f to 5,
+                ),
+                muscles = listOf(Muscles.abs.id),
+            ),
+            CompletedExerciseCardDto(
+                setId = 0,
+                timestamp = 0,
+                exerciseTitle = "Подъемы ног ".repeat(5).trimIndent(),
+                sets = listOf(
+                    0f to 5,
+                    0f to 5,
+                    0f to 5,
+                    0f to 5,
+                ),
+                muscles = listOf(Muscles.abs.id),
+            ),
+            CompletedExerciseCardDto(
+                setId = 0,
+                timestamp = 0,
+                exerciseTitle = "Подъемы ног",
+                sets = listOf(
+                    0f to 5,
+                ),
+                muscles = Muscles.allMuscles.map(Muscle::id),
+            ),
+        )
 }

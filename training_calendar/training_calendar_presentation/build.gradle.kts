@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":design_system"))
     implementation(project(":navigation"))
     implementation(project(":new_training_api"))
+    implementation(project(":configs_api"))
 
     implementation(libs.calendar)
     implementation(libs.koin.compose)

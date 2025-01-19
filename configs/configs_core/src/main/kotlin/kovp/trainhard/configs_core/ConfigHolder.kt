@@ -1,5 +1,7 @@
 package kovp.trainhard.configs_core
 
 interface ConfigHolder {
-    val exercises: ExercisesConfig
+    val exercisesConfig: ExercisesConfig
+    val trainingConfig: TrainingConfig
+    val homeScreenConfig: HomeScreenConfig
 }

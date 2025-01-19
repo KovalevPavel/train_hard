@@ -62,6 +62,7 @@ fun ExerciseCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
+                        modifier = Modifier.weight(1f),
                         text = card.title,
                         style = themeTypography.header1,
                     )
@@ -107,6 +108,12 @@ private class ExerciseCardProvider : PreviewParameterProvider<ExerciseCardVs> {
             ),
             ExerciseCardVs(
                 title = "Full body",
+                muscles = Muscles.allMuscles.map {
+                    ExerciseCardVs.MuscleVs(it.muscleId, it.muscleGroup)
+                },
+            ),
+            ExerciseCardVs(
+                title = "Full body ".repeat(5).trimIndent(),
                 muscles = Muscles.allMuscles.map {
                     ExerciseCardVs.MuscleVs(it.muscleId, it.muscleGroup)
                 },

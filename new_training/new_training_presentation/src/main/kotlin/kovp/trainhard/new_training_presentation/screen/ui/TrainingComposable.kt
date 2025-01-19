@@ -87,6 +87,7 @@ fun TrainingComposable(
     navController.subscribeForResult<String>(SelectExerciseTypeScreen.EXERCISE_TITLE_ID) {
         EditSetDialogVs(
             exerciseTitle = it,
+            weightIncrement = vm.weightIncrement,
             requestAction = RequestAction.Add,
         )
             .let(TrainingAction::NavigateToSetDialog)
@@ -118,7 +119,7 @@ fun TrainingComposable(
                 }
 
                 is TrainingScreenState.Data -> {
-                    DataContent(state = it, onAction = vm::handleAction)
+                    DataContent(state = it, weightIncrement = vm.weightIncrement, onAction = vm::handleAction)
                 }
             }
         }
@@ -128,6 +129,7 @@ fun TrainingComposable(
 @Composable
 private fun DataContent(
     state: TrainingScreenState.Data,
+    weightIncrement: Float,
     onAction: (TrainingAction) -> Unit,
 ) {
     LazyColumn(
@@ -147,6 +149,7 @@ private fun DataContent(
                 exerciseTitle = it.exerciseTitle,
                 initWeight = initWeight,
                 initReps = initReps,
+                weightIncrement = weightIncrement,
                 requestAction = RequestAction.Edit,
             )
                 .let(TrainingAction::NavigateToSetDialog)
@@ -166,6 +169,7 @@ private fun DataContent(
                         exerciseTitle = it.exerciseTitle,
                         initWeight = initWeight,
                         initReps = initReps,
+                        weightIncrement = weightIncrement,
                         requestAction = RequestAction.Edit,
                     )
                         .let(TrainingAction::NavigateToSetDialog)
@@ -210,6 +214,7 @@ private fun EditSetDialog(
                 exerciseTitle = state.exerciseTitle,
                 initWeight = state.initWeight,
                 initReps = state.initReps,
+                weightIncrement = state.weightIncrement,
                 onApplyClick = { onApplyClick(it, state.requestAction) },
             )
         }

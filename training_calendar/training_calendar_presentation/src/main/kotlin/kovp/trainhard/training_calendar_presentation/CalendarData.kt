@@ -28,17 +28,15 @@ import java.time.YearMonth
 import java.time.format.TextStyle.SHORT
 import java.util.Locale
 
-//TODO: убрать хардкод
-private const val HARDCODED_MONTHS = 24L
-
 @Composable
 fun CalendarData(
     modifier: Modifier,
+    firstMonthOffset: Long,
     muscleGroups: Map<LocalDate, List<MuscleGroup>>,
     onDayClick: (LocalDate) -> Unit,
 ) {
     val currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth.minusMonths(HARDCODED_MONTHS) }
+    val startMonth = remember { currentMonth.minusMonths(firstMonthOffset) }
     val endMonth = remember { currentMonth }
     val daysOfWeek = remember { daysOfWeek(firstDayOfWeek = firstDayOfWeekFromLocale()) }
 

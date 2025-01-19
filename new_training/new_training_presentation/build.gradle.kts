@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":new_training_domain"))
     implementation(project(":design_system"))
     implementation(project(":navigation"))
+    implementation(project(":configs_api"))
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.koin.compose)

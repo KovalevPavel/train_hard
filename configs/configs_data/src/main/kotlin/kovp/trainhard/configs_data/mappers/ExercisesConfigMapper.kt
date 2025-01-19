@@ -7,10 +7,11 @@ import kovp.trainhard.core_domain.Muscles
 class ExercisesConfigMapper {
     fun mapConfig(dto: ExercisesConfigDto): ExercisesConfig {
         return ExercisesConfig(
-            defaultExercises = dto.defaultExercises.map {
+            defaultExercises = dto.defaultExercises.mapNotNull {
                 ExercisesConfig.DefaultExercise(
-                    title = it.title,
-                    muscles = it.muscles.mapNotNull(Muscles::getMuscleByFullId),
+                    title = it.title ?: return@mapNotNull null,
+                    muscles = it.muscles?.mapNotNull(Muscles::getMuscleByFullId)
+                        ?: return@mapNotNull null,
                 )
             }
         )

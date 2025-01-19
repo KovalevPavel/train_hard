@@ -24,8 +24,6 @@ import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogRes
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
-private const val DEFAULT_COUNTER_WEIGHT_INCREMENT = 2.5f
-
 @Composable
 fun EditSetDialogComposable(
     exerciseId: Long,
@@ -33,6 +31,7 @@ fun EditSetDialogComposable(
     exerciseTitle: String,
     initWeight: Float,
     initReps: Int,
+    weightIncrement: Float,
     onApplyClick: (EditSetDialogResult) -> Unit,
 ) {
     var selectedWeight: CounterValue by remember {
@@ -57,7 +56,7 @@ fun EditSetDialogComposable(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.weight_label),
             initialValue = CounterValue.Float(initWeight),
-            increment = CounterValue.Float(DEFAULT_COUNTER_WEIGHT_INCREMENT),
+            increment = CounterValue.Float(weightIncrement),
         ) {
             selectedWeight = it
         }

@@ -8,4 +8,5 @@ dependencies {
     api(project(":configs_core"))
 
     implementation(libs.koin.core)
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -9,4 +9,5 @@ dependencies {
     implementation(project(":domain_storage"))
     implementation(project(":configs_core"))
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.annotation.jvm)
 }

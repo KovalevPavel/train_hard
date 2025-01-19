@@ -24,6 +24,7 @@ fun newTrainingModule(currentTimestamp: Long) = module {
             updateCompletedExercise = get(),
             getExerciseById = get(),
             removeCompletedExercise = get(),
+            configHolder = get(),
         )
     }
 }

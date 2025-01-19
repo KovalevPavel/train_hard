@@ -9,7 +9,7 @@ class InitBaseExercisesInteractor(
     private val configHolder: ConfigHolder,
 ) {
     suspend operator fun invoke() {
-        configHolder.exercises
+        configHolder.exercisesConfig
             .defaultExercises
             // todo: объединить модели?
             .map {

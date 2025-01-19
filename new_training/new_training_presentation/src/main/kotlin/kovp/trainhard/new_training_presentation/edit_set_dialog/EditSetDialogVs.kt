@@ -8,6 +8,7 @@ import trainhard.kovp.core.RequestAction
  * @param exerciseTitle название упражнения
  * @param initWeight начальный вес, который будет предложен в диалоге
  * @param initReps начальное количество повторений, которое будет предложено в диалоге
+ * @param weightIncrement инкремент веса снаряда
  * @param requestAction действие, которое предполагается выполнить с результатом диалога
  */
 data class EditSetDialogVs(
@@ -16,5 +17,6 @@ data class EditSetDialogVs(
     val exerciseTitle: String,
     val initWeight: Float = 0f,
     val initReps: Int = 0,
+    val weightIncrement: Float,
     val requestAction: RequestAction,
 )

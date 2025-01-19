@@ -1,0 +1,11 @@
+{
+  "gymCard": "Абонемент",
+  "gymCardStub": "Тапните для установки срока действия абонемента",
+  "activeProgramTitle": "Активная программа тренировок:",
+  "defaultProgram": "не выбрана",
+  "todayPlan": "Сегодня по плану",
+  "muscleGroups": "Мышечные группы: %s",
+  "startTrainingAction": "НАЧАТЬ ТРЕНИРОВКУ",
+  "todayPlanRestDay": "Сегодня отдыхаем",
+  "todayPlanNotSelected": "Программа тренировок не выбрана"
+}
