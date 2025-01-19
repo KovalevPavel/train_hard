@@ -2,33 +2,39 @@ package kovp.trainhard.components.counter
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import kovp.trainhard.components.counter.CounterValue.Float
 
-sealed interface CounterValue: Parcelable {
+sealed interface CounterValue {
     val value: Number
 
     @Parcelize
     data class Int(
-        override val value: kotlin.Int,
-    ) : CounterValue
+        override val value: Number,
+    ) : CounterValue, Parcelable
 
     @Parcelize
     data class Float(
-        override val value: kotlin.Float,
-    ) : CounterValue
+        override val value: Number,
+    ) : CounterValue, Parcelable
+
+    companion object {
+        val unknownException = IllegalArgumentException("Unknown CounterValue type")
+    }
 }
 
-fun Number.toCounterValue() = when(this) {
-    is Int -> CounterValue.Int(this)
-    else -> Float(this.toFloat())
+inline fun <reified T: CounterValue> Number.toCounterValue(): T = when(T::class) {
+    CounterValue.Int::class -> CounterValue.Int(this) as T
+    CounterValue.Float::class -> CounterValue.Float(this) as T
+    else -> throw CounterValue.unknownException
 }
 
-operator fun CounterValue.plus(other: CounterValue): CounterValue = when (this) {
-    is CounterValue.Int -> this.copy(value = this.value + other.value.toInt())
-    is Float -> this.copy(value = this.value + other.value.toFloat())
+inline operator fun <reified T: CounterValue> T.plus(other: T): T = when (T::class) {
+    CounterValue.Int::class -> CounterValue.Int(value = this.value.toInt() + other.value.toInt()) as T
+    CounterValue.Float::class -> CounterValue.Float(value = this.value.toFloat() + other.value.toFloat()) as T
+    else -> throw CounterValue.unknownException
 }
 
-operator fun CounterValue.minus(other: CounterValue): CounterValue = when (this) {
-    is CounterValue.Int -> this.copy(value = this.value - other.value.toInt())
-    is Float -> this.copy(value = this.value - other.value.toFloat())
+inline operator fun <reified T: CounterValue> T.minus(other: T): T = when (T::class) {
+    CounterValue.Int::class -> CounterValue.Int(value = this.value.toInt() - other.value.toInt()) as T
+    CounterValue.Float::class -> CounterValue.Float(value = this.value.toFloat() - other.value.toFloat()) as T
+    else -> throw CounterValue.unknownException
 }

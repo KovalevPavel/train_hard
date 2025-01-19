@@ -16,6 +16,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,27 +26,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.core_domain.orZero
 import kovp.trainhard.design_system.R
+import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
 @Suppress("LongMethod")
 @Composable
-fun Counter(
+inline fun <reified T: CounterValue> Counter(
     modifier: Modifier = Modifier,
-    initialValue: CounterValue,
-    increment: CounterValue.Float,
-    onValueChanged: (CounterValue) -> Unit,
+    initialValue: T,
+    increment: T,
+    crossinline onValueChanged: (T) -> Unit,
 ) {
     var currentValue by remember { mutableStateOf(initialValue) }
     var currentString by remember { mutableStateOf(initialValue.value.toString()) }
 
     val regex = remember {
-        when (initialValue::class) {
+        when (T::class) {
             CounterValue.Int::class -> "\\d{0,3}"
-            Float::class -> "\\d{0,3}?\\.?\\d{0,2}"
+            CounterValue.Float::class -> "\\d{0,3}?\\.?\\d{0,2}"
             else -> ""
         }
             .toRegex()
@@ -53,7 +57,7 @@ fun Counter(
     Row(modifier = modifier) {
         CounterButton(
             iconRes = R.drawable.ic_minus,
-            isDecreaseButton = true,
+            buttonType = ButtonType.Remove,
         ) {
             val newValue = (currentValue - increment).value
                 .let {
@@ -62,7 +66,7 @@ fun Counter(
                         else -> it.toFloat().coerceAtLeast(0f)
                     }
                 }
-                .toCounterValue()
+                .toCounterValue<T>()
 
             currentValue = newValue
             currentString = currentValue.value.toString()
@@ -87,7 +91,7 @@ fun Counter(
                     newString.toFloatOrNull()?.coerceAtLeast(0f).orZero() as Number
                 }
             }
-                .toCounterValue()
+                .toCounterValue<T>()
             if (newString == currentString) return@CounterTextField
 
             currentValue = newValue
@@ -96,7 +100,7 @@ fun Counter(
         }
         CounterButton(
             iconRes = R.drawable.ic_plus,
-            isDecreaseButton = false,
+            buttonType = ButtonType.Add,
         ) {
             val newValue = (currentValue + increment).value
                 .let {
@@ -105,7 +109,7 @@ fun Counter(
                         else -> it.toFloat()
                     }
                 }
-                .toCounterValue()
+                .toCounterValue<T>()
 
             currentValue = newValue
             currentString = currentValue.value.toString()
@@ -115,19 +119,19 @@ fun Counter(
 }
 
 @Composable
-private fun CounterButton(
+fun CounterButton(
     @DrawableRes iconRes: Int,
-    isDecreaseButton: Boolean,
+    buttonType: ButtonType,
     onValueChange: () -> Unit
 ) {
     Surface(
         modifier = Modifier.size(40.dp),
         color = themeColors.lime,
         shape = RoundedCornerShape(
-            topStart = if (isDecreaseButton) 20.dp else 0.dp,
-            topEnd = if (isDecreaseButton) 0.dp else 20.dp,
-            bottomEnd = if (isDecreaseButton) 0.dp else 20.dp,
-            bottomStart = if (isDecreaseButton) 20.dp else 0.dp,
+            topStart = buttonType.topStart,
+            topEnd = buttonType.topEnd,
+            bottomEnd = buttonType.bottomEnd,
+            bottomStart = buttonType.bottomStart,
         ),
         onClick = onValueChange,
     ) {
@@ -144,7 +148,7 @@ private fun CounterButton(
 }
 
 @Composable
-private fun CounterTextField(
+fun CounterTextField(
     modifier: Modifier = Modifier,
     currentString: String,
     onValueChange: (String) -> Unit,
@@ -164,5 +168,33 @@ private fun CounterTextField(
             value = currentString,
             onValueChange = onValueChange,
         )
+    }
+}
+
+@Preview
+@Composable
+private fun IntCounterPreviewComposable() {
+    TrainHardTheme {
+        var value by remember { mutableIntStateOf(0) }
+        Counter(
+            initialValue = CounterValue.Int(value),
+            increment = CounterValue.Float(1f)
+        ) {
+            value = it.value.toInt()
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun FloatCounterPreviewComposable() {
+    TrainHardTheme {
+        var value by remember { mutableFloatStateOf(0f) }
+        Counter(
+            initialValue = CounterValue.Float(value),
+            increment = CounterValue.Float(.25f)
+        ) {
+            value = it.value.toFloat()
+        }
     }
 }

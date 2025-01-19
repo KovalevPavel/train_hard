@@ -10,12 +10,12 @@ import kovp.trainhard.components.counter.CounterValue.Float
 import kovp.trainhard.ui_theme.providers.themeTypography
 
 @Composable
-fun TrainCounter(
+inline fun <reified T: CounterValue> TrainCounter(
     modifier: Modifier = Modifier,
     label: String = "",
-    initialValue: CounterValue,
-    increment: Float,
-    onValueChanged: (CounterValue) -> Unit,
+    initialValue: T,
+    increment: T,
+    crossinline onValueChanged: (T) -> Unit,
 ) {
     Row(
         modifier = modifier,

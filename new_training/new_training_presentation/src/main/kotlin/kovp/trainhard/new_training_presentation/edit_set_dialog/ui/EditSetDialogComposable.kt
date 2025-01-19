@@ -52,7 +52,7 @@ fun EditSetDialogComposable(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(text = exerciseTitle, style = themeTypography.header1)
-        TrainCounter(
+        TrainCounter<CounterValue.Float>(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.weight_label),
             initialValue = CounterValue.Float(initWeight),
@@ -60,11 +60,11 @@ fun EditSetDialogComposable(
         ) {
             selectedWeight = it
         }
-        TrainCounter(
+        TrainCounter<CounterValue.Int>(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(id = R.string.reps_label),
             initialValue = CounterValue.Int(initReps),
-            increment = CounterValue.Float(1f),
+            increment = CounterValue.Int(1),
         ) {
             selectedReps = it
         }
