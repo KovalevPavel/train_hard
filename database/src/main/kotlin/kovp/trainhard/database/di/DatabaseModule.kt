@@ -22,7 +22,7 @@ val dbModule = module {
             .build()
     }
 
-    single { ExerciseMapper() }
+    single { ExerciseMapper(configHolder = get()) }
     single {
         val db: AppDatabase = get()
 
@@ -56,6 +56,7 @@ val dbModule = module {
 
         CalendarApiImpl(
             calendarDao = db.calendarDao(),
+            configHolder = get(),
         )
     }
 }

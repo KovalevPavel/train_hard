@@ -6,18 +6,18 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kovp.trainhard.core_domain.orTrue
-import kovp.trainhard.parameters_core.GetAllExercisesInteractor
+import kovp.trainhard.database_api.ExercisesApi
 
 class MainActivityViewModel(
     private val initBaseExercises: InitBaseExercisesInteractor,
-    private val getAllExercises: GetAllExercisesInteractor,
+    private val exercisesApi: ExercisesApi,
 ) : ViewModel() {
     var dbIsInitialized = false
         private set
 
     init {
         viewModelScope.launch {
-            val exercisesAreEmpty = getAllExercises().firstOrNull()?.isEmpty().orTrue()
+            val exercisesAreEmpty = exercisesApi.getExercises().firstOrNull()?.isEmpty().orTrue()
             delay(MIN_DELAY_MS)
 
             if (exercisesAreEmpty) {

@@ -54,7 +54,7 @@ fun TrainingCalendar(
             is TrainingCalendarState.Data -> {
                 Data(
                     firstMonthOffset = viewModel.firstMonthsOffset,
-                    muscleGroups = trainingCalendarState.trainings,
+                    state = trainingCalendarState,
                 ) { day ->
                     TrainingCalendarAction.OnTrainingDayClick(day = day)
                         .let(viewModel::handleAction)
@@ -68,7 +68,7 @@ fun TrainingCalendar(
 @Composable
 private fun Data(
     firstMonthOffset: Long,
-    muscleGroups: Map<LocalDate, List<MuscleGroup>>,
+    state: TrainingCalendarState.Data,
     onDayClick: (LocalDate) -> Unit,
 ) {
     Scaffold(
@@ -89,6 +89,7 @@ private fun Data(
 
                 Legend(
                     modifier = Modifier.padding(horizontal = 16.dp),
+                    muscleGroups = state.muscleGroups,
                 )
             }
         },
@@ -97,7 +98,7 @@ private fun Data(
         CalendarData(
             modifier = Modifier.padding(top = it.calculateTopPadding()),
             firstMonthOffset = firstMonthOffset,
-            muscleGroups = muscleGroups,
+            muscleGroups = state.trainings,
             onDayClick = onDayClick,
         )
     }

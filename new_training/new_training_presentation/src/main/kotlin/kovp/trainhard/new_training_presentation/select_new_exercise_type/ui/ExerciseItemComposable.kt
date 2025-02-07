@@ -15,11 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.toImmutableList
-import kovp.trainhard.components.joinToStringComposable
-import kovp.trainhard.components.mapMuscleTitle
-import kovp.trainhard.core_domain.MuscleGroup
-import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.new_training_presentation.select_new_exercise_type.ExerciseVs
 import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
@@ -54,8 +49,7 @@ fun ExerciseItem(
                 color = themeColors.white,
             )
             Text(
-                text = item.muscles
-                    .joinToStringComposable { mapMuscleTitle(muscleId = it.id) },
+                text = item.muscles,
                 style = themeTypography.body1,
                 color = themeColors.white.copy(alpha = .7f)
             )
@@ -78,7 +72,7 @@ private class ExerciseVsProvider : PreviewParameterProvider<ExerciseVs> {
         get() = sequenceOf(
             ExerciseVs(
                 title = "Приседания",
-                muscles = Muscles.getMusclesByGroup(MuscleGroup.LEGS).toImmutableList(),
+                muscles = "мышцы, ".repeat(10),
             ),
         )
 }

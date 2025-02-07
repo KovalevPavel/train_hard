@@ -3,5 +3,6 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":configs_core"))
     implementation(project(":core_domain"))
 }

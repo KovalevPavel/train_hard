@@ -4,9 +4,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kovp.trainhard.components.train_card.CompletedExerciseCardDto
+import kovp.trainhard.components.train_card.CompletedExerciseCardVs
 import kovp.trainhard.configs_core.ConfigHolder
-import kovp.trainhard.core_domain.Muscle
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.models.CompletedExercise
 import kovp.trainhard.database_api.models.minus
@@ -29,8 +28,9 @@ class TrainingViewModel(
 ) : BaseViewModel<TrainingScreenState, TrainingAction, TrainingEvent>(
     initialState = TrainingScreenState.Loading,
 ) {
-    private val completedExercises: MutableList<CompletedExercise> = mutableListOf()
     val weightIncrement = configHolder.trainingConfig.weightIncrement
+    private val completedExercises: MutableList<CompletedExercise> = mutableListOf()
+    private val exercisesConfig = configHolder.exercisesConfig
 
     init {
         subscribeOnSetsList()
@@ -71,7 +71,7 @@ class TrainingViewModel(
 
             completedExercises.clear()
             list.let(completedExercises::addAll)
-            list.map(::mapToCardDto)
+            list.map(::mapToCardVs)
                 .toImmutableList()
                 .let(TrainingScreenState::Data)
                 .let(::updateState)
@@ -118,7 +118,7 @@ class TrainingViewModel(
         updateCompletedExercise(editedCompletedExercise = updatedExercise)
     }
 
-    private suspend fun removeSet(setDto: CompletedExerciseCardDto, setIndex: Int) {
+    private suspend fun removeSet(setDto: CompletedExerciseCardVs, setIndex: Int) {
         val completedExercise = completedExercises.firstOrNull {
             it.id == setDto.setId &&
                     it.dayTimestamp == setDto.timestamp &&
@@ -140,11 +140,14 @@ class TrainingViewModel(
         updateCompletedExercise(editedCompletedExercise = updateSet)
     }
 
-    private fun mapToCardDto(item: CompletedExercise) = CompletedExerciseCardDto(
+    private fun mapToCardVs(item: CompletedExercise) = CompletedExerciseCardVs(
         setId = item.id,
         timestamp = item.dayTimestamp,
         exerciseTitle = item.exercise.title,
         sets = item.sets,
-        muscles = item.exercise.muscles.map(Muscle::id),
+        muscles = item.exercise.muscles.mapNotNull { m ->
+            exercisesConfig.getLocalizedString(m.id) ?: return@mapNotNull null
+        }
+            .joinToString(),
     )
 }

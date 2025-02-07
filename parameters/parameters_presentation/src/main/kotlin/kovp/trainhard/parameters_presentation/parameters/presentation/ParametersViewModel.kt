@@ -5,14 +5,12 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kovp.trainhard.components.exercise_type.ExerciseCardVs
-import kovp.trainhard.components.exercise_type.ExerciseCardVs.MuscleVs
+import kovp.trainhard.configs_core.ConfigHolder
+import kovp.trainhard.configs_core.ExercisesConfig
 import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
-import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.core_presentation.BaseViewModel
-import kovp.trainhard.database_api.models.ExerciseVo
-import kovp.trainhard.parameters_core.GetAllExercisesInteractor
-import kovp.trainhard.parameters_domain.RemoveExerciseInteractor
+import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.parameters_presentation.R
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 import timber.log.Timber
@@ -20,9 +18,9 @@ import trainhard.kovp.core.ResourceProvider
 import java.util.UUID
 
 class ParametersViewModel(
-    private val getExercises: GetAllExercisesInteractor,
-    private val removeExistingExercise: RemoveExerciseInteractor,
+    private val exercisesApi: ExercisesApi,
     private val resourceProvider: ResourceProvider,
+    private val configHolder: ConfigHolder,
 ) : BaseViewModel<ParametersScreenState, ParametersAction, ParametersEvent>(
     initialState = ParametersScreenState.Loading,
 ) {
@@ -68,11 +66,16 @@ class ParametersViewModel(
 
     private fun openParametersScreen(exercise: ExerciseCardVs?) {
         launch {
+            val muscleIds = exercisesApi.getExerciseById(exercise?.title.orEmpty())
+                ?.muscles
+                ?.map(ExercisesConfig.MuscleVo::id)
+                .orEmpty()
+
             emitEvent(
                 event = ParametersEvent.NavigateToExerciseParams(
                     arg = ExerciseParametersArg(
                         title = exercise?.title.orEmpty(),
-                        muscleIds = exercise?.muscles?.map(MuscleVs::id).orEmpty(),
+                        muscleIds = muscleIds,
                     ),
                 )
             )
@@ -101,31 +104,25 @@ class ParametersViewModel(
     private fun removeExercise(exercise: ExerciseCardVs) {
         launch(
             action = {
-                ExerciseVo(
-                    title = exercise.title,
-                    muscles = exercise.muscles.mapNotNull {
-                        Muscles.getMuscleByFullId(it.id)
-                    },
-                )
-                    .let { removeExistingExercise(it) }
+                exercisesApi.removeExercise(exercise.title)
             },
             error = ::handleError,
         )
     }
 
     private fun subscribeOnExercisesList() {
-        getExercises().onEach { list ->
+        exercisesApi.getExercises().onEach { list ->
             ParametersScreenState.Loading.let(::updateState)
 
             list.map {
                 ExerciseCardVs(
                     title = it.title,
-                    muscles = it.muscles.map { m ->
-                        MuscleVs(
-                            muscleId = m.muscleId,
-                            muscleGroup = m.muscleGroup,
-                        )
-                    },
+                    muscles = it.muscles.mapNotNull { m ->
+                        configHolder.exercisesConfig.getLocalizedString(m.id)
+                            ?: return@mapNotNull null
+                    }
+                        .joinToString()
+                        .replaceFirstChar(Char::uppercaseChar)
                 )
             }
                 .toImmutableList()

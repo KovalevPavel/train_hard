@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(project(":database_api"))
     implementation(project(":core_domain"))
+    implementation(project(":configs_api"))
 
     implementation(libs.koin.compose)
 }

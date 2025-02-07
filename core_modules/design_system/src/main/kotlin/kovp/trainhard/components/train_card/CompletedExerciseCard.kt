@@ -20,10 +20,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.design_system.R
 import kovp.trainhard.components.button.TrainButton
-import kovp.trainhard.components.joinToStringComposable
-import kovp.trainhard.components.mapMuscleTitle
-import kovp.trainhard.core_domain.Muscle
-import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
@@ -31,7 +27,7 @@ import kovp.trainhard.ui_theme.providers.themeTypography
 @Composable
 fun CompletedExerciseCard(
     modifier: Modifier = Modifier,
-    card: CompletedExerciseCardDto,
+    card: CompletedExerciseCardVs,
     onAddSetClick: () -> Unit,
     onRemoveSetClick: (Int) -> Unit,
     onEditSetClick: (Int) -> Unit,
@@ -67,12 +63,10 @@ fun CompletedExerciseCard(
             }
 
             Spacer(modifier = Modifier.height(8.dp))
-            val groups = card.muscles
-                .joinToStringComposable { mapMuscleTitle(muscleId = it) }
 
             Text(
                 modifier = Modifier.padding(vertical = 8.dp),
-                text = stringResource(id = R.string.muscle_groups, groups),
+                text = stringResource(id = R.string.muscle_groups, card.muscles),
                 style = themeTypography.body2,
             )
 
@@ -89,7 +83,7 @@ fun CompletedExerciseCard(
 @Preview
 @Composable
 private fun CompletedExerciseCardPreview(
-    @PreviewParameter(CompletedExerciseCardDtoProvider::class) item: CompletedExerciseCardDto,
+    @PreviewParameter(CompletedExerciseCardDtoProvider::class) item: CompletedExerciseCardVs,
 ) {
     TrainHardTheme {
         CompletedExerciseCard(
@@ -102,26 +96,26 @@ private fun CompletedExerciseCardPreview(
 }
 
 private class CompletedExerciseCardDtoProvider :
-    PreviewParameterProvider<CompletedExerciseCardDto> {
-    override val values: Sequence<CompletedExerciseCardDto>
+    PreviewParameterProvider<CompletedExerciseCardVs> {
+    override val values: Sequence<CompletedExerciseCardVs>
         get() = sequenceOf(
-            CompletedExerciseCardDto(
+            CompletedExerciseCardVs(
                 setId = 0,
                 timestamp = 0,
                 exerciseTitle = "Подъемы ног",
                 sets = listOf(),
-                muscles = listOf(),
+                muscles = "",
             ),
-            CompletedExerciseCardDto(
+            CompletedExerciseCardVs(
                 setId = 0,
                 timestamp = 0,
                 exerciseTitle = "Подъемы ног",
                 sets = listOf(
                     0f to 5,
                 ),
-                muscles = listOf(Muscles.abs.id),
+                muscles = "мышцы, ".repeat(10),
             ),
-            CompletedExerciseCardDto(
+            CompletedExerciseCardVs(
                 setId = 0,
                 timestamp = 0,
                 exerciseTitle = "Подъемы ног ".repeat(5).trimIndent(),
@@ -131,16 +125,16 @@ private class CompletedExerciseCardDtoProvider :
                     0f to 5,
                     0f to 5,
                 ),
-                muscles = listOf(Muscles.abs.id),
+                muscles = "пресс",
             ),
-            CompletedExerciseCardDto(
+            CompletedExerciseCardVs(
                 setId = 0,
                 timestamp = 0,
                 exerciseTitle = "Подъемы ног",
                 sets = listOf(
                     0f to 5,
                 ),
-                muscles = Muscles.allMuscles.map(Muscle::id),
+                muscles = "мышцы, ".repeat(10),
             ),
         )
 }

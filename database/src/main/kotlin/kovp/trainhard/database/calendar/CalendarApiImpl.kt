@@ -2,13 +2,14 @@ package kovp.trainhard.database.calendar
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.core_domain.MuscleGroup
-import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.database.dao.CalendarDao
 import kovp.trainhard.database_api.CalendarApi
 
 internal class CalendarApiImpl(
     private val calendarDao: CalendarDao,
+    private val configHolder: ConfigHolder,
 ) : CalendarApi {
     override fun getMuscleGroupsByDates(
         startDate: Long,
@@ -29,7 +30,10 @@ internal class CalendarApiImpl(
                     list.asSequence()
                         .map { it.second }
                         .flatten()
-                        .mapNotNull { Muscles.getMuscleGroup(it) ?: return@mapNotNull null }
+                        .mapNotNull {
+                            configHolder.exercisesConfig.getMuscleGroup(it)
+                                ?: return@mapNotNull null
+                        }
                         .toList()
                         .distinct()
                 }

@@ -5,6 +5,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":configs_api"))
     implementation(project(":core_dialogs"))
     implementation(project(":core_presentation"))
     implementation(project(":design_system"))

@@ -37,8 +37,8 @@ internal class ExercisesApiImpl(
             .let { exerciseDao.updateExercise(it) }
     }
 
-    override suspend fun removeExercise(exercise: ExerciseVo) {
-        exerciseDao.removeExercise(exerciseTitle = exercise.title)
+    override suspend fun removeExercise(exerciseTitle: String) {
+        exerciseDao.removeExercise(exerciseTitle = exerciseTitle)
     }
 
     override fun getExercises(): Flow<List<ExerciseVo>> {

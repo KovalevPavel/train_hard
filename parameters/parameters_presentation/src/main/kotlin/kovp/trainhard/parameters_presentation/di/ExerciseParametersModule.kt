@@ -9,9 +9,9 @@ fun exerciseParametersModule(arg: ExerciseParametersArg) = module {
     viewModel {
         ExerciseParametersViewModel(
             exerciseArgument = arg,
-            insertExercise = get(),
-            updateExercise = get(),
+            exercisesApi = get(),
             resourceProvider = get(),
+            configHolder = get(),
         )
     }
 }

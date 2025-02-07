@@ -5,6 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ExercisesConfigDto(
+    @SerialName("muscleGroups")
+    val muscleGroups: Map<String, String>?,
+    @SerialName("muscles")
+    val muscles: Map<String, Map<String, String?>?>,
     @SerialName("defaultExercises")
     val defaultExercises: List<DefaultExerciseDto>
 ) {

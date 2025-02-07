@@ -1,4 +1,43 @@
 {
+  "muscleGroups": {
+    "legs": "Ноги",
+    "back": "Спина",
+    "chest": "Грудные",
+    "deltoids": "Плечи",
+    "arms": "Руки",
+    "abs": "Пресс"
+  },
+  "muscles": {
+    "legs": {
+      "quadriceps": "квадрицепс",
+      "hamstrings": "бицепс бедра",
+      "calves": "икры"
+    },
+    "back": {
+      "lats": "широчайшие",
+      "loin": "поясница",
+      "trapezius": "трапеции",
+      "teres": "круглая мышца"
+    },
+    "chest": {
+      "upper": "верх грудных",
+      "middle": "середина грудных",
+      "lower": "низ грудных"
+    },
+    "deltoids": {
+      "anterior": "передние дельты",
+      "middle": "средние дельты",
+      "posterior": "задние дельты"
+    },
+    "arms": {
+      "biceps": "бицепс",
+      "triceps": "трицепс",
+      "forearms": "предплечия"
+    },
+    "abs": {
+      "abs": "пресс"
+    }
+  },
   "defaultExercises": [
     {
       "title": "Приседания",

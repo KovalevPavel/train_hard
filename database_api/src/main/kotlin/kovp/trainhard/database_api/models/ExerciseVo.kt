@@ -1,8 +1,8 @@
 package kovp.trainhard.database_api.models
 
-import kovp.trainhard.core_domain.Muscle
+import kovp.trainhard.configs_core.ExercisesConfig
 
 data class ExerciseVo(
     val title: String,
-    val muscles: List<Muscle>,
+    val muscles: List<ExercisesConfig.MuscleVo>,
 )

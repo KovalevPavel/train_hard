@@ -1,15 +1,16 @@
 package kovp.trainhard.parameters_presentation.exercise_parameters.presentation
 
 import kotlinx.collections.immutable.toImmutableList
+import kovp.trainhard.configs_core.ConfigHolder
+import kovp.trainhard.configs_core.ExercisesConfig
+import kovp.trainhard.configs_core.getMuscleByFullId
 import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
-import kovp.trainhard.core_domain.Muscle
-import kovp.trainhard.core_domain.Muscles
+import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.core_presentation.BaseViewModel
+import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.database_api.errors.EntityExistsException
 import kovp.trainhard.database_api.models.ExerciseVo
-import kovp.trainhard.parameters_domain.InsertNewExerciseInteractor
-import kovp.trainhard.parameters_domain.UpdateExistingExerciseInteractor
 import kovp.trainhard.parameters_presentation.R
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 import timber.log.Timber
@@ -18,18 +19,20 @@ import java.util.UUID
 
 class ExerciseParametersViewModel(
     private val exerciseArgument: ExerciseParametersArg,
-    private val insertExercise: InsertNewExerciseInteractor,
-    private val updateExercise: UpdateExistingExerciseInteractor,
+    private val exercisesApi: ExercisesApi,
     private val resourceProvider: ResourceProvider,
+    configHolder: ConfigHolder,
 ) : BaseViewModel<ExerciseParametersState, ExerciseParametersAction, ExerciseParametersEvent>(
     initialState = ExerciseParametersState.Loading,
 ) {
+    private val exercisesConfig = configHolder.exercisesConfig
     private val isNewExercise = exerciseArgument == ExerciseParametersArg.empty
 
     private val initExercise = exerciseArgument.let {
         ExerciseVo(
             title = it.title,
-            muscles = it.muscleIds.mapNotNull(Muscles::getMuscleByFullId).sortedBy(Muscle::id),
+            muscles = it.muscleIds.mapNotNull(exercisesConfig.muscles::getMuscleByFullId)
+                .sortedBy(ExercisesConfig.MuscleVo::id),
         )
     }
 
@@ -41,7 +44,8 @@ class ExerciseParametersViewModel(
         get() {
             return ExerciseVo(
                 title = currentName,
-                muscles = musclesCloud.mapNotNull(Muscles::getMuscleByFullId).sortedBy(Muscle::id),
+                muscles = musclesCloud.mapNotNull(exercisesConfig.muscles::getMuscleByFullId)
+                    .sortedBy(ExercisesConfig.MuscleVo::id),
             )
         }
 
@@ -97,7 +101,22 @@ class ExerciseParametersViewModel(
             screenTitle = resourceProvider.getString(titleResId),
             action = resourceProvider.getString(actionRes),
             muscleName = currentName,
-            muscleIds = musclesCloud.toImmutableList(),
+            muscleGroups = MuscleGroup.entries.map { g ->
+                ExerciseParametersState.MuscleGroupVs(
+                    title = exercisesConfig.muscleGroups[g].orEmpty(),
+                    muscles = exercisesConfig.muscles
+                        .filter { it.muscleGroup == g }
+                        .map {
+                            ExerciseParametersState.MuscleVs(
+                                id = it.id,
+                                title = it.localizedString,
+                                isSelected = it.id in musclesCloud,
+                            )
+                        }
+                        .toImmutableList()
+                )
+            }
+                .toImmutableList(),
         )
             .let(::updateState)
     }
@@ -127,8 +146,8 @@ class ExerciseParametersViewModel(
     private suspend fun addOrEditExercise() {
         when {
             currentExercise == initExercise -> return
-            isNewExercise -> insertExercise(currentExercise)
-            else -> updateExercise(currentExercise)
+            isNewExercise -> exercisesApi.addNewExercise(currentExercise)
+            else -> exercisesApi.updateExistingExercise(currentExercise)
         }
     }
 

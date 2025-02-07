@@ -1,6 +1,8 @@
 package kovp.trainhard.training_calendar_presentation
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,7 +53,18 @@ class TrainingCalendarViewModel(
                     val instant = Instant.ofEpochMilli(timestamp)
                     LocalDate.ofInstant(instant, ZoneId.systemDefault())
                 }
-                    .let(TrainingCalendarState::Data)
+                    .let { trainings ->
+                        TrainingCalendarState.Data(
+                            muscleGroups = configHolder.exercisesConfig.muscleGroups.map { (k, v) ->
+                                TrainingCalendarState.LegendMuscleGroupVs(
+                                    group = k,
+                                    title = v,
+                                )
+                            }
+                                .toImmutableList(),
+                            trainings = trainings.toImmutableMap(),
+                        )
+                    }
                     .let(::updateState)
             }
             .launchIn(viewModelScope)

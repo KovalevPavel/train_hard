@@ -8,4 +8,10 @@ enum class MuscleGroup(val groupId: String) {
     ARMS("arms"),
     ABS("abs"),
     ;
+
+    companion object {
+        fun findById(id: String?) = MuscleGroup.entries.firstOrNull {
+            it.groupId.equals(other = id, ignoreCase = true)
+        }
+    }
 }

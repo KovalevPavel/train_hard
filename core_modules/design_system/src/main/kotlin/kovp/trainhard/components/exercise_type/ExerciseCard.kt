@@ -25,9 +25,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.components.GlowContainer
-import kovp.trainhard.components.joinToStringComposable
-import kovp.trainhard.components.mapMuscleTitle
-import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
@@ -40,12 +37,6 @@ fun ExerciseCard(
     onRemoveClick: (ExerciseCardVs) -> Unit,
 ) {
     var visible by remember { mutableStateOf(true) }
-
-    val list = card.muscles
-        .joinToStringComposable(", ") {
-            mapMuscleTitle(muscleId = it.id)
-        }
-        .replaceFirstChar { it.uppercaseChar() }
 
     GlowContainer(modifier = modifier) {
         Surface(
@@ -83,7 +74,7 @@ fun ExerciseCard(
                     modifier = Modifier
                         .padding(vertical = 8.dp),
                 )
-                Text(text = list, style = themeTypography.body2)
+                Text(text = card.muscles, style = themeTypography.body2)
             }
         }
     }
@@ -104,19 +95,15 @@ private class ExerciseCardProvider : PreviewParameterProvider<ExerciseCardVs> {
         get() = sequenceOf(
             ExerciseCardVs(
                 title = "",
-                muscles = listOf(),
+                muscles = "",
             ),
             ExerciseCardVs(
                 title = "Full body",
-                muscles = Muscles.allMuscles.map {
-                    ExerciseCardVs.MuscleVs(it.muscleId, it.muscleGroup)
-                },
+                muscles = "Верх грудных, середина грудных, низ грудных, квадрицепс, бицепс бедра",
             ),
             ExerciseCardVs(
                 title = "Full body ".repeat(5).trimIndent(),
-                muscles = Muscles.allMuscles.map {
-                    ExerciseCardVs.MuscleVs(it.muscleId, it.muscleGroup)
-                },
+                muscles = "Верх грудных, середина грудных, низ грудных, квадрицепс, бицепс бедра",
             ),
         )
 }

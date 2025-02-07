@@ -21,12 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
-import kovp.trainhard.components.muscle_groups_cloud.MuscleGroupsCloud
 import kovp.trainhard.components.text_field.TrainTextField
 import kovp.trainhard.core_dialogs.BottomSheetDialog
 import kovp.trainhard.core_dialogs.DialogState
-import kovp.trainhard.core_domain.MuscleGroup
-import kovp.trainhard.core_domain.Muscles
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.parameters_presentation.R
 import kovp.trainhard.parameters_presentation.di.exerciseParametersModule
@@ -159,14 +156,14 @@ private fun ScreenData(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
-            items(MuscleGroup.entries) {
+            items(state.muscleGroups) {
                 MuscleGroupsCloud(
-                    group = it,
-                    initialList = state.muscleIds.mapNotNull(Muscles::getMuscleByFullId),
-                ) { muscle, isSelected ->
+                    title = it.title,
+                    initialList = it.muscles,
+                ) { muscleId, isSelected ->
                     handleAction(
                         ExerciseParametersAction.OnMuscleAction(
-                            muscleId = muscle.id,
+                            muscleId = muscleId,
                             isSelected = isSelected,
                         )
                     )

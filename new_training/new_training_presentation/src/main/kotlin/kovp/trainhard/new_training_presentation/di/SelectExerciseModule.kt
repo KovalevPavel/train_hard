@@ -8,6 +8,7 @@ val selectExerciseModule = module {
     viewModel {
         SelectNewExerciseTypeViewModel(
             exercisesApi = get(),
+            configHolder = get(),
         )
     }
 }

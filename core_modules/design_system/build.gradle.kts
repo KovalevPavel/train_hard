@@ -8,6 +8,7 @@ plugins {
 dependencies {
     implementation(project(":ui_theme"))
     implementation(project(":core_domain"))
+    implementation(project(":configs_api"))
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.activity.compose)

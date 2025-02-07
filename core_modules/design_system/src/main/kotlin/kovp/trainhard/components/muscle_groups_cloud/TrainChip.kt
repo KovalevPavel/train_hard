@@ -12,16 +12,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kovp.trainhard.components.mapMuscleTitle
-import kovp.trainhard.core_domain.Muscle
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
 @Composable
-internal fun TrainChip(
-    muscle: Muscle,
+fun TrainChip(
+    id: String,
+    title: String,
     selected: Boolean,
-    onChipClick: (muscle: Muscle, isChecked: Boolean) -> Unit,
+    onChipClick: (muscleId: String, isChecked: Boolean) -> Unit,
 ) {
     var isSelected by remember { mutableStateOf(selected) }
 
@@ -33,14 +32,12 @@ internal fun TrainChip(
         ),
         onClick = {
             isSelected = !isSelected
-            onChipClick(muscle, isSelected)
+            onChipClick(id, isSelected)
         },
         label = {
-            val string =
-                mapMuscleTitle(muscleId = muscle.id).replaceFirstChar { it.uppercaseChar() }
             Text(
                 modifier = Modifier.padding(all = 8.dp),
-                text = string,
+                text = title,
                 style = themeTypography.body2.copy(
                     color = if (isSelected) themeColors.black else themeColors.white,
                 )
