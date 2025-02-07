@@ -1,8 +1,8 @@
 buildscript {
     val major = 1
     val minor = 0
-    val patch = 0
-    val build = 2
+    val patch = 1
+    val build = 3
 
     extra.apply {
         set(
