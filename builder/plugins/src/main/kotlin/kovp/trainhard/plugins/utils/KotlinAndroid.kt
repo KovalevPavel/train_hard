@@ -15,9 +15,8 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
-        val props = TrainProps.getProperties()
-        val javaVersion = props["javaVersion"].toString()
-        val appId = props["applicationId"].toString().filterNot { it == '\"' }
+        val javaVersion = "17"
+        val appId = "trainHard"
 
         namespace = "$appId.$name"
         compileSdk = Config.compileSdk

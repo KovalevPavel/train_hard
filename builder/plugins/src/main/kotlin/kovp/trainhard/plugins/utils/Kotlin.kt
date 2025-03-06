@@ -10,8 +10,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlin(extensions: JavaPluginExtension) {
-    val props = TrainProps.getProperties()
-    val javaVersion = props["javaVersion"].toString()
+    val javaVersion = "17"
 
     extensions.apply {
         toolchain.languageVersion.set(JavaLanguageVersion.of(javaVersion))

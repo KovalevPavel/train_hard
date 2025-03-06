@@ -96,12 +96,17 @@ junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
 junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 
+# Plugins for composite build
+gradleplugin-android = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
+gradleplugin-compose = { module = "org.jetbrains.compose:compose-gradle-plugin", version = "1.8.0-alpha03" }
+gradleplugin-composeCompiler = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+gradleplugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 androidx-benchmark-baseline-profile-gradle-plugin = { group = "androidx.benchmark", name = "benchmark-baseline-profile-gradle-plugin", version.ref = "benchmarkBaselineProfileGradlePlugin" }
-
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 
 # multiplatform
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
