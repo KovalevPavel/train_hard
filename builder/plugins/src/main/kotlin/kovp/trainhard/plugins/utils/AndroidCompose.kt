@@ -1,4 +1,4 @@
-package kovp.trainhard.convention.utils
+package kovp.trainhard.plugins.utils
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project

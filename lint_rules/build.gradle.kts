@@ -5,7 +5,7 @@ plugins {
 }
 
 val props = Properties().apply {
-    file("../build-logic/build.properties").inputStream().use(this::load)
+    file("../builder/plugins/build.properties").inputStream().use(this::load)
 }
 
 val javaVersion = props["javaVersion"].toString()

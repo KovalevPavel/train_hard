@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 pluginManagement {
-    includeBuild("build-logic")
+    includeBuild("builder/plugins")
     repositories {
         google()
         mavenCentral()
@@ -34,7 +34,6 @@ include(":database_api")
 include(":navigation")
 include(":core_dialogs")
 include(":core_presentation")
-include(":lint_rules")
 
 withDirectory("core_modules") {
     includeProject("core")

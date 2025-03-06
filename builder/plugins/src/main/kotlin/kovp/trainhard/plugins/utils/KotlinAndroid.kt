@@ -1,7 +1,7 @@
-package kovp.trainhard.convention.utils
+package kovp.trainhard.plugins.utils
 
 import com.android.build.api.dsl.CommonExtension
-import kovp.trainhard.convention.consts.Config
+import kovp.trainhard.plugins.consts.Config
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension

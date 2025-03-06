@@ -40,8 +40,6 @@ koinCompose = "3.4.6"
 
 calendar = "2.4.0"
 
-lint = "31.1.4"
-detekt = "1.23.6"
 annotationJvm = "1.9.1"
 
 junit = "5.11.3"
@@ -85,7 +83,6 @@ calendar = { group = "com.kizitonwose.calendar", name = "compose", version.ref =
 # gradle plugins
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
 
 # logging
 logging-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
@@ -112,5 +109,4 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

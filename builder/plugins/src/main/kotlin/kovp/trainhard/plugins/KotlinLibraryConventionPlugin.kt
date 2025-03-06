@@ -1,8 +1,7 @@
-package kovp.trainhard.convention
+package kovp.trainhard.plugins
 
-import kovp.trainhard.convention.consts.Plugins
-import kovp.trainhard.convention.utils.configureDetekt
-import kovp.trainhard.convention.utils.configureKotlin
+import kovp.trainhard.plugins.consts.Plugins
+import kovp.trainhard.plugins.utils.configureKotlin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -14,11 +13,9 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
             pluginManager.apply {
                 Plugins.kotlin.let(::apply)
                 Plugins.java.let(::apply)
-                Plugins.detekt.let(::apply)
             }
 
             extensions.configure(::configureKotlin)
-            configureDetekt()
         }
     }
 }

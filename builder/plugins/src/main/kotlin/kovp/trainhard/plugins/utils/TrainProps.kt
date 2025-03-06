@@ -1,4 +1,4 @@
-package kovp.trainhard.convention.utils
+package kovp.trainhard.plugins.utils
 
 import org.gradle.api.Project
 import java.util.Properties
@@ -15,7 +15,7 @@ object TrainProps {
 
         else -> {
             properties.let {
-                file("../build-logic/build.properties").inputStream().use(it::load)
+                file("../builder/plugins/build.properties").inputStream().use(it::load)
             }
             isInitialized = true
             properties

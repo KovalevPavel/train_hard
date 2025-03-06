@@ -27,26 +27,25 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
-    compileOnly(libs.detekt.gradlePlugin)
 }
 
 gradlePlugin {
     plugins {
         register("androidApplication") {
             id = "trainhard.android.application"
-            implementationClass = "kovp.trainhard.convention.AndroidApplicationConventionPlugin"
+            implementationClass = "kovp.trainhard.plugins.AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
             id = "trainhard.android.library"
-            implementationClass = "kovp.trainhard.convention.AndroidLibraryConventionPlugin"
+            implementationClass = "kovp.trainhard.plugins.AndroidLibraryConventionPlugin"
         }
         register("androidLibraryCompose") {
             id = "trainhard.android.compose"
-            implementationClass = "kovp.trainhard.convention.AndroidComposeConventionPlugin"
+            implementationClass = "kovp.trainhard.plugins.AndroidComposeConventionPlugin"
         }
         register("kotlinLibrary") {
             id = "trainhard.kotlin.library"
-            implementationClass = "kovp.trainhard.convention.KotlinLibraryConventionPlugin"
+            implementationClass = "kovp.trainhard.plugins.KotlinLibraryConventionPlugin"
         }
     }
 }
