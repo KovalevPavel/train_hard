@@ -25,7 +25,7 @@ fun File.includeProject(moduleName: String) {
     project(":$moduleName").projectDir = file("${this.path}/$moduleName")
 }
 
-rootProject.name = "Train hard"
+rootProject.name = "trainHard"
 
 include(":app")
 include(":core_domain")
