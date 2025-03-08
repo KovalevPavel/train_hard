@@ -3,6 +3,7 @@ package kovp.trainhard.components.selectors
 import androidx.compose.material3.CalendarLocale
 import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.ExperimentalMaterial3Api
+import kotlinx.datetime.Instant
 import kovp.trainhard.core_domain.formatToDateString
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -13,7 +14,7 @@ class DatePickerFormatter: DatePickerFormatter {
         forContentDescription: Boolean
     ): String? {
 
-        return dateMillis?.formatToDateString(DATE_PICKER_FORMAT, locale)
+        return dateMillis?.let(Instant::fromEpochMilliseconds)?.formatToDateString(DATE_PICKER_FORMAT)
     }
 
     override fun formatMonthYear(monthMillis: Long?, locale: CalendarLocale): String? {

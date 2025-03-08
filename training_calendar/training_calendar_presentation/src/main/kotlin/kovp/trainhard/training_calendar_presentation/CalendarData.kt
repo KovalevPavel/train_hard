@@ -16,6 +16,7 @@ import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.DayPosition.MonthDate
 import com.kizitonwose.calendar.core.daysOfWeek
+import kotlinx.datetime.toKotlinInstant
 import kovp.trainhard.core_domain.DATE_FORMAT_LLLL_YYYY
 import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.core_domain.formatToDateString
@@ -25,7 +26,9 @@ import kovp.trainhard.ui_theme.providers.themeTypography
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.format.TextStyle.SHORT
+import java.util.Date
 import java.util.Locale
 
 @Composable
@@ -57,11 +60,20 @@ fun CalendarData(
         },
         monthContainer = { calendarMonth, container ->
             Spacer(modifier = Modifier.height(8.dp))
+            val dateString = Date.from(
+                calendarMonth.yearMonth
+                    .atDay(1)
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+            )
+                .toInstant()
+                .toKotlinInstant()
+                .formatToDateString(DATE_FORMAT_LLLL_YYYY)
+                .replaceFirstChar(Char::uppercase)
+
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = calendarMonth.yearMonth
-                    .formatToDateString(DATE_FORMAT_LLLL_YYYY)
-                    .replaceFirstChar(Char::uppercase),
+                text = dateString,
                 style = themeTypography.body1,
             )
             Row(

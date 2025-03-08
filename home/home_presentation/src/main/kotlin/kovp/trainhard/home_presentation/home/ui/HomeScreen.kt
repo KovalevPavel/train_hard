@@ -12,10 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.Instant
 import kovp.trainhard.core_domain.DATE_FORMAT_dd_MMMM
 import kovp.trainhard.core_domain.formatToDateString
 import kovp.trainhard.home_presentation.R
@@ -34,8 +34,6 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onDateClick: () -> Unit,
 ) {
-    val locale = LocalContext.current.resources.configuration.locales[0]
-
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
@@ -44,7 +42,7 @@ fun HomeScreen(
         item {
             CurrentDateCard(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                currentDate = dateString.formatToDateString(DATE_FORMAT_dd_MMMM, locale),
+                currentDate = Instant.fromEpochMilliseconds(dateString).formatToDateString(DATE_FORMAT_dd_MMMM),
                 currentProgramName = "",
                 onDateClick = onDateClick,
             )

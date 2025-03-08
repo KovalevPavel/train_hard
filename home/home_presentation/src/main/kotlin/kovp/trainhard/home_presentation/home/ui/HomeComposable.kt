@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import androidx.navigation.NavController
+import kotlinx.datetime.Clock
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.selectors.DateRangeSelectorState
@@ -153,7 +154,7 @@ private fun handleEvent(event: HomeEvent, navController: NavController) {
         }
 
         is HomeEvent.OpenNewTrainingScreen -> {
-            val timeStamp = LocalDate.now().toStartOfDay()
+            val timeStamp = Clock.System.now().toStartOfDay()
 
             navController.navigate(TrainingScreen(timestamp = timeStamp))
         }

@@ -3,8 +3,11 @@
 package kovp.trainhard.core_domain
 
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.time.LocalDate
-import java.time.ZoneId
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toLocalDateTime
 
 fun Int?.orZero() = this ?: 0
 fun Float?.orZero() = this ?: 0
@@ -15,9 +18,12 @@ fun Long?.orZero(): Long = this ?: 0
 fun <T : Any> MutableStateFlow<T>.update(newState: T) =
     this.compareAndSet(expect = this.value, update = newState)
 
+fun Instant.toStartOfDay(): Long {
+    return this.toLocalDateTime(TimeZone.currentSystemDefault()).date.toStartOfDay()
+}
+
 fun LocalDate.toStartOfDay(): Long {
     return this
-        .atStartOfDay(ZoneId.systemDefault())
-        .toInstant()
-        .toEpochMilli()
+        .atStartOfDayIn(TimeZone.currentSystemDefault())
+        .toEpochMilliseconds()
 }
