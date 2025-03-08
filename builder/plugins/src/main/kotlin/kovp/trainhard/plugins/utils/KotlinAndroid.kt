@@ -34,13 +34,13 @@ internal fun Project.configureKotlinAndroid(
         compileOptions {
             sourceCompatibility = JavaVersion.toVersion(javaVersion.toInt())
             targetCompatibility = JavaVersion.toVersion(javaVersion.toInt())
-            isCoreLibraryDesugaringEnabled = true
+//            isCoreLibraryDesugaringEnabled = true
         }
 
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-        dependencies {
-            add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
-        }
+//        dependencies {
+//            add("coreLibraryDesugaring", libs.findLibrary("desugar").get())
+//        }
     }
 }

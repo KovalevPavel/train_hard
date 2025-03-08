@@ -9,7 +9,7 @@ class HomeScreenConfigDataProvider(
     private val resourceProvider: ResourceProvider,
     private val json: Json,
 ) : ConfigDataProvider<HomeScreenConfigDto> {
-    override val provider: () -> HomeScreenConfigDto = {
+    override val provider: suspend () -> HomeScreenConfigDto = {
         val rawString = resourceProvider.getConfig(R.raw.home_screen_config)
         json.decodeFromString<HomeScreenConfigDto>(rawString)
     }

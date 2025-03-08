@@ -1,5 +1,3 @@
-package kovp.trainhard.core
-
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.test.runTest

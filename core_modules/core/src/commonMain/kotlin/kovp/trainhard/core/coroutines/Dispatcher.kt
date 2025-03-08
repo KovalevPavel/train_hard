@@ -1,6 +1,7 @@
 package kovp.trainhard.core.coroutines
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 
 sealed interface Dispatcher {
     data object Main: Dispatcher

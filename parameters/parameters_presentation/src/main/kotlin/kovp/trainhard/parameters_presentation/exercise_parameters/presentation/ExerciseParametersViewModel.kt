@@ -1,6 +1,8 @@
 package kovp.trainhard.parameters_presentation.exercise_parameters.presentation
 
+import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.configs_core.ExercisesConfig
 import kovp.trainhard.configs_core.getMuscleByFullId
@@ -85,40 +87,42 @@ class ExerciseParametersViewModel(
     }
 
     private fun updateState() {
-        val actionRes = if (isNewExercise) {
-            kovp.trainhard.design_system.R.string.add
-        } else {
-            kovp.trainhard.design_system.R.string.save
-        }
-
-        val titleResId = if (isNewExercise) {
-            R.string.new_exercise_screen_title
-        } else {
-            R.string.edit_exercise_screen_title
-        }
-
-        ExerciseParametersState.Content(
-            screenTitle = resourceProvider.getString(titleResId),
-            action = resourceProvider.getString(actionRes),
-            muscleName = currentName,
-            muscleGroups = MuscleGroup.entries.map { g ->
-                ExerciseParametersState.MuscleGroupVs(
-                    title = exercisesConfig.muscleGroups[g].orEmpty(),
-                    muscles = exercisesConfig.muscles
-                        .filter { it.muscleGroup == g }
-                        .map {
-                            ExerciseParametersState.MuscleVs(
-                                id = it.id,
-                                title = it.localizedString,
-                                isSelected = it.id in musclesCloud,
-                            )
-                        }
-                        .toImmutableList()
-                )
+        viewModelScope.launch {
+            val actionRes = if (isNewExercise) {
+                kovp.trainhard.design_system.R.string.add
+            } else {
+                kovp.trainhard.design_system.R.string.save
             }
-                .toImmutableList(),
-        )
-            .let(::updateState)
+
+            val titleResId = if (isNewExercise) {
+                R.string.new_exercise_screen_title
+            } else {
+                R.string.edit_exercise_screen_title
+            }
+
+            ExerciseParametersState.Content(
+                screenTitle = resourceProvider.getString(titleResId),
+                action = resourceProvider.getString(actionRes),
+                muscleName = currentName,
+                muscleGroups = MuscleGroup.entries.map { g ->
+                    ExerciseParametersState.MuscleGroupVs(
+                        title = exercisesConfig.muscleGroups[g].orEmpty(),
+                        muscles = exercisesConfig.muscles
+                            .filter { it.muscleGroup == g }
+                            .map {
+                                ExerciseParametersState.MuscleVs(
+                                    id = it.id,
+                                    title = it.localizedString,
+                                    isSelected = it.id in musclesCloud,
+                                )
+                            }
+                            .toImmutableList()
+                    )
+                }
+                    .toImmutableList(),
+            )
+                .let(::updateState)
+        }
     }
 
     private fun handleOnActionClick() {

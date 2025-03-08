@@ -8,11 +8,11 @@ class ResourceProviderImpl(
 ) : ResourceProvider {
     private val resources = context.resources
 
-    override fun getString(resId: Int): String {
+    override suspend fun getString(resId: Int): String {
         return resources.getString(resId)
     }
 
-    override fun getConfig(resId: Int): String {
+    override suspend fun getConfig(resId: Int): String {
         return resources.openRawResource(resId).bufferedReader().use { it.readText() }
     }
 }

@@ -10,4 +10,5 @@ dependencies {
     implementation(project(":configs_core"))
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.annotation.jvm)
+    implementation(libs.kotlinx.coroutines.core)
 }

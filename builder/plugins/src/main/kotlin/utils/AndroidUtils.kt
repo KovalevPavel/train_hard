@@ -31,7 +31,7 @@ private val Project.androidExtension: AndroidExtensions
 
 internal fun Project.configAndroid() {
     androidExtension.apply {
-        namespace = "kovp.rm.${project.name}"
+        namespace = "kovp.trainhard.${project.name}"
 
         compileSdk = libs.versions.android.compileSdk.get().toInt()
 

@@ -1,5 +1,6 @@
 package kovp.trainhard.configs_data
 
+import kotlinx.coroutines.runBlocking
 import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.configs_core.ExercisesConfig
 import kovp.trainhard.configs_core.HomeScreenConfig
@@ -21,14 +22,20 @@ class ConfigHolderImpl(
 ) : ConfigHolder {
 
     override val exercisesConfig: ExercisesConfig by lazy {
-        exercisesConfigDataProvider.provider().let(exercisesConfigMapper::mapConfig)
+        runBlocking {
+            exercisesConfigDataProvider.provider().let(exercisesConfigMapper::mapConfig)
+        }
     }
 
     override val trainingConfig: TrainingConfig by lazy {
-        trainingConfigDataProvider.provider().let(trainingConfigMapper::mapConfig)
+        runBlocking {
+            trainingConfigDataProvider.provider().let(trainingConfigMapper::mapConfig)
+        }
     }
 
     override val homeScreenConfig: HomeScreenConfig by lazy {
-        homeScreenConfigDataProvider.provider().let(homeScreenConfigMapper::mapConfig)
+        runBlocking {
+            homeScreenConfigDataProvider.provider().let(homeScreenConfigMapper::mapConfig)
+        }
     }
 }

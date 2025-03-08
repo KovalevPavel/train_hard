@@ -9,7 +9,7 @@ class TrainingConfigDataProvider(
     private val resourceProvider: ResourceProvider,
     private val json: Json,
 ): ConfigDataProvider<TrainingConfigDto> {
-    override val provider: () -> TrainingConfigDto = {
+    override val provider: suspend () -> TrainingConfigDto = {
         val rawString = resourceProvider.getConfig(R.raw.training_config)
         json.decodeFromString<TrainingConfigDto>(rawString)
     }

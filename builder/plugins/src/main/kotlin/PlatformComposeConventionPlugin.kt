@@ -1,18 +1,11 @@
-import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.jetbrains.compose.ComposePlugin
+import utils.AbstractComposeConventionPlugin
 import utils.kotlin
 import utils.libs
 
-class PlatformComposeConventionPlugin : Plugin<Project> {
-    private lateinit var composeDependencies: ComposePlugin.Dependencies
-
-    private val compose: ComposePlugin.Dependencies
-        get() = composeDependencies
-
+class PlatformComposeConventionPlugin : AbstractComposeConventionPlugin() {
     override fun apply(target: Project) {
-        composeDependencies = ComposePlugin.Dependencies(target)
-
+        super.apply(target)
         with(target) {
             pluginManager.apply {
                 apply(libs.plugins.composeMultiplatform.get().pluginId)

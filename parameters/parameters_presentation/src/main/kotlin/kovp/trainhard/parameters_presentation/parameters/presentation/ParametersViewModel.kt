@@ -82,7 +82,7 @@ class ParametersViewModel(
         }
     }
 
-    private fun getRemoveExerciseAlert(exercise: ExerciseCardVs): DialogState {
+    private suspend fun getRemoveExerciseAlert(exercise: ExerciseCardVs): DialogState {
         return MessageDialogState(
             dialogId = CONFIRM_DELETE_EXERCISE_DIALOG_LABEL,
             title = exercise.title,
