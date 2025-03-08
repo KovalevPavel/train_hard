@@ -18,11 +18,6 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget.set(JvmTarget.fromTarget(projectJavaVersion.toString()))
 }
 
-dependencies {
-    compileOnly(libs.android.gradlePlugin)
-    compileOnly(libs.kotlin.gradlePlugin)
-}
-
 gradlePlugin {
     plugins {
         register("androidApplication_deprecated") {

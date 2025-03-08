@@ -3,7 +3,7 @@ package kovp.trainhard.configs_data.providers
 import kotlinx.serialization.json.Json
 import kovp.trainhard.configs_data.R
 import kovp.trainhard.configs_data.TrainingConfigDto
-import trainhard.kovp.core.ResourceProvider
+import kovp.trainhard.core.ResourceProvider
 
 class TrainingConfigDataProvider(
     private val resourceProvider: ResourceProvider,

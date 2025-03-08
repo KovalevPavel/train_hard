@@ -14,7 +14,7 @@ import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.parameters_presentation.R
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 import timber.log.Timber
-import trainhard.kovp.core.ResourceProvider
+import kovp.trainhard.core.ResourceProvider
 import java.util.UUID
 
 class ParametersViewModel(

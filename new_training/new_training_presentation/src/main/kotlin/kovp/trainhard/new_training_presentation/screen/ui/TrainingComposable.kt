@@ -44,7 +44,7 @@ import kovp.trainhard.ui_theme.providers.themeColors
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.module.rememberKoinModules
 import org.koin.core.annotation.KoinExperimentalAPI
-import trainhard.kovp.core.RequestAction
+import kovp.trainhard.core.RequestAction
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable

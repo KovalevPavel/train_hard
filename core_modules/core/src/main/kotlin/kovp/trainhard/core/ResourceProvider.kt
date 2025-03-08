@@ -1,4 +1,4 @@
-package trainhard.kovp.core
+package kovp.trainhard.core
 
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes

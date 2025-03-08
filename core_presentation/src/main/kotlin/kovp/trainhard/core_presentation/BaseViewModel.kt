@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import trainhard.kovp.core.coroutines.Dispatcher
-import trainhard.kovp.core.coroutines.Scope
-import trainhard.kovp.core.coroutines.coroutine
+import kovp.trainhard.core.coroutines.Dispatcher
+import kovp.trainhard.core.coroutines.Scope
+import kovp.trainhard.core.coroutines.coroutine
 
 abstract class BaseViewModel<State : Any, Action : Any, Event : Any>(
     initialState: State,

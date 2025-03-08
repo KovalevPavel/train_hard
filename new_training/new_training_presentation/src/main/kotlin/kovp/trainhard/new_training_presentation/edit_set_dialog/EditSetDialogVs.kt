@@ -1,6 +1,6 @@
 package kovp.trainhard.new_training_presentation.edit_set_dialog
 
-import trainhard.kovp.core.RequestAction
+import kovp.trainhard.core.RequestAction
 
 /**
  * @param id id упражнения в текущей тренировке

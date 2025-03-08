@@ -1,3 +1,3 @@
-package trainhard.kovp.core
+package kovp.trainhard.core
 
 class TestException: RuntimeException("Test exception")

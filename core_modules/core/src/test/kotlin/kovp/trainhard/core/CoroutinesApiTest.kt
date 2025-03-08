@@ -1,4 +1,4 @@
-package trainhard.kovp.core
+package kovp.trainhard.core
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.supervisorScope
@@ -6,7 +6,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import trainhard.kovp.core.coroutines.coroutine
+import kovp.trainhard.core.coroutines.coroutine
 import kotlin.reflect.KClass
 
 class CoroutinesApiTest {

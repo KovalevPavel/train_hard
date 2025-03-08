@@ -1,4 +1,4 @@
-package trainhard.kovp.core
+package kovp.trainhard.core
 
 /**
  * Тип действия с сущностями. Применяется для создания/редактирования упражнений, сетов и др

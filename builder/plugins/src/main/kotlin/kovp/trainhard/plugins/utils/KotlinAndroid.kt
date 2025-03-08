@@ -16,7 +16,7 @@ internal fun Project.configureKotlinAndroid(
 ) {
     commonExtension.apply {
         val javaVersion = "17"
-        val appId = "trainHard"
+        val appId = "kovp.trainhard"
 
         namespace = "$appId.$name"
         compileSdk = Config.compileSdk

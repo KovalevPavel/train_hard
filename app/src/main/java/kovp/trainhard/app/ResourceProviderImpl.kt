@@ -1,7 +1,7 @@
 package kovp.trainhard.app
 
 import android.content.Context
-import trainhard.kovp.core.ResourceProvider
+import kovp.trainhard.core.ResourceProvider
 
 class ResourceProviderImpl(
     context: Context,

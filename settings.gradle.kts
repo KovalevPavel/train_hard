@@ -1,6 +1,5 @@
 @file:Suppress("UnstableApiUsage")
 
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 pluginManagement {
     includeBuild("builder/plugins")
     repositories {
@@ -27,7 +26,7 @@ fun File.includeProject(moduleName: String) {
     project(":$moduleName").projectDir = file("${this.path}/$moduleName")
 }
 
-rootProject.name = "trainHard"
+rootProject.name = "Train hard"
 
 include(":app")
 include(":core_domain")

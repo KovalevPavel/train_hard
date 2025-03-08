@@ -1,4 +1,4 @@
-package trainhard.kovp.core.coroutines
+package kovp.trainhard.core.coroutines
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
