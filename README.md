@@ -2,7 +2,6 @@
 Используемый стек:
 * Jetpack compose
 * DI - Koin (https://insert-koin.io/)
-* Навигация - Compose destinations (https://composedestinations.rafaelcosta.xyz/)
 * Room, shared preferences
 
 Уже реализованный функционал:
