@@ -12,13 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.Instant
 import kovp.trainhard.core_domain.DATE_FORMAT_dd_MMMM
 import kovp.trainhard.core_domain.formatToDateString
-import kovp.trainhard.home_presentation.R
 import kovp.trainhard.home_presentation.components.CurrentDateCard
 import kovp.trainhard.home_presentation.components.ExercisePlanCardComposable
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan
@@ -26,6 +24,11 @@ import kovp.trainhard.home_presentation.home.presentation.TodayPlan.NoProgramSel
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan.RestDay
 import kovp.trainhard.home_presentation.home.presentation.TodayPlan.TrainingDay
 import kovp.trainhard.ui_theme.providers.themeTypography
+import org.jetbrains.compose.resources.stringResource
+import trainhard.home_presentation.generated.resources.Res
+import trainhard.home_presentation.generated.resources.today_plan
+import trainhard.home_presentation.generated.resources.today_plan_no_selected
+import trainhard.home_presentation.generated.resources.today_plan_rest_day
 
 @Composable
 fun HomeScreen(
@@ -50,7 +53,7 @@ fun HomeScreen(
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(id = R.string.today_plan),
+                text = stringResource(resource = Res.string.today_plan),
                 style = themeTypography.header1,
             )
         }
@@ -66,7 +69,7 @@ private fun LazyListScope.mapTodayPlan(plan: TodayPlan) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(24.dp),
-                    text = stringResource(id = R.string.today_plan_no_selected),
+                    text = stringResource(resource = Res.string.today_plan_no_selected),
                     style = themeTypography.body2,
                     textAlign = TextAlign.Center,
                 )
@@ -79,7 +82,7 @@ private fun LazyListScope.mapTodayPlan(plan: TodayPlan) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(24.dp),
-                    text = stringResource(id = R.string.today_plan_rest_day),
+                    text = stringResource(resource = Res.string.today_plan_rest_day),
                     style = themeTypography.body2,
                     textAlign = TextAlign.Center,
                 )

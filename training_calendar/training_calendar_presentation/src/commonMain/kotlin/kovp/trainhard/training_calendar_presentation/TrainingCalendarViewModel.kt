@@ -7,14 +7,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Clock
-import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
 import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.core_domain.toStartOfDay
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.training_calendar_domain.GetTrainingDataInteractor
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.ExperimentalTime
 
 class TrainingCalendarViewModel(
     private val getTrainingData: GetTrainingDataInteractor,
@@ -34,7 +35,7 @@ class TrainingCalendarViewModel(
             when (action) {
                 is TrainingCalendarAction.OnTrainingDayClick -> {
                     action.day
-                        .toKotlinLocalDate()
+//                        .toKotlinLocalDate()
                         .toStartOfDay()
                         .let(TrainingCalendarEvent::OpenNewTrainingScreen)
                 }
@@ -43,6 +44,7 @@ class TrainingCalendarViewModel(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     private fun subscribeOnCalendarData() {
         //TODO: добавить пагинацию
         val startDate = kotlinx.datetime.LocalDate(
@@ -57,8 +59,9 @@ class TrainingCalendarViewModel(
             .onEach {
                 delay(STATE_UPDATE_DELAY_MS)
                 it.mapKeys { (timestamp, _) ->
-                    val instant = Instant.ofEpochMilli(timestamp)
-                    LocalDate.ofInstant(instant, ZoneId.systemDefault())
+//                    val instant = Instant.ofEpochMilli(timestamp)
+                    val daysEpoch = Duration.convert(timestamp.toDouble(), DurationUnit.MILLISECONDS, DurationUnit.DAYS)
+                    LocalDate.fromEpochDays(daysEpoch.toInt())
                 }
                     .let { trainings ->
                         TrainingCalendarState.Data(

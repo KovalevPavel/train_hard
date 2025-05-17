@@ -1,6 +1,6 @@
 package kovp.trainhard.training_calendar_presentation
 
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 sealed interface TrainingCalendarAction {
     data class OnTrainingDayClick(val day: LocalDate) : TrainingCalendarAction

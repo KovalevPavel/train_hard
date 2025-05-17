@@ -3,8 +3,8 @@ package kovp.trainhard.training_calendar_presentation
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.datetime.LocalDate
 import kovp.trainhard.core_domain.MuscleGroup
-import java.time.LocalDate
 
 @Immutable
 sealed interface TrainingCalendarState {

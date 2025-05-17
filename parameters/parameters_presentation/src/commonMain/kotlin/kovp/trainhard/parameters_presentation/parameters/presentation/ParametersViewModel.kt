@@ -11,11 +11,11 @@ import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.ExercisesApi
-import kovp.trainhard.parameters_presentation.R
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
-import timber.log.Timber
 import kovp.trainhard.core.ResourceProvider
-import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
 
 class ParametersViewModel(
     private val exercisesApi: ExercisesApi,
@@ -86,15 +86,17 @@ class ParametersViewModel(
         return MessageDialogState(
             dialogId = CONFIRM_DELETE_EXERCISE_DIALOG_LABEL,
             title = exercise.title,
-            message = resourceProvider.getString(R.string.exercise_delete_message),
+            message = "resourceProvider.getString(R.string.exercise_delete_message)",
             positiveAction = DialogState.Action(
                 action = resourceProvider.getString(
-                    kovp.trainhard.design_system.R.string.action_ok,
+//                    kovp.trainhard.design_system.R.string.action_ok,
+                    0,
                 ),
             ),
             negativeAction = DialogState.Action(
                 action = resourceProvider.getString(
-                    kovp.trainhard.design_system.R.string.action_cancel,
+//                    kovp.trainhard.design_system.R.string.action_cancel,
+                    0,
                 ),
             ),
             payload = exercise,
@@ -140,15 +142,16 @@ class ParametersViewModel(
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     private fun handleError(e: Throwable) {
-        Timber.e(e)
+        println(e)
         launch {
             ParametersEvent.ShowBottomSheetDialog(
                 dialogState = MessageDialogState(
-                    dialogId = UUID.randomUUID().toString(),
+                    dialogId = Uuid.random().toString(),
                     title = e.message.orEmpty(),
                     positiveAction = DialogState.Action(
-                        resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok),
+                        "resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok)",
                     ),
                 )
             )

@@ -13,13 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import kotlin.math.roundToInt
@@ -95,25 +91,4 @@ fun MonthString(month: String) {
         maxLines = 1,
         overflow = TextOverflow.Visible,
     )
-}
-
-@Preview
-@Composable
-private fun CalendarCardPreview(
-    @PreviewParameter(DateStringProvider::class) date: String?,
-) {
-    TrainHardTheme {
-        CalendarCard(date = date, onClick = {})
-    }
-}
-
-private class DateStringProvider : PreviewParameterProvider<String?> {
-    override val values: Sequence<String?>
-        get() = sequenceOf(
-            null,
-            "",
-            "03\nсентября",
-            "13\nфевраля",
-            "13\nфевраляяяяяя",
-        )
 }

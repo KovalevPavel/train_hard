@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,15 +26,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import kovp.trainhard.components.PublicResources
 import kovp.trainhard.core_domain.orZero
 import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Suppress("LongMethod")
@@ -56,7 +57,7 @@ inline fun <reified T: CounterValue> Counter(
 
     Row(modifier = modifier) {
         CounterButton(
-            iconRes = PublicResources.iconMinus,
+            iconRes = Icons.Default.Remove,
             buttonType = ButtonType.Remove,
         ) {
             val newValue = (currentValue - increment).value
@@ -99,7 +100,7 @@ inline fun <reified T: CounterValue> Counter(
             onValueChanged(currentValue)
         }
         CounterButton(
-            iconRes = PublicResources.iconPlus,
+            iconRes = Icons.Default.Add,
             buttonType = ButtonType.Add,
         ) {
             val newValue = (currentValue + increment).value
@@ -120,7 +121,7 @@ inline fun <reified T: CounterValue> Counter(
 
 @Composable
 fun CounterButton(
-    iconRes: DrawableResource,
+    iconRes: ImageVector,
     buttonType: ButtonType,
     onValueChange: () -> Unit
 ) {
@@ -140,7 +141,7 @@ fun CounterButton(
         ) {
             Image(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(resource = iconRes),
+                imageVector = iconRes,
                 contentDescription = null
             )
         }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.datetime.Clock
 import kovp.trainhard.components.StateContainer
@@ -22,7 +23,6 @@ import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.selectors.DateRangeSelectorState
 import kovp.trainhard.core_domain.toStartOfDay
 import kovp.trainhard.core_presentation.subscribeForResult
-import kovp.trainhard.home_presentation.di.homeModule
 import kovp.trainhard.home_presentation.home.presentation.HomeAction
 import kovp.trainhard.home_presentation.home.presentation.HomeEvent
 import kovp.trainhard.home_presentation.home.presentation.HomeScreenState
@@ -32,19 +32,15 @@ import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_api.TrainingScreen
 import kovp.trainhard.training_calendar_api.TrainingCalendarScreen
 import kovp.trainhard.ui_theme.providers.themeColors
-import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.module.rememberKoinModules
-import org.koin.core.annotation.KoinExperimentalAPI
-import java.time.LocalDate
+import kotlin.time.ExperimentalTime
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeComposable(
     navController: NavController,
 ) {
-    rememberKoinModules { listOf(homeModule) }
+//    rememberKoinModules { listOf(homeModule) }
 
-    val vm = koinViewModel<HomeViewModel>()
+    val vm = viewModel<HomeViewModel>()
     val state by vm.state.collectAsState()
 
     SubscribeOnEvents(
@@ -142,6 +138,7 @@ private fun checkCardHealthUpdates(
     }
 }
 
+@OptIn(ExperimentalTime::class)
 private fun handleEvent(event: HomeEvent, navController: NavController) {
     when (event) {
         is HomeEvent.OpenDatePickerDialog -> {
@@ -160,7 +157,7 @@ private fun handleEvent(event: HomeEvent, navController: NavController) {
         }
 
         is HomeEvent.OpenTrainingCalendar -> {
-            navController.navigate(TrainingCalendarScreen(lastAvailableDate = System.currentTimeMillis()))
+            navController.navigate(TrainingCalendarScreen(lastAvailableDate = kotlin.time.Clock.System.now().epochSeconds))
         }
     }
 }

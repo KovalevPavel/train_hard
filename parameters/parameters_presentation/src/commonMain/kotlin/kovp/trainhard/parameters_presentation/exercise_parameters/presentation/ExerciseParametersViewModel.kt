@@ -13,11 +13,10 @@ import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.database_api.errors.EntityExistsException
 import kovp.trainhard.database_api.models.ExerciseVo
-import kovp.trainhard.parameters_presentation.R
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
-import timber.log.Timber
 import kovp.trainhard.core.ResourceProvider
-import java.util.UUID
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class ExerciseParametersViewModel(
     private val exerciseArgument: ExerciseParametersArg,
@@ -89,15 +88,19 @@ class ExerciseParametersViewModel(
     private fun updateState() {
         viewModelScope.launch {
             val actionRes = if (isNewExercise) {
-                kovp.trainhard.design_system.R.string.add
+                //kovp.trainhard.design_system.Res.string.add
+                0
             } else {
-                kovp.trainhard.design_system.R.string.save
+                //kovp.trainhard.design_system.Res.string.save
+                1
             }
 
             val titleResId = if (isNewExercise) {
-                R.string.new_exercise_screen_title
+                // R.string.new_exercise_screen_title
+                0
             } else {
-                R.string.edit_exercise_screen_title
+                // R.string.edit_exercise_screen_title
+                1
             }
 
             ExerciseParametersState.Content(
@@ -125,14 +128,15 @@ class ExerciseParametersViewModel(
         }
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     private fun handleOnActionClick() {
         launch(
             action = {
                 if (currentName.isEmpty() || musclesCloud.isEmpty()) {
                     MessageDialogState(
-                        dialogId = UUID.randomUUID().toString(),
-                        title = resourceProvider.getString(R.string.enter_info),
-                        positiveAction = resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok)
+                        dialogId = Uuid.random().toString(),
+                        title = "resourceProvider.getString(R.string.enter_info)",
+                        positiveAction = "resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok)"
                             .let(DialogState::Action),
                     )
                         .let(ExerciseParametersEvent::ShowMessageDialog)
@@ -156,7 +160,7 @@ class ExerciseParametersViewModel(
     }
 
     private fun handleError(e: Throwable) {
-        Timber.e(e)
+        println(e)
         launch {
             when (e) {
                 is EntityExistsException -> {
@@ -165,7 +169,7 @@ class ExerciseParametersViewModel(
                             dialogId = EXERCISE_ALREADY_EXISTS_DIALOG_ID,
                             title = e.title,
                             positiveAction = DialogState.Action(
-                                resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok),
+                                "resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok)",
                             ),
                         ),
                     )
@@ -182,13 +186,14 @@ class ExerciseParametersViewModel(
             } else {
                 MessageDialogState(
                     dialogId = EXIT_DIALOG_ID,
-                    title = resourceProvider.getString(R.string.exit_without_save),
+                    title = "resourceProvider.getString(R.string.exit_without_save)",
                     positiveAction = DialogState.Action(
-                        action = resourceProvider.getString(R.string.exit)
+                        action = "resourceProvider.getString(R.string.exit)"
                     ),
                     negativeAction = DialogState.Action(
                         action = resourceProvider.getString(
-                            resId = kovp.trainhard.design_system.R.string.action_cancel,
+                            //resId = kovp.trainhard.design_system.R.string.action_cancel,
+                            resId = 1
                         ),
                     ),
                 )

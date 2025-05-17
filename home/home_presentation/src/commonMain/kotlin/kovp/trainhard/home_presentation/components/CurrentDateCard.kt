@@ -14,14 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kovp.trainhard.home_presentation.R
-import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
+import org.jetbrains.compose.resources.stringResource
+import trainhard.home_presentation.generated.resources.Res
+import trainhard.home_presentation.generated.resources.active_program_title
+import trainhard.home_presentation.generated.resources.default_program
 
 @Composable
 fun CurrentDateCard(
@@ -52,12 +52,12 @@ fun CurrentDateCard(
                 )
             ) {
                 Text(
-                    text = stringResource(id = R.string.active_program_title),
+                    text = stringResource(resource = Res.string.active_program_title),
                     style = themeTypography.body1,
                 )
                 Text(
                     text = currentProgramName.takeIf(String::isNotEmpty)
-                        ?: stringResource(id = R.string.default_program),
+                        ?: stringResource(resource = Res.string.default_program),
                     style = themeTypography.header1
                         .takeIf { currentProgramName.isNotEmpty() }
                         ?: themeTypography.body1,
@@ -65,17 +65,5 @@ fun CurrentDateCard(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun CurrentDateCardPreview() {
-    TrainHardTheme {
-        CurrentDateCard(
-            currentDate = "03\nсентября",
-            currentProgramName = "",
-            onDateClick = {},
-        )
     }
 }

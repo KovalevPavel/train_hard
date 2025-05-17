@@ -14,30 +14,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import kotlinx.datetime.LocalDate
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
-import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_api.TrainingScreen
-import kovp.trainhard.training_calendar_presentation.di.trainingCalendarModule
 import kovp.trainhard.training_calendar_presentation.legend.Legend
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
-import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.module.rememberKoinModules
-import org.koin.core.annotation.KoinExperimentalAPI
-import java.time.LocalDate
+import org.jetbrains.compose.resources.stringResource
+import trainhard.training_calendar_presentation.generated.resources.Res
+import trainhard.training_calendar_presentation.generated.resources.training_calendar_title
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun TrainingCalendar(
     navController: NavController,
 ) {
-    rememberKoinModules { listOf(trainingCalendarModule) }
-    val viewModel = koinViewModel<TrainingCalendarViewModel>()
+//    rememberKoinModules { listOf(trainingCalendarModule) }
+    val viewModel: TrainingCalendarViewModel = viewModel<TrainingCalendarViewModel>()
     val state by viewModel.state.collectAsState()
 
     SubscribeOnEvents(
@@ -83,7 +80,7 @@ private fun Data(
             ) {
                 Text(
                     modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
-                    text = stringResource(id = R.string.training_calendar_title),
+                    text = stringResource(resource = Res.string.training_calendar_title),
                     style = themeTypography.header1.copy(color = themeColors.lime),
                 )
 

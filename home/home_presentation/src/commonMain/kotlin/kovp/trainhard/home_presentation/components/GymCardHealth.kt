@@ -1,6 +1,5 @@
 package kovp.trainhard.home_presentation.components
 
-import android.graphics.text.MeasuredText
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,28 +18,22 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.LinearGradient
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import kovp.trainhard.components.dropShadow
-import kovp.trainhard.home_presentation.R
-import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
+import org.jetbrains.compose.resources.stringResource
+import trainhard.home_presentation.generated.resources.Res
+import trainhard.home_presentation.generated.resources.gym_card
+import trainhard.home_presentation.generated.resources.gym_card_stub
 import kotlin.math.roundToInt
 
 @Composable
@@ -86,7 +78,7 @@ private fun GymCardHealthStub(
                     .align(Alignment.Center)
                     .padding(all = 8.dp),
                 textAlign = TextAlign.Center,
-                text = stringResource(id = R.string.gym_card_stub),
+                text = stringResource(resource = Res.string.gym_card_stub),
                 style = themeTypography.body1.copy(color = themeColors.black),
             )
         }
@@ -106,7 +98,7 @@ private fun GymCardHealthContent(
     Box(modifier.height(30.dp)) {
         BoxWithConstraints(Modifier.clickable(onClick = onClick).matchParentSize()) {
             val measurer = rememberTextMeasurer()
-            val text = stringResource(id = R.string.gym_card)
+            val text = stringResource(resource = Res.string.gym_card)
             val healthWidth = maxWidth * cardHealth
             val textColor = themeColors.black
 
@@ -197,31 +189,4 @@ private fun DrawScope.canvasContent(
     )
 
     drawText(measuredText, topLeft = textOffset, color = textColor)
-}
-
-@Preview(device = "spec:width=411dp,height=891dp")
-@Preview(device = "id:Nexus S")
-@Composable
-private fun GymCardHealthPreview(
-    @PreviewParameter(GymCardHealthProvider::class) health: Float?,
-) {
-    TrainHardTheme {
-        GymCardHealth(
-            modifier = Modifier.fillMaxWidth(),
-            cardHealth = health,
-            onClick = {},
-        )
-    }
-}
-
-private class GymCardHealthProvider : PreviewParameterProvider<Float?> {
-    override val values: Sequence<Float?>
-        get() = sequenceOf(
-            null,
-            .1f,
-            .2f,
-            .5f,
-            .9f,
-            1f,
-        )
 }

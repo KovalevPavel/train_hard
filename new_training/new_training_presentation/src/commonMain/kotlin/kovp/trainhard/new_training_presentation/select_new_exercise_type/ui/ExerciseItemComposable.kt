@@ -11,12 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import kovp.trainhard.new_training_presentation.select_new_exercise_type.ExerciseVs
-import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 
@@ -55,24 +51,4 @@ fun ExerciseItem(
             )
         }
     }
-}
-
-@Preview
-@Composable
-private fun ExerciseItemComposablePreview(
-    @PreviewParameter(ExerciseVsProvider::class) vs: ExerciseVs,
-) {
-    TrainHardTheme {
-        ExerciseItem(item = vs, onItemClick = {})
-    }
-}
-
-private class ExerciseVsProvider : PreviewParameterProvider<ExerciseVs> {
-    override val values: Sequence<ExerciseVs>
-        get() = sequenceOf(
-            ExerciseVs(
-                title = "Приседания",
-                muscles = "мышцы, ".repeat(10),
-            ),
-        )
 }
