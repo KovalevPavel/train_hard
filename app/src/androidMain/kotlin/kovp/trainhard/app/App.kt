@@ -6,7 +6,8 @@ import kovp.trainhard.configs_api.configsModule
 import kovp.trainhard.app.di.coreModule
 import kovp.trainhard.app.di.initializationModule
 import kovp.trainhard.core_storage.di.storageModule
-import kovp.trainhard.database.di.dbModule
+import kovp.trainhard.database.di.getDatabaseModule
+import kovp.trainhard.database.getDatabaseBuilder
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 //import timber.log.Timber
@@ -29,7 +30,7 @@ class App : Application() {
             modules(
                 coreModule,
                 configsModule,
-                dbModule,
+                getDatabaseModule(getDatabaseBuilder(this@App)),
                 initializationModule,
                 storageModule(context = this@App),
             )

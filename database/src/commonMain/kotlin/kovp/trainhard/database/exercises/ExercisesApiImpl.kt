@@ -1,6 +1,5 @@
 package kovp.trainhard.database.exercises
 
-import android.database.sqlite.SQLiteConstraintException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kovp.trainhard.database.dao.ExerciseDao
@@ -25,7 +24,7 @@ internal class ExercisesApiImpl(
                 }
                     .onFailure {
                         throw when (it) {
-                            is SQLiteConstraintException -> EntityExistsException(title = exercise.title)
+//                            is SQLiteConstraintException -> EntityExistsException(title = exercise.title)
                             else -> it
                         }
                     }

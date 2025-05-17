@@ -1,6 +1,9 @@
 package kovp.trainhard.database.di
 
-import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kovp.trainhard.database.AppDatabase
 import kovp.trainhard.database.calendar.CalendarApiImpl
 import kovp.trainhard.database.completed_exercise.CompletedExerciseApiImpl
@@ -12,17 +15,17 @@ import kovp.trainhard.database_api.CompletedExerciseApi
 import kovp.trainhard.database_api.ExercisesApi
 import org.koin.dsl.module
 
-val dbModule = module {
+fun getDatabaseModule(builder: RoomDatabase.Builder<AppDatabase>) = module {
     single {
-        Room.databaseBuilder(
-            context = get(),
-            klass = AppDatabase::class.java,
-            name = "app_database",
-        )
+        builder
+            .fallbackToDestructiveMigration(false)
+            .setDriver(BundledSQLiteDriver())
+            .setQueryCoroutineContext(Dispatchers.IO)
             .build()
     }
 
     single { ExerciseMapper(configHolder = get()) }
+
     single {
         val db: AppDatabase = get()
 
