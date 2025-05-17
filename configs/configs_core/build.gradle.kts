@@ -1,7 +1,11 @@
 plugins {
-    id("trainhard.kotlin.library")
+    id("th.kotlin.library")
 }
 
-dependencies {
-    implementation(project(":core_domain"))
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core_domain"))
+        }
+    }
 }

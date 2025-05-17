@@ -1,24 +1,24 @@
 plugins {
-    id("trainhard.android.library")
+    id("th.platform.library")
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.room)
 }
 
-android {
-    defaultConfig {
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.room.runtime)
+            implementation(project(":database_api"))
+            implementation(project(":core_domain"))
+            implementation(project(":configs_api"))
         }
     }
 }
 
-dependencies {
-    implementation(libs.room.common)
-    ksp(libs.room.kapt)
-    implementation(libs.room.ktx)
-    implementation(libs.room.runtime)
-    implementation(project(":database_api"))
-    implementation(project(":core_domain"))
-    implementation(project(":configs_api"))
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
-    implementation(libs.koin.compose)
+dependencies {
+    kspCommonMainMetadata(libs.room.compiler)
 }

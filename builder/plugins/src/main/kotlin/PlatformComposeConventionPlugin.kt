@@ -15,7 +15,7 @@ class PlatformComposeConventionPlugin : AbstractComposeConventionPlugin() {
             kotlin {
                 sourceSets.findByName("commonMain")?.dependencies {
                     implementation(compose.runtime)
-                    implementation(compose.material)
+                    implementation(compose.material3)
                     implementation(compose.ui)
                     implementation(compose.components.resources)
                     implementation(compose.components.uiToolingPreview)

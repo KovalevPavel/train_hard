@@ -20,23 +20,6 @@ tasks.withType<KotlinCompile>().configureEach {
 
 gradlePlugin {
     plugins {
-        register("androidApplication_deprecated") {
-            id = "trainhard.android.application"
-            implementationClass = "kovp.trainhard.plugins.AndroidApplicationConventionPlugin"
-        }
-        register("androidLibrary_deprecated") {
-            id = "trainhard.android.library"
-            implementationClass = "kovp.trainhard.plugins.AndroidLibraryConventionPlugin"
-        }
-        register("androidLibraryCompose_deprecated") {
-            id = "trainhard.android.compose"
-            implementationClass = "kovp.trainhard.plugins.AndroidComposeConventionPlugin"
-        }
-        register("kotlinLibrary_deprecated") {
-            id = "trainhard.kotlin.library"
-            implementationClass = "kovp.trainhard.plugins.KotlinLibraryConventionPlugin"
-        }
-
         register("kotlinLibrary") {
             id = "th.kotlin.library"
             implementationClass = "KotlinLibraryConventionPlugin"

@@ -9,7 +9,7 @@ import kovp.trainhard.core_storage.di.storageModule
 import kovp.trainhard.database.di.dbModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import timber.log.Timber
+//import timber.log.Timber
 
 class App : Application() {
     override fun onCreate() {
@@ -38,7 +38,7 @@ class App : Application() {
 
     private fun initLogging() {
         if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
+//            Timber.plant(Timber.DebugTree())
         }
     }
 }

@@ -65,7 +65,7 @@ kotlin {
             implementation(project(":training_calendar_api"))
             implementation(project(":parameters_api"))
 
-            implementation(libs.room.ktx)
+//            implementation(libs.room.ktx)
 
             implementation(libs.koin.compose)
             implementation(libs.koin.core)

@@ -1,7 +1,11 @@
 plugins {
-    id("trainhard.kotlin.library")
+    id("th.kotlin.library")
 }
 
-dependencies {
-    implementation(libs.koin.core)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.koin.core)
+        }
+    }
 }

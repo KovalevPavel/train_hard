@@ -2,6 +2,8 @@ package kovp.trainhard.core.coroutines
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import kovp.trainhard.core.Scope
+import kovp.trainhard.core.scope
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract

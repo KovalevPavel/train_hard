@@ -1,9 +1,13 @@
 plugins {
-    id("trainhard.kotlin.library")
+    id("th.kotlin.library")
 }
 
-dependencies {
-    implementation(project(":core_domain"))
-    api(project(":database_api"))
-    api(project(":domain_storage"))
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core_domain"))
+            api(project(":database_api"))
+            api(project(":domain_storage"))
+        }
+    }
 }
