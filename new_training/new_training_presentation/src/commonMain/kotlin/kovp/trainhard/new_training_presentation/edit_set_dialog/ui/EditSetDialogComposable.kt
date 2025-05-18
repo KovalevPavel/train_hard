@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kovp.trainhard.components.PublicResources
 import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.components.counter.CounterValue
 import kovp.trainhard.components.counter.TrainCounter
@@ -23,6 +24,8 @@ import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.jetbrains.compose.resources.stringResource
 import trainhard.new_training_presentation.generated.resources.Res
+import trainhard.new_training_presentation.generated.resources.reps_label
+import trainhard.new_training_presentation.generated.resources.weight_label
 
 @Composable
 fun EditSetDialogComposable(
@@ -54,7 +57,7 @@ fun EditSetDialogComposable(
         Text(text = exerciseTitle, style = themeTypography.header1)
         TrainCounter<CounterValue.Float>(
             modifier = Modifier.fillMaxWidth(),
-            label = "stringResource(resource = Res.string.weight_label)",
+            label = stringResource(resource = Res.string.weight_label),
             initialValue = CounterValue.Float(initWeight),
             increment = CounterValue.Float(weightIncrement),
         ) {
@@ -62,7 +65,7 @@ fun EditSetDialogComposable(
         }
         TrainCounter<CounterValue.Int>(
             modifier = Modifier.fillMaxWidth(),
-            label = "stringResource(resource = Res.string.reps_label)",
+            label = stringResource(resource = Res.string.reps_label),
             initialValue = CounterValue.Int(initReps),
             increment = CounterValue.Int(1),
         ) {
@@ -71,7 +74,7 @@ fun EditSetDialogComposable(
 
         TrainButton(
             modifier = Modifier.align(Alignment.End),
-            label = "stringResource(resource = kovp.trainhard.design_system.R.string.save)",
+            label = stringResource(resource = PublicResources.String.save),
             onClick = {
                 onApplyClick(
                     EditSetDialogResult.Success(

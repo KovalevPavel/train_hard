@@ -1,7 +1,6 @@
 package kovp.trainhard.parameters_presentation.di
 
 import kovp.trainhard.configs_core.ConfigHolder
-import kovp.trainhard.core.ResourceProvider
 import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 import kovp.trainhard.parameters_presentation.exercise_parameters.presentation.ExerciseParametersViewModel
@@ -12,7 +11,6 @@ fun exerciseParametersModule(arg: ExerciseParametersArg) = module {
         ExerciseParametersViewModel(
             exerciseArgument = arg,
             exercisesApi = get<ExercisesApi>(),
-            resourceProvider = get<ResourceProvider>(),
             configHolder = get<ConfigHolder>(),
         )
     }

@@ -6,10 +6,6 @@ plugins {
 
 kotlin {
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.koin.compose)
-        }
-
         commonMain.dependencies {
             implementation(project(":configs_api"))
             implementation(project(":core_dialogs"))
@@ -20,6 +16,7 @@ kotlin {
             implementation(project(":parameters_domain"))
             implementation(project(":parameters_core"))
 
+            implementation(libs.koin.compose)
             implementation(libs.navigation)
             implementation(libs.kotlinx.serialization.json)
         }

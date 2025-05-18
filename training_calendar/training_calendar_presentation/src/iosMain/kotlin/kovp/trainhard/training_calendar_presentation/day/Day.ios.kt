@@ -4,13 +4,10 @@ import androidx.compose.runtime.Composable
 import kotlinx.datetime.LocalDate
 import kovp.trainhard.core_domain.MuscleGroup
 
-interface CalendarDay {
-    val date: LocalDate
-}
-
 @Composable
-internal expect fun Day(
+internal actual fun Day(
     groups: List<MuscleGroup>,
     day: CalendarDay,
-    onClick: (LocalDate) -> Unit,
-)
+    onClick: (LocalDate) -> Unit
+) {
+}

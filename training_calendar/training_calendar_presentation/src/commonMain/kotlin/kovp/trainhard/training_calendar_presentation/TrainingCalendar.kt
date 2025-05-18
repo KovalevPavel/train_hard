@@ -15,26 +15,30 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.datetime.LocalDate
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_api.TrainingScreen
+import kovp.trainhard.training_calendar_presentation.di.trainingCalendarModule
 import kovp.trainhard.training_calendar_presentation.legend.Legend
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.module.rememberKoinModules
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import trainhard.training_calendar_presentation.generated.resources.Res
 import trainhard.training_calendar_presentation.generated.resources.training_calendar_title
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun TrainingCalendar(
     navController: NavController,
 ) {
-//    rememberKoinModules { listOf(trainingCalendarModule) }
-    val viewModel: TrainingCalendarViewModel = viewModel<TrainingCalendarViewModel>()
+    rememberKoinModules { listOf(trainingCalendarModule) }
+    val viewModel = koinViewModel<TrainingCalendarViewModel>()
     val state by viewModel.state.collectAsState()
 
     SubscribeOnEvents(

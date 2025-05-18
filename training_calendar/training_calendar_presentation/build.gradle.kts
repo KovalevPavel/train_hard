@@ -5,10 +5,6 @@ plugins {
 
 kotlin {
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.koin.compose)
-        }
-
         commonMain.dependencies {
             implementation(project(":core_presentation"))
             implementation(project(":ui_theme"))
@@ -18,6 +14,7 @@ kotlin {
             implementation(project(":new_training_api"))
             implementation(project(":configs_api"))
 
+            implementation(libs.koin.compose)
             implementation(libs.calendar)
             implementation(libs.navigation)
         }

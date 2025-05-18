@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
 import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.core_domain.toStartOfDay
 import kovp.trainhard.core_presentation.BaseViewModel
@@ -35,7 +34,6 @@ class TrainingCalendarViewModel(
             when (action) {
                 is TrainingCalendarAction.OnTrainingDayClick -> {
                     action.day
-//                        .toKotlinLocalDate()
                         .toStartOfDay()
                         .let(TrainingCalendarEvent::OpenNewTrainingScreen)
                 }
@@ -47,7 +45,7 @@ class TrainingCalendarViewModel(
     @OptIn(ExperimentalTime::class)
     private fun subscribeOnCalendarData() {
         //TODO: добавить пагинацию
-        val startDate = kotlinx.datetime.LocalDate(
+        val startDate = LocalDate(
             year = configHolder.trainingConfig.startYear,
             monthNumber = 1,
             dayOfMonth = 1,
@@ -59,7 +57,6 @@ class TrainingCalendarViewModel(
             .onEach {
                 delay(STATE_UPDATE_DELAY_MS)
                 it.mapKeys { (timestamp, _) ->
-//                    val instant = Instant.ofEpochMilli(timestamp)
                     val daysEpoch = Duration.convert(timestamp.toDouble(), DurationUnit.MILLISECONDS, DurationUnit.DAYS)
                     LocalDate.fromEpochDays(daysEpoch.toInt())
                 }

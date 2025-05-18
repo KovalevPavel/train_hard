@@ -3,6 +3,7 @@ package kovp.trainhard.parameters_presentation.exercise_parameters.presentation
 import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
+import kovp.trainhard.components.PublicResources
 import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.configs_core.ExercisesConfig
 import kovp.trainhard.configs_core.getMuscleByFullId
@@ -14,14 +15,19 @@ import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.database_api.errors.EntityExistsException
 import kovp.trainhard.database_api.models.ExerciseVo
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
-import kovp.trainhard.core.ResourceProvider
+import org.jetbrains.compose.resources.getString
+import trainhard.parameters_presentation.generated.resources.Res
+import trainhard.parameters_presentation.generated.resources.edit_exercise_screen_title
+import trainhard.parameters_presentation.generated.resources.enter_info
+import trainhard.parameters_presentation.generated.resources.exit
+import trainhard.parameters_presentation.generated.resources.exit_without_save
+import trainhard.parameters_presentation.generated.resources.new_exercise_screen_title
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 class ExerciseParametersViewModel(
     private val exerciseArgument: ExerciseParametersArg,
     private val exercisesApi: ExercisesApi,
-    private val resourceProvider: ResourceProvider,
     configHolder: ConfigHolder,
 ) : BaseViewModel<ExerciseParametersState, ExerciseParametersAction, ExerciseParametersEvent>(
     initialState = ExerciseParametersState.Loading,
@@ -88,24 +94,20 @@ class ExerciseParametersViewModel(
     private fun updateState() {
         viewModelScope.launch {
             val actionRes = if (isNewExercise) {
-                //kovp.trainhard.design_system.Res.string.add
-                0
+                PublicResources.String.add
             } else {
-                //kovp.trainhard.design_system.Res.string.save
-                1
+                PublicResources.String.save
             }
 
             val titleResId = if (isNewExercise) {
-                // R.string.new_exercise_screen_title
-                0
+                Res.string.new_exercise_screen_title
             } else {
-                // R.string.edit_exercise_screen_title
-                1
+                Res.string.edit_exercise_screen_title
             }
 
             ExerciseParametersState.Content(
-                screenTitle = resourceProvider.getString(titleResId),
-                action = resourceProvider.getString(actionRes),
+                screenTitle = getString(titleResId),
+                action = getString(actionRes),
                 muscleName = currentName,
                 muscleGroups = MuscleGroup.entries.map { g ->
                     ExerciseParametersState.MuscleGroupVs(
@@ -135,8 +137,8 @@ class ExerciseParametersViewModel(
                 if (currentName.isEmpty() || musclesCloud.isEmpty()) {
                     MessageDialogState(
                         dialogId = Uuid.random().toString(),
-                        title = "resourceProvider.getString(R.string.enter_info)",
-                        positiveAction = "resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok)"
+                        title = getString(Res.string.enter_info),
+                        positiveAction = getString(PublicResources.String.action_ok)
                             .let(DialogState::Action),
                     )
                         .let(ExerciseParametersEvent::ShowMessageDialog)
@@ -169,7 +171,7 @@ class ExerciseParametersViewModel(
                             dialogId = EXERCISE_ALREADY_EXISTS_DIALOG_ID,
                             title = e.title,
                             positiveAction = DialogState.Action(
-                                "resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok)",
+                                getString(PublicResources.String.action_ok),
                             ),
                         ),
                     )
@@ -186,15 +188,12 @@ class ExerciseParametersViewModel(
             } else {
                 MessageDialogState(
                     dialogId = EXIT_DIALOG_ID,
-                    title = "resourceProvider.getString(R.string.exit_without_save)",
+                    title = getString(Res.string.exit_without_save),
                     positiveAction = DialogState.Action(
-                        action = "resourceProvider.getString(R.string.exit)"
+                        action = getString(Res.string.exit),
                     ),
                     negativeAction = DialogState.Action(
-                        action = resourceProvider.getString(
-                            //resId = kovp.trainhard.design_system.R.string.action_cancel,
-                            resId = 1
-                        ),
+                        action = getString(PublicResources.String.action_cancel),
                     ),
                 )
                     .let(ExerciseParametersEvent::ShowMessageDialog)

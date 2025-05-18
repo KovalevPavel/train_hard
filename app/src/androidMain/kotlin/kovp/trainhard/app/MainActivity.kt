@@ -26,7 +26,7 @@ import kovp.trainhard.parameters_api.ParametersBaseRoute
 import kovp.trainhard.statistics_api.StatisticsBaseRoute
 import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 class MainActivity : ComponentActivity() {
 

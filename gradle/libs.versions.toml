@@ -37,8 +37,7 @@ serialization = "1.7.3"
 uiController = "0.32.0"
 benchmarkBaselineProfileGradlePlugin = "1.3.3"
 
-koinCore = "3.4.3"
-koinCompose = "3.4.6"
+koin = "4.0.3"
 
 calendar = "2.4.0"
 
@@ -76,9 +75,9 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 paper = { group = "io.github.pilgr", name = "paperdb", version.ref = "paper" }
 
 # Koin
-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinCore" }
-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koinCore" }
-koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinCompose" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin" }
 
 # Navigation
 navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }

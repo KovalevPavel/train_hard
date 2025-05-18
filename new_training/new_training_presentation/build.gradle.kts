@@ -12,7 +12,6 @@ kotlin {
         }
 
         commonMain.dependencies {
-            implementation(project(":core"))
             implementation(project(":core_dialogs"))
             implementation(project(":core_presentation"))
             implementation(project(":ui_theme"))

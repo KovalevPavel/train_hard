@@ -1,5 +1,6 @@
 plugins {
     id("th.platform.library")
+    id("th.compose")
     alias(libs.plugins.kotlinx.serialization)
 }
 
@@ -10,7 +11,6 @@ kotlin {
         }
 
         commonMain.dependencies {
-            implementation(project(":core"))
             implementation(project(":core_domain"))
             implementation(project(":domain_storage"))
             implementation(project(":configs_core"))

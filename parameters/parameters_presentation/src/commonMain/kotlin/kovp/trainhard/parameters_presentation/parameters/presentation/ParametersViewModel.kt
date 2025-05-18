@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kovp.trainhard.components.PublicResources
 import kovp.trainhard.components.exercise_type.ExerciseCardVs
 import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.configs_core.ExercisesConfig
@@ -12,14 +13,14 @@ import kovp.trainhard.core_dialogs.message_dialog.MessageDialogState
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.ExercisesApi
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
-import kovp.trainhard.core.ResourceProvider
+import org.jetbrains.compose.resources.getString
+import trainhard.parameters_presentation.generated.resources.Res
+import trainhard.parameters_presentation.generated.resources.exercise_delete_message
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
-
 class ParametersViewModel(
     private val exercisesApi: ExercisesApi,
-    private val resourceProvider: ResourceProvider,
     private val configHolder: ConfigHolder,
 ) : BaseViewModel<ParametersScreenState, ParametersAction, ParametersEvent>(
     initialState = ParametersScreenState.Loading,
@@ -86,18 +87,12 @@ class ParametersViewModel(
         return MessageDialogState(
             dialogId = CONFIRM_DELETE_EXERCISE_DIALOG_LABEL,
             title = exercise.title,
-            message = "resourceProvider.getString(R.string.exercise_delete_message)",
+            message = getString(Res.string.exercise_delete_message),
             positiveAction = DialogState.Action(
-                action = resourceProvider.getString(
-//                    kovp.trainhard.design_system.R.string.action_ok,
-                    0,
-                ),
+                action = getString(PublicResources.String.action_ok),
             ),
             negativeAction = DialogState.Action(
-                action = resourceProvider.getString(
-//                    kovp.trainhard.design_system.R.string.action_cancel,
-                    0,
-                ),
+                action = getString(PublicResources.String.action_cancel),
             ),
             payload = exercise,
         )
@@ -151,7 +146,7 @@ class ParametersViewModel(
                     dialogId = Uuid.random().toString(),
                     title = e.message.orEmpty(),
                     positiveAction = DialogState.Action(
-                        "resourceProvider.getString(kovp.trainhard.design_system.R.string.action_ok)",
+                        getString(PublicResources.String.action_ok),
                     ),
                 )
             )

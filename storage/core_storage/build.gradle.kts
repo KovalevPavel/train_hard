@@ -7,12 +7,12 @@ kotlin {
         androidMain.dependencies {
             api(libs.paper)
             implementation(libs.androidx.core.ktx)
-            implementation(libs.koin.compose)
         }
 
         commonMain.dependencies {
             implementation(project(":core_domain"))
             implementation(project(":domain_storage"))
+            implementation(libs.koin.compose)
         }
     }
 }

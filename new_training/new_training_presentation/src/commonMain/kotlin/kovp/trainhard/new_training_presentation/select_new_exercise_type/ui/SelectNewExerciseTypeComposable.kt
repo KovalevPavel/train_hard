@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
@@ -41,17 +40,21 @@ import kovp.trainhard.new_training_presentation.select_new_exercise_type.SelectN
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.module.rememberKoinModules
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.core.context.loadKoinModules
 import trainhard.new_training_presentation.generated.resources.Res
+import trainhard.new_training_presentation.generated.resources.search_exercise_hint
+import trainhard.new_training_presentation.generated.resources.select_exercise_title
 
 @OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SelectNewExerciseTypeComposable(navController: NavController) {
-//    rememberKoinModules { listOf(selectExerciseModule) }
+    rememberKoinModules { listOf(selectExerciseModule) }
 
     loadKoinModules(selectExerciseModule)
-    val viewModel: SelectNewExerciseTypeViewModel = viewModel<SelectNewExerciseTypeViewModel>()
+    val viewModel = koinViewModel<SelectNewExerciseTypeViewModel>()
     val state by viewModel.state.collectAsState()
 
     val onBackClick = remember {
@@ -86,7 +89,7 @@ fun SelectNewExerciseTypeComposable(navController: NavController) {
                 },
                 title = {
                     Text(
-                        text = "stringResource(resource = Res.string.select_exercise_title)",
+                        text = stringResource(resource = Res.string.select_exercise_title),
                         style = themeTypography.header1,
                         color = themeColors.white,
                     )
@@ -129,7 +132,7 @@ private fun DataContent(
         item {
             TrainTextField(
                 value = currentQuery,
-                hint = "stringResource(resource = Res.string.search_exercise_hint)",
+                hint = stringResource(resource = Res.string.search_exercise_hint),
                 onValueChanged = { currentQuery = it },
             )
         }

@@ -11,9 +11,9 @@ import kovp.trainhard.configs_data.providers.TrainingConfigDataProvider
 import org.koin.dsl.module
 
 val configsModule = module {
-    single { ExercisesConfigDataProvider(resourceProvider = get(), json = get()) }
-    single { TrainingConfigDataProvider(resourceProvider = get(), json = get()) }
-    single { HomeScreenConfigDataProvider(resourceProvider = get(), json = get()) }
+    single { ExercisesConfigDataProvider(json = get()) }
+    single { TrainingConfigDataProvider(json = get()) }
+    single { HomeScreenConfigDataProvider(json = get()) }
     single { ExercisesConfigMapper() }
     single { TrainingConfigMapper() }
     single { HomeScreenConfigMapper() }

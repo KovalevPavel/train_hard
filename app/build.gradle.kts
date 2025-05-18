@@ -42,12 +42,24 @@ kotlin {
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.core.splash)
             implementation(libs.androidx.lifecycle.ktx)
-            implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.compose.ui)
             implementation(libs.androidx.compose.material)
+
+            implementation(libs.koin.android)
+
+            implementation(libs.logging.timber)
+            implementation(libs.accompanist.systemuicontroller)
+        }
+
+        commonMain.dependencies {
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
             implementation(libs.navigation)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.room.runtime)
+            implementation(libs.androidx.lifecycle.viewmodelCompose)
+
             implementation(project(":home_api"))
             implementation(project(":statistics_api"))
             implementation(project(":design_system"))
@@ -64,14 +76,6 @@ kotlin {
             implementation(project(":new_training_api"))
             implementation(project(":training_calendar_api"))
             implementation(project(":parameters_api"))
-
-            implementation(libs.room.runtime)
-
-            implementation(libs.koin.compose)
-            implementation(libs.koin.core)
-
-            implementation(libs.logging.timber)
-            implementation(libs.accompanist.systemuicontroller)
         }
     }
 }

@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.datetime.Clock
 import kovp.trainhard.components.StateContainer
@@ -23,6 +22,7 @@ import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.selectors.DateRangeSelectorState
 import kovp.trainhard.core_domain.toStartOfDay
 import kovp.trainhard.core_presentation.subscribeForResult
+import kovp.trainhard.home_presentation.di.homeModule
 import kovp.trainhard.home_presentation.home.presentation.HomeAction
 import kovp.trainhard.home_presentation.home.presentation.HomeEvent
 import kovp.trainhard.home_presentation.home.presentation.HomeScreenState
@@ -32,15 +32,19 @@ import kovp.trainhard.navigation.SubscribeOnEvents
 import kovp.trainhard.new_training_api.TrainingScreen
 import kovp.trainhard.training_calendar_api.TrainingCalendarScreen
 import kovp.trainhard.ui_theme.providers.themeColors
+import org.koin.compose.module.rememberKoinModules
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import kotlin.time.ExperimentalTime
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeComposable(
     navController: NavController,
 ) {
-//    rememberKoinModules { listOf(homeModule) }
+    rememberKoinModules { listOf(homeModule) }
 
-    val vm = viewModel<HomeViewModel>()
+    val vm = koinViewModel<HomeViewModel>()
     val state by vm.state.collectAsState()
 
     SubscribeOnEvents(

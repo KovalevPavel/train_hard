@@ -41,10 +41,10 @@ import kovp.trainhard.new_training_presentation.screen.TrainingEvent
 import kovp.trainhard.new_training_presentation.screen.TrainingScreenState
 import kovp.trainhard.new_training_presentation.screen.TrainingViewModel
 import kovp.trainhard.ui_theme.providers.themeColors
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.module.rememberKoinModules
 import org.koin.core.annotation.KoinExperimentalAPI
 import kovp.trainhard.core.RequestAction
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable

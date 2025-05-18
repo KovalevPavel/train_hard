@@ -6,7 +6,7 @@ import kovp.trainhard.new_trainig_domain.GetExerciseByIdInteractor
 import kovp.trainhard.new_trainig_domain.RemoveCompletedExerciseInteractor
 import kovp.trainhard.new_trainig_domain.UpdateCompletedExerciseInteractor
 import kovp.trainhard.new_training_presentation.screen.TrainingViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 fun newTrainingModule(currentTimestamp: Long) = module {

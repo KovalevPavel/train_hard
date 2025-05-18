@@ -18,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.fab.TrainFab
@@ -26,6 +25,7 @@ import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.core_dialogs.BottomSheetDialog
 import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.navigation.SubscribeOnEvents
+import kovp.trainhard.parameters_presentation.di.parametersModule
 import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersRoute
 import kovp.trainhard.parameters_presentation.parameters.presentation.ParametersAction
 import kovp.trainhard.parameters_presentation.parameters.presentation.ParametersEvent
@@ -34,16 +34,20 @@ import kovp.trainhard.parameters_presentation.parameters.presentation.Parameters
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.module.rememberKoinModules
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 import trainhard.parameters_presentation.generated.resources.Res
 import trainhard.parameters_presentation.generated.resources.exercises_list
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun ParametersComposable(
     navController: NavController,
 ) {
-//    rememberKoinModules(unloadOnForgotten = false) { listOf(parametersModule) }
+    rememberKoinModules(unloadOnForgotten = false) { listOf(parametersModule) }
 
-    val vm = viewModel<ParametersViewModel>()
+    val vm = koinViewModel<ParametersViewModel>()
     val state by vm.state.collectAsState()
 
     var isVisible by remember { mutableStateOf(false) }

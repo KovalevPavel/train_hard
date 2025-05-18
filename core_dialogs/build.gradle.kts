@@ -7,7 +7,6 @@ plugins {
 kotlin {
     sourceSets {
         androidMain.dependencies {
-            implementation(libs.koin.compose)
             implementation(libs.androidx.compose.ui.tooling)
         }
 
@@ -17,6 +16,7 @@ kotlin {
             implementation(project(":ui_theme"))
             implementation(project(":design_system"))
 
+            implementation(libs.koin.compose)
             implementation(libs.kotlinx.serialization.json)
         }
     }

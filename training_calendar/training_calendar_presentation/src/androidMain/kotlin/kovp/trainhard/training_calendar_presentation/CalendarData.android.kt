@@ -14,12 +14,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinInstant
+import kotlinx.datetime.toKotlinLocalDate
 import kovp.trainhard.core_domain.DATE_FORMAT_LLLL_YYYY
 import kovp.trainhard.core_domain.MuscleGroup
 import kovp.trainhard.core_domain.formatToDateString
@@ -58,8 +58,12 @@ actual fun CalendarData(
         dayContent = { day ->
             if (day.position != DayPosition.MonthDate) return@VerticalCalendar
             val trainings = muscleGroups.mapKeys { it.key.toJavaLocalDate() }[day.date].orEmpty()
-            Day()
-//            Day(groups = trainings, day = day, onClick = onDayClick)
+
+            val mDay = object : kovp.trainhard.training_calendar_presentation.day.CalendarDay {
+                override val date: LocalDate = day.date.toKotlinLocalDate()
+            }
+
+            Day(groups = trainings, day = mDay, onClick = onDayClick)
         },
         monthContainer = { calendarMonth, container ->
             Spacer(modifier = Modifier.height(8.dp))

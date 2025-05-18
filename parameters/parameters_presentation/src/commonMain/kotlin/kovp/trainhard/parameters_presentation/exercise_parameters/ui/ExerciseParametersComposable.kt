@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.selectors.BackNavigationHandler
@@ -25,6 +24,7 @@ import kovp.trainhard.components.text_field.TrainTextField
 import kovp.trainhard.core_dialogs.BottomSheetDialog
 import kovp.trainhard.core_dialogs.DialogState
 import kovp.trainhard.navigation.SubscribeOnEvents
+import kovp.trainhard.parameters_presentation.di.exerciseParametersModule
 import kovp.trainhard.parameters_presentation.exercise_parameters.presentation.ExerciseParametersAction
 import kovp.trainhard.parameters_presentation.exercise_parameters.presentation.ExerciseParametersEvent
 import kovp.trainhard.parameters_presentation.exercise_parameters.presentation.ExerciseParametersState
@@ -33,19 +33,22 @@ import kovp.trainhard.parameters_presentation.navigation.ExerciseParametersArg
 import kovp.trainhard.ui_theme.providers.themeColors
 import kovp.trainhard.ui_theme.providers.themeTypography
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.module.rememberKoinModules
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import trainhard.parameters_presentation.generated.resources.Res
 import trainhard.parameters_presentation.generated.resources.enter_exercise_hint
 import trainhard.parameters_presentation.generated.resources.select_muscle_groups
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun ExerciseParametersComposable(
     argument: ExerciseParametersArg,
     navController: NavController,
 ) {
-//    rememberKoinModules { listOf(exerciseParametersModule(arg = argument)) }
+    rememberKoinModules { listOf(exerciseParametersModule(arg = argument)) }
 
-    val vm = viewModel<ExerciseParametersViewModel>()
+    val vm = koinViewModel<ExerciseParametersViewModel>()
     val state by vm.state.collectAsState()
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogState: DialogState? by remember { mutableStateOf(null) }
