@@ -17,11 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import androidx.navigation.NavController
 import kotlinx.datetime.Clock
+import kotlinx.serialization.json.Json
 import kovp.trainhard.components.StateContainer
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.selectors.DateRangeSelectorState
 import kovp.trainhard.core_domain.toStartOfDay
-import kovp.trainhard.core_presentation.subscribeForResult
 import kovp.trainhard.home_presentation.di.homeModule
 import kovp.trainhard.home_presentation.home.presentation.HomeAction
 import kovp.trainhard.home_presentation.home.presentation.HomeEvent
@@ -127,19 +127,24 @@ private fun checkCardHealthUpdates(
     navController: NavController,
     onAction: (HomeAction.EditGymCardDates) -> Unit,
 ) {
-    navController.subscribeForResult<DateRangeSelectorState>(
-        key = SelectGymDatesScreen.DATE_RANGE_KEY,
-    ) { (start, end) ->
-        val (currentStart, currentEnd) = currentCardHealth
-        if (start != currentStart || end != currentEnd) {
-            onAction(
-                HomeAction.EditGymCardDates(
-                    start ?: return@subscribeForResult,
-                    end ?: return@subscribeForResult,
+    val entry = navController.currentBackStackEntry?.savedStateHandle
+
+    entry?.get<String>(SelectGymDatesScreen.DATE_RANGE_KEY)
+        ?.let {
+            entry.remove<String>(key = SelectGymDatesScreen.DATE_RANGE_KEY)
+
+            val (currentStart, currentEnd) = currentCardHealth
+            val (start, end) = Json.decodeFromString<DateRangeSelectorState>(it)
+
+            if (start != currentStart || end != currentEnd) {
+                onAction(
+                    HomeAction.EditGymCardDates(
+                        start ?: return@let,
+                        end ?: return@let,
+                    )
                 )
-            )
+            }
         }
-    }
 }
 
 @OptIn(ExperimentalTime::class)
