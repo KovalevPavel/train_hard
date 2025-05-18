@@ -1,9 +1,9 @@
 package kovp.trainhard.home_domain
 
-import kovp.trainhard.domain_storage.SharedPreferencesWrapper
+import kovp.trainhard.domain_storage.DataStoreWrapper
 
 class GetGymCardHealthInteractor(
-    private val prefs: SharedPreferencesWrapper,
+    private val prefs: DataStoreWrapper,
 ) {
     suspend operator fun invoke(): Pair<Long, Long>? {
         val startTimestamp = prefs.getLong(PrefsConstants.START_TIMESTAMP_KEY)

@@ -42,6 +42,7 @@ koin = "4.0.3"
 calendar = "2.4.0"
 
 annotationJvm = "1.9.1"
+datastore = "1.1.6"
 
 junit = "5.11.3"
 
@@ -73,6 +74,10 @@ sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sql
 
 #Paper
 paper = { group = "io.github.pilgr", name = "paperdb", version.ref = "paper" }
+
+#datastore
+datastore-core = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 # Koin
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }

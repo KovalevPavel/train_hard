@@ -13,6 +13,8 @@ kotlin {
             implementation(project(":core_domain"))
             implementation(project(":domain_storage"))
             implementation(libs.koin.compose)
+            implementation(libs.datastore.core)
+            implementation(libs.datastore.preferences)
         }
     }
 }
