@@ -7,7 +7,7 @@ appVersion-build = "3"
 
 # languages and plugins
 kotlin = "2.1.21"
-androidGradlePlugin = "8.8.2"
+androidGradlePlugin = "8.10.0"
 kotlinImmutable = "0.3.8"
 java = "17"
 compose-multiplatform = "1.8.0"

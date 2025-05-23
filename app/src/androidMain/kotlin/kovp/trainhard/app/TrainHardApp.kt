@@ -10,9 +10,9 @@ import kovp.trainhard.database.di.getDatabaseModule
 import kovp.trainhard.database.getDatabaseBuilder
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-//import timber.log.Timber
+import timber.log.Timber
 
-class App : Application() {
+class TrainHardApp : Application() {
     override fun onCreate() {
         super.onCreate()
         initDb()
@@ -21,25 +21,25 @@ class App : Application() {
     }
 
     private fun initDb() {
-        Paper.init(this@App)
+        Paper.init(this@TrainHardApp)
     }
 
     private fun initDi() {
         startKoin {
-            androidContext(this@App)
+            androidContext(this@TrainHardApp)
             modules(
                 coreModule,
                 configsModule,
-                getDatabaseModule(getDatabaseBuilder(this@App)),
+                getDatabaseModule(getDatabaseBuilder(this@TrainHardApp)),
                 initializationModule,
-                storageModule(context = this@App),
+                storageModule(context = this@TrainHardApp),
             )
         }
     }
 
     private fun initLogging() {
         if (BuildConfig.DEBUG) {
-//            Timber.plant(Timber.DebugTree())
+            Timber.plant(Timber.DebugTree())
         }
     }
 }

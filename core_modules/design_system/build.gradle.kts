@@ -15,7 +15,7 @@ kotlin {
             implementation(project(":core_domain"))
             implementation(project(":configs_api"))
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.compose.icons)
+            api(libs.compose.icons)
         }
     }
 }

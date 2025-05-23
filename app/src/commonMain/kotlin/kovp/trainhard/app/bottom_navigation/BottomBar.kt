@@ -2,6 +2,7 @@ package kovp.trainhard.app.bottom_navigation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -11,20 +12,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import kovp.trainhard.home_api.HomeBaseRoute
 import kovp.trainhard.parameters_api.ParametersBaseRoute
 import kovp.trainhard.statistics_api.StatisticsBaseRoute
-import kovp.trainhard.ui_theme.TrainHardTheme
 import kovp.trainhard.ui_theme.providers.themeColors
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BottomBar(modifier: Modifier = Modifier, navController: NavController) {
@@ -53,11 +52,12 @@ fun BottomBar(modifier: Modifier = Modifier, navController: NavController) {
                     } == true,
                     icon = {
                         Icon(
-                            painter = painterResource(id = topLevelRoute.icon),
+                            modifier = Modifier.size(32.dp),
+                            imageVector = topLevelRoute.icon,
                             contentDescription = null
                         )
                     },
-                    label = { Text(text = stringResource(id = topLevelRoute.label)) },
+                    label = { Text(text = stringResource(resource = topLevelRoute.label)) },
                     alwaysShowLabel = false,
                     onClick = {
                         val options = navOptions {
@@ -95,13 +95,5 @@ fun BottomBar(modifier: Modifier = Modifier, navController: NavController) {
                 )
             }
         }
-    }
-}
-
-//@Preview
-@Composable
-private fun BottomBarPreview() {
-    TrainHardTheme {
-        BottomBar(navController = rememberNavController())
     }
 }
