@@ -1,9 +1,9 @@
 package kovp.trainhard.new_training_presentation.edit_set_dialog
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-sealed class EditSetDialogResult : Parcelable {
+@Serializable
+sealed class EditSetDialogResult {
     /**
      * @param id id упражнения в текущей тренировке
      * @param setId id редактируемого сета в _текущем_ упражнении
@@ -11,7 +11,7 @@ sealed class EditSetDialogResult : Parcelable {
      * @param weight вес в текущем подходе
      * @param reps выполненное количество повторений
      */
-    @Parcelize
+    @Serializable
     data class Success(
         val id: Long,
         val setId: Long?,

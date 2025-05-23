@@ -28,7 +28,7 @@ fun File.includeProject(moduleName: String) {
 
 rootProject.name = "Trainhard"
 
-include(":app")
+include(":composeApp")
 include(":core_domain")
 include(":database")
 include(":database_api")

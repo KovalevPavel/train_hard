@@ -1,8 +1,7 @@
 package kovp.trainhard.home_domain
 
-import java.util.Calendar
+import kotlinx.datetime.Clock
 
 class GetCurrentDateInteractor {
-    operator fun invoke(): Long = Calendar.getInstance()
-        .timeInMillis
+    operator fun invoke(): Long = Clock.System.now().toEpochMilliseconds()
 }

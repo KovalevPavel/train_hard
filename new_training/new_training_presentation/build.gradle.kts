@@ -1,7 +1,6 @@
 plugins {
     id("th.platform.library")
     id("th.compose")
-    id("kotlin-parcelize")
     alias(libs.plugins.kotlinx.serialization)
 }
 

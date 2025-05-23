@@ -8,10 +8,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.Clock
 import kovp.trainhard.home_presentation.components.GymCardHealth
 import kovp.trainhard.home_presentation.home.presentation.HomeAction
 import kovp.trainhard.home_presentation.home.presentation.HomeScreenState
 import kovp.trainhard.ui_theme.providers.themeColors
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +30,7 @@ fun HomeTopBar(
             val cardHealth = if (startDate == null || endDate == null) {
                 null
             } else {
-                val currentDays = System.currentTimeMillis().milliseconds.inWholeDays.toFloat()
+                val currentDays = Clock.System.now().toEpochMilliseconds().days.inWholeDays.toFloat()
                 val startDays = startDate.milliseconds.inWholeDays
                 val endDays = endDate.milliseconds.inWholeDays
 

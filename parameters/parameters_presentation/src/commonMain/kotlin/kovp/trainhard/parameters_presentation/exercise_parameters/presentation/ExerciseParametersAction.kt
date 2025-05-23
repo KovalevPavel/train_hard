@@ -1,5 +1,7 @@
 package kovp.trainhard.parameters_presentation.exercise_parameters.presentation
 
+import kotlin.jvm.JvmInline
+
 sealed interface ExerciseParametersAction {
     data object OnActionClick : ExerciseParametersAction
     data object OnBackClick : ExerciseParametersAction
