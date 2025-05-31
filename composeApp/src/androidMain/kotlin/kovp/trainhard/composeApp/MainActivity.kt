@@ -12,6 +12,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        // через стили скрытие, почему-то, не работает
+        actionBar?.hide()
+
         setContent {
             val viewModel: MainActivityViewModel = koinViewModel()
             installSplashScreen().setKeepOnScreenCondition { !viewModel.dbIsInitialized }

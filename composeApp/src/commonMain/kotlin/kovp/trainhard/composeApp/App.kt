@@ -38,36 +38,34 @@ fun App() {
         CompositionLocalProvider(
             LocalViewModelStoreOwner provides myStoreOwner,
         ) {
-            TrainHardTheme {
-                SetStatusBar()
+            SetStatusBar()
 
-                Column(
-                    modifier = Modifier
-                        .background(themeColors.black)
-                        .fillMaxSize(),
+            Column(
+                modifier = Modifier
+                    .background(themeColors.black)
+                    .fillMaxSize(),
+            ) {
+                NavHost(
+                    modifier = Modifier.weight(1f),
+                    navController = navController,
+                    startDestination = HomeBaseRoute,
+                    enterTransition = { scaleIn(initialScale = 1f) },
+                    exitTransition = { scaleOut(targetScale = 1f) },
                 ) {
-                    NavHost(
-                        modifier = Modifier.weight(1f),
+                    HomeBaseRoute.createScreen(
+                        navGraphBuilder = this,
                         navController = navController,
-                        startDestination = HomeBaseRoute,
-                        enterTransition = { scaleIn(initialScale = 1f) },
-                        exitTransition = { scaleOut(targetScale = 1f) },
-                    ) {
-                        HomeBaseRoute.createScreen(
-                            navGraphBuilder = this,
-                            navController = navController,
-                        )
-                        StatisticsBaseRoute.createScreen(
-                            navGraphBuilder = this,
-                            navController = navController,
-                        )
-                        ParametersBaseRoute.createScreen(
-                            navGraphBuilder = this,
-                            navController = navController,
-                        )
-                    }
-                    BottomBar(navController = navController)
+                    )
+                    StatisticsBaseRoute.createScreen(
+                        navGraphBuilder = this,
+                        navController = navController,
+                    )
+                    ParametersBaseRoute.createScreen(
+                        navGraphBuilder = this,
+                        navController = navController,
+                    )
                 }
+                BottomBar(navController = navController)
             }
         }
     }
