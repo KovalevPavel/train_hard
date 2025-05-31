@@ -1,16 +1,14 @@
 package kovp.trainhard.components.selectors
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DateRangePickerDefaults
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
@@ -18,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kovp.trainhard.components.TopBar
 import kovp.trainhard.components.button.TrainButton
 import kovp.trainhard.core_domain.orZero
 import kovp.trainhard.ui_theme.providers.themeColors
@@ -42,10 +41,20 @@ fun ShowDatePickerDialog(
     val datePickerFormatter = remember { DatePickerFormatter() }
 
     Scaffold(
-        modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
-            .padding(horizontal = 16.dp)
-            .padding(top = 16.dp),
         containerColor = themeColors.black,
+        topBar = {
+            TopBar(
+                header = null,
+                onBackClick = onDismiss,
+                navigationBackIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.KeyboardArrowDown,
+                        tint = themeColors.white,
+                        contentDescription = null,
+                    )
+                }
+            )
+        },
         floatingActionButton = {
             TrainButton(
                 label = stringResource(resource = Res.string.action_ok),
@@ -60,7 +69,8 @@ fun ShowDatePickerDialog(
         },
     ) { paddings ->
         DateRangePicker(
-            modifier = Modifier.padding(top = paddings.calculateTopPadding()),
+            modifier = Modifier.padding(top = paddings.calculateTopPadding())
+                .padding(horizontal = 16.dp),
             state = datePickerState,
             colors = DatePickerDefaults.colors(
                 containerColor = themeColors.black,

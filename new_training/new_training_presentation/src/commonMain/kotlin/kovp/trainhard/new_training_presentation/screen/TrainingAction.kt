@@ -5,6 +5,8 @@ import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogRes
 import kovp.trainhard.new_training_presentation.edit_set_dialog.EditSetDialogVs
 
 sealed interface TrainingAction {
+    data object OnBackClick: TrainingAction
+
     data class AddOrEditSet(
         val data: EditSetDialogResult.Success,
     ) : TrainingAction

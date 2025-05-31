@@ -26,7 +26,7 @@ benchmarkBaselineProfileGradlePlugin = "1.3.3"
 
 koin = "4.0.3"
 
-calendar = "2.4.0"
+calendar = "1.0.2"
 
 annotationJvm = "1.9.1"
 datastore = "1.1.6"
@@ -74,7 +74,7 @@ koin-compose = { group = "io.insert-koin", name = "koin-compose-viewmodel", vers
 # Navigation
 navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
-calendar = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar" }
+calendar = { group = "io.github.wojciechosak", name = "calendar", version.ref = "calendar" }
 
 # logging
 logging-timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }

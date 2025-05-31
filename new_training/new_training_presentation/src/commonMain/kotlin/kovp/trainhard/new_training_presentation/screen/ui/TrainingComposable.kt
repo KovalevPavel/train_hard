@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kovp.trainhard.components.StateContainer
+import kovp.trainhard.components.TopBar
 import kovp.trainhard.components.fab.TrainFab
 import kovp.trainhard.components.progress.FullscreenLoader
 import kovp.trainhard.components.train_card.CompletedExerciseCard
@@ -97,6 +98,12 @@ fun TrainingComposable(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = themeColors.black,
+        topBar = {
+            TopBar(
+                header = null,
+                onBackClick = { TrainingAction.OnBackClick.let(vm::handleAction) },
+            )
+        },
         floatingActionButton = {
             AnimatedVisibility(
                 visible = state is TrainingScreenState.Data,
@@ -193,6 +200,10 @@ private fun handleEvent(
 
         is TrainingEvent.NavigateToEditSetDialog -> {
             onNewEditSetDialogState(event.data)
+        }
+
+        is TrainingEvent.PopBackstack -> {
+            navController.popBackStack()
         }
     }
 }

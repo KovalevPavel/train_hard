@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="training_calendar_title">Календарь тренировок</string>
+
+    <string name="locale_mon">пн</string>
+    <string name="locale_tue">вт</string>
+    <string name="locale_wed">ср</string>
+    <string name="locale_thu">чт</string>
+    <string name="locale_fri">пт</string>
+    <string name="locale_sat">сб</string>
+    <string name="locale_sun">вс</string>
+
+    <string name="locale_jan">январь</string>
+    <string name="locale_feb">февраль</string>
+    <string name="locale_mar">март</string>
+    <string name="locale_apr">апрель</string>
+    <string name="locale_may">май</string>
+    <string name="locale_jun">июнь</string>
+    <string name="locale_jul">июль</string>
+    <string name="locale_aug">август</string>
+    <string name="locale_sep">сентябрь</string>
+    <string name="locale_oct">октябрь</string>
+    <string name="locale_nov">ноябрь</string>
+    <string name="locale_dec">декабрь</string>
 </resources>

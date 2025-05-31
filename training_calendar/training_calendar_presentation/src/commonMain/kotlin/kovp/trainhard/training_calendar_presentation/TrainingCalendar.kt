@@ -95,7 +95,7 @@ private fun Data(
         },
         containerColor = themeColors.black
     ) {
-        CalendarData(
+        TrainCalendar(
             modifier = Modifier.padding(top = it.calculateTopPadding()),
             firstMonthOffset = firstMonthOffset,
             muscleGroups = state.trainings,

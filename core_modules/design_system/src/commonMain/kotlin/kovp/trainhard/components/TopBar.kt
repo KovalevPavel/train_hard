@@ -20,17 +20,20 @@ import kovp.trainhard.ui_theme.providers.themeTypography
 fun TopBar(
     header: String?,
     onBackClick: (() -> Unit)? = null,
+    navigationBackIcon: @Composable (() -> Unit) = {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            tint = themeColors.white,
+            contentDescription = null,
+        )
+    },
     actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     CenterAlignedTopAppBar(
         navigationIcon = {
             onBackClick?.let {
                 IconButton(onClick = it) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        tint = themeColors.white,
-                        contentDescription = null,
-                    )
+                    navigationBackIcon()
                 }
             }
         },

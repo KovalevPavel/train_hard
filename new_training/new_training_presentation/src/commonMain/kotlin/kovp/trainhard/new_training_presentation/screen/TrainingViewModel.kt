@@ -39,6 +39,10 @@ class TrainingViewModel(
     override fun handleAction(action: TrainingAction) {
         launch {
             when (action) {
+                is TrainingAction.OnBackClick -> {
+                    emitEvent(event = TrainingEvent.PopBackstack)
+                }
+
                 is TrainingAction.OnAddExerciseClick -> {
                     emitEvent(event = TrainingEvent.NavigateToSelectExerciseType)
                 }
