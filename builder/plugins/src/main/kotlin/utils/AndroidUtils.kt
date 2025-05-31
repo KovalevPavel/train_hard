@@ -31,12 +31,12 @@ private val Project.androidExtension: AndroidExtensions
 
 internal fun Project.configAndroid() {
     androidExtension.apply {
-        namespace = "kovp.trainhard.${project.name}"
+        namespace = "${Versions.App.PACKAGE_ID}.${project.name}"
 
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        compileSdk = Versions.Sdk.TARGET_SDK
 
         defaultConfig {
-            minSdk = libs.versions.android.minSdk.get().toInt()
+            minSdk = Versions.Sdk.MIN_SDK
         }
 
         compileOptions {

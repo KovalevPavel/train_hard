@@ -1,5 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import utils.Versions
 import utils.application
 import utils.configAndroid
 import utils.kotlin
@@ -7,6 +8,7 @@ import utils.libs
 import utils.nativeTargets
 import utils.projectJvmTarget
 
+@Suppress("unused")
 class ApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
@@ -20,16 +22,16 @@ class ApplicationConventionPlugin : Plugin<Project> {
 
             application {
                 defaultConfig {
-                    targetSdk = libs.versions.android.targetSdk.get().toInt()
-                    applicationId = "kovp.trainhard"
-                    versionCode = libs.versions.appVersion.build.get().toInt()
+                    targetSdk = Versions.Sdk.TARGET_SDK
+                    applicationId = Versions.App.PACKAGE_ID
+                    versionCode = Versions.App.BUILD
                     versionName = listOf(
-                        libs.versions.appVersion.major.get(),
-                        libs.versions.appVersion.minor.get(),
-                        libs.versions.appVersion.patch.get(),
+                        Versions.App.MAJOR,
+                        Versions.App.MINOR,
+                        Versions.App.PATCH,
                     )
                         .joinToString(".")
-                        .plus("(${libs.versions.appVersion.build.get()})")
+                        .plus("(${Versions.App.BUILD})")
                 }
 
                 packaging {

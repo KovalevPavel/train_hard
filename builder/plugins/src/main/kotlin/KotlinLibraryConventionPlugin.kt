@@ -4,6 +4,7 @@ import utils.kotlin
 import utils.libs
 import utils.nativeTargets
 
+@Suppress("unused")
 class KotlinLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {

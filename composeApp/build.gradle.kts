@@ -1,5 +1,7 @@
 @file:Suppress("unchecked_cast")
 
+import utils.Versions
+
 plugins {
     id("th.application")
     alias(libs.plugins.kotlinx.serialization)
@@ -10,12 +12,9 @@ android {
         buildConfig = true
     }
 
-    val applicationConfig = rootProject.extra["applicationConfig"] as Map<String, Any>
-
     defaultConfig {
-        versionName = applicationConfig["versionName"].toString()
-        versionCode = applicationConfig["versionCode"] as Int
-
+        versionName = Versions.versionName
+        versionCode = Versions.versionCode
         project.setProperty("archivesBaseName", "TrainHard-$versionName($versionCode)")
     }
 

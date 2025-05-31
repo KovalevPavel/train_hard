@@ -6,7 +6,7 @@ plugins {
     `kotlin-dsl`
 }
 
-private val projectJavaVersion: JavaVersion = JavaVersion.toVersion(libs.versions.java.get())
+private val projectJavaVersion: JavaVersion = JavaVersion.toVersion(17)
 
 java {
     toolchain {

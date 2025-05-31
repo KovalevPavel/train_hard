@@ -3,6 +3,7 @@ import utils.AbstractComposeConventionPlugin
 import utils.kotlin
 import utils.libs
 
+@Suppress("unused")
 class PlatformComposeConventionPlugin : AbstractComposeConventionPlugin() {
     override fun apply(target: Project) {
         super.apply(target)

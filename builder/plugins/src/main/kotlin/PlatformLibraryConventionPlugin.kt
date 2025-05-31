@@ -6,6 +6,7 @@ import utils.libs
 import utils.nativeTargets
 import utils.projectJvmTarget
 
+@Suppress("unused")
 class PlatformLibraryConventionPlugin : AbstractComposeConventionPlugin() {
     override fun apply(target: Project) {
         super.apply(target)

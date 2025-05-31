@@ -9,5 +9,3 @@ plugins {
     alias(libs.plugins.kotlinx.serialization) apply false
     alias(libs.plugins.room) apply false
 }
-
-apply(from = "$rootDir/buildConfig.gradle.kts")

@@ -1,22 +1,9 @@
 [versions]
-# Application version
-appVersion-major = "1"
-appVersion-minor = "0"
-appVersion-patch = "1"
-appVersion-build = "3"
-
-# languages and plugins
 kotlin = "2.1.21"
-androidGradlePlugin = "8.10.0"
+androidGradlePlugin = "8.10.1"
 kotlinImmutable = "0.3.8"
-java = "17"
 compose-multiplatform = "1.8.0"
 ksp = "2.1.21-2.0.1"
-
-# SDKs
-android-minSdk = "26"
-android-compileSdk = "35"
-android-targetSdk = "35"
 
 core-ktx = "1.15.0"
 kotlinCoroutines = "1.10.1"
