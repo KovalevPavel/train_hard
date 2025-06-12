@@ -7,14 +7,17 @@ import kotlinx.datetime.Instant
 import kovp.trainhard.core_domain.formatToDateString
 
 @OptIn(ExperimentalMaterial3Api::class)
-class DatePickerFormatter: DatePickerFormatter {
+class DatePickerFormatter(
+    private val noDateSelectedStub: String,
+) : DatePickerFormatter {
     override fun formatDate(
         dateMillis: Long?,
         locale: CalendarLocale,
         forContentDescription: Boolean
-    ): String? {
-
-        return dateMillis?.let(Instant::fromEpochMilliseconds)?.formatToDateString(DATE_PICKER_FORMAT)
+    ): String {
+        return dateMillis?.let(Instant::fromEpochMilliseconds)
+            ?.formatToDateString(DATE_PICKER_FORMAT)
+            ?: noDateSelectedStub
     }
 
     override fun formatMonthYear(monthMillis: Long?, locale: CalendarLocale): String? {
@@ -22,6 +25,6 @@ class DatePickerFormatter: DatePickerFormatter {
     }
 
     companion object {
-        private const val DATE_PICKER_FORMAT = "dd MMMM"
+        private const val DATE_PICKER_FORMAT = "dd.MM.uuuu"
     }
 }

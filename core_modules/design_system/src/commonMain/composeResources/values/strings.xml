@@ -16,4 +16,6 @@
 
     <string name="action_ok">OK</string>
     <string name="action_cancel">Отмена</string>
+
+    <string name="not_selected">Не выбрано</string>
 </resources>

@@ -25,6 +25,7 @@ import org.jetbrains.compose.resources.stringResource
 import trainhard.design_system.generated.resources.Res
 import trainhard.design_system.generated.resources.action_ok
 import trainhard.design_system.generated.resources.gym_card_date_range_title
+import trainhard.design_system.generated.resources.not_selected
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +39,9 @@ fun ShowDatePickerDialog(
         initialSelectedStartDateMillis = startTimestamp,
         initialSelectedEndDateMillis = endTimestamp,
     )
-    val datePickerFormatter = remember { DatePickerFormatter() }
+
+    val notSelectedStub = stringResource(Res.string.not_selected)
+    val datePickerFormatter = remember { DatePickerFormatter(notSelectedStub) }
 
     Scaffold(
         containerColor = themeColors.black,
