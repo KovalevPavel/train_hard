@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
+
 pluginManagement {
-    includeBuild("build-logic")
+    includeBuild("builder/plugins")
     repositories {
         google()
         mavenCentral()
@@ -25,16 +26,15 @@ fun File.includeProject(moduleName: String) {
     project(":$moduleName").projectDir = file("${this.path}/$moduleName")
 }
 
-rootProject.name = "Train hard"
+rootProject.name = "Trainhard"
 
-include(":app")
+include(":composeApp")
 include(":core_domain")
 include(":database")
 include(":database_api")
 include(":navigation")
 include(":core_dialogs")
 include(":core_presentation")
-include(":lint_rules")
 
 withDirectory("core_modules") {
     includeProject("core")

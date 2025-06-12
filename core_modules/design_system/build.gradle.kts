@@ -1,16 +1,23 @@
 plugins {
-    id("trainhard.android.library")
-    id("trainhard.android.compose")
-    id("kotlin-parcelize")
+    id("th.platform.library")
+    id("th.compose")
     alias(libs.plugins.kotlinx.serialization)
 }
 
-dependencies {
-    implementation(project(":ui_theme"))
-    implementation(project(":core_domain"))
-    implementation(project(":configs_api"))
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.kotlinx.serialization.json)
+kotlin {
+    sourceSets {
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.compose.ui.tooling)
+            implementation(libs.androidx.compose.ui.tooling.preview)
+        }
+
+        commonMain.dependencies {
+            implementation(project(":ui_theme"))
+            implementation(project(":core_domain"))
+            implementation(project(":configs_api"))
+            implementation(libs.kotlinx.serialization.json)
+            api(libs.compose.icons)
+        }
+    }
 }

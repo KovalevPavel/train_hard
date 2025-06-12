@@ -1,24 +1,42 @@
 plugins {
-    id("trainhard.android.library")
+    id("th.platform.library")
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.room)
 }
 
-android {
-    defaultConfig {
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
+kotlin {
+    targets.configureEach {
+        compilations.configureEach {
+            compileTaskProvider.get().compilerOptions {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
+            implementation(libs.koin.core)
+            implementation(project(":database_api"))
+            implementation(project(":core_domain"))
+            implementation(project(":configs_api"))
         }
     }
 }
 
-dependencies {
-    implementation(libs.room.common)
-    ksp(libs.room.kapt)
-    implementation(libs.room.ktx)
-    implementation(libs.room.runtime)
-    implementation(project(":database_api"))
-    implementation(project(":core_domain"))
-    implementation(project(":configs_api"))
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 
-    implementation(libs.koin.compose)
+dependencies {
+    listOf(
+        "kspAndroid",
+        // "kspJvm",
+        "kspIosSimulatorArm64",
+        "kspIosX64",
+        "kspIosArm64"
+    ).forEach {
+        add(it, libs.room.compiler)
+    }
 }

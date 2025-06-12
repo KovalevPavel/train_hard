@@ -1,11 +1,20 @@
 plugins {
-    id("trainhard.android.library")
+    id("th.platform.library")
 }
 
-dependencies {
-    implementation(project(":core_domain"))
-    implementation(project(":domain_storage"))
-    api(libs.paper)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.koin.compose)
+kotlin {
+    sourceSets {
+        androidMain.dependencies {
+            api(libs.paper)
+            implementation(libs.androidx.core.ktx)
+        }
+
+        commonMain.dependencies {
+            implementation(project(":core_domain"))
+            implementation(project(":domain_storage"))
+            implementation(libs.koin.compose)
+            implementation(libs.datastore.core)
+            implementation(libs.datastore.preferences)
+        }
+    }
 }

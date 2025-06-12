@@ -1,4 +1,4 @@
 plugins {
-    id("trainhard.android.library")
-    id("trainhard.android.compose")
+    id("th.platform.library")
+    id("th.compose")
 }

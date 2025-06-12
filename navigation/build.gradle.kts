@@ -1,8 +1,12 @@
 plugins {
-    id("trainhard.android.library")
-    id("trainhard.android.compose")
+    id("th.platform.library")
+    id("th.compose")
 }
 
-dependencies {
-    implementation(libs.navigation)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.navigation)
+        }
+    }
 }

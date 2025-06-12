@@ -9,3 +9,6 @@
 .cxx
 local.properties
 **/build
+.kotlin
+iosApp/iosApp.xcodeproj/project.xcworkspace/
+*.xcuserstate

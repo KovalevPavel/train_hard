@@ -1,7 +1,12 @@
 plugins {
-    id("trainhard.kotlin.library")
+    id("th.kotlin.library")
 }
 
-dependencies {
-    api(libs.kotlinx.collections.immutable)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(libs.kotlinx.collections.immutable)
+            api(libs.kotlinx.datetime)
+        }
+    }
 }
