@@ -8,6 +8,8 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.koin.compose)
+            implementation(libs.androidx.compose.ui.tooling)
+            implementation(libs.androidx.compose.ui.tooling.preview)
         }
 
         commonMain.dependencies {

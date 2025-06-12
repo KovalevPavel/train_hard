@@ -8,8 +8,6 @@ import kovp.trainhard.components.train_card.CompletedExerciseCardVs
 import kovp.trainhard.configs_core.ConfigHolder
 import kovp.trainhard.core_presentation.BaseViewModel
 import kovp.trainhard.database_api.models.CompletedExercise
-import kovp.trainhard.database_api.models.minus
-import kovp.trainhard.database_api.models.plus
 import kovp.trainhard.new_trainig_domain.AddNewCompletedExerciseInteractor
 import kovp.trainhard.new_trainig_domain.GetAllCompletedExercisesInteractor
 import kovp.trainhard.new_trainig_domain.GetExerciseByIdInteractor
@@ -88,7 +86,7 @@ class TrainingViewModel(
             addNewCompletedSet(
                 timestamp = currentTimestamp,
                 exercise = it,
-                sets = listOf(
+                attempts = listOf(
                     dialogResult.weight to dialogResult.reps,
                 )
             )
@@ -103,11 +101,13 @@ class TrainingViewModel(
 
         val updatedExercise = when (dialogResult.setId) {
             null -> {
-                completedExercise + listOf(dialogResult.weight to dialogResult.reps)
+                completedExercise.copy(
+                    attempts = completedExercise.attempts + (dialogResult.weight to dialogResult.reps),
+                )
             }
 
             else -> {
-                val modifiedReps = completedExercise.sets
+                val modifiedReps = completedExercise.attempts
                     .mapIndexed { i, p ->
                         if (i.toLong() == dialogResult.setId) {
                             dialogResult.weight to dialogResult.reps
@@ -115,7 +115,7 @@ class TrainingViewModel(
                             p
                         }
                     }
-                completedExercise.copy(sets = modifiedReps)
+                completedExercise.copy(attempts = modifiedReps)
             }
         }
 
@@ -132,13 +132,18 @@ class TrainingViewModel(
 
         val index = completedExercises.indexOf(completedExercise)
 
-        if (completedExercise.sets.size == 1) {
+        if (completedExercise.attempts.size == 1) {
             removeCompletedExercise(completedExercise)
             completedExercises.remove(completedExercise)
             return
         }
 
-        val updateSet = completedExercise - listOf(completedExercise.sets[setIndex])
+        val newSets: List<Pair<Float, Int>> = completedExercise.attempts
+            .toMutableList()
+            .apply { removeAt(setIndex) }
+            .toList()
+
+        val updateSet = completedExercise.copy(attempts = newSets)
 
         completedExercises[index] = updateSet
         updateCompletedExercise(editedCompletedExercise = updateSet)
@@ -148,7 +153,7 @@ class TrainingViewModel(
         setId = item.id,
         timestamp = item.dayTimestamp,
         exerciseTitle = item.exercise.title,
-        sets = item.sets,
+        sets = item.attempts,
         muscles = item.exercise.muscles.mapNotNull { m ->
             exercisesConfig.getLocalizedString(m.id) ?: return@mapNotNull null
         }
