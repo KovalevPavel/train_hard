@@ -24,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun calendarDao(): CalendarDao
 
     companion object {
-        internal const val DATABASE_NAME = "app_database.db"
+        internal const val DATABASE_NAME = "app_database"
     }
 }
 

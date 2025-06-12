@@ -7,8 +7,8 @@ object Versions {
     internal object App {
         const val MAJOR = 1
         const val MINOR = 0
-        const val PATCH = 1
-        const val BUILD = 3
+        const val PATCH = 2
+        const val BUILD = 4
         const val PACKAGE_ID = "kovp.trainhard"
     }
 
